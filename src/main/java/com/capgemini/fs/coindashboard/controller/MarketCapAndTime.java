@@ -1,11 +1,11 @@
 package com.capgemini.fs.coindashboard.controller;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public class MarketCapAndTime implements Serializable{
-    private long time;
-    private double marketCap;
-
+public class MarketCapAndTime implements Serializable {
+  private long time;
+  private double marketCap;
 
   public MarketCapAndTime(long time, double marketCap) {
     this.time = time;
@@ -30,18 +30,13 @@ public class MarketCapAndTime implements Serializable{
 
   @Override
   public String toString() {
-    return "{" +
-        "time=" + time +
-        ", marketCap=" + marketCap +
-        '}';
+    return "{" + "time=" + time + ", marketCap=" + marketCap + '}';
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (!(o instanceof MarketCapAndTime))
-      return false;
+    if (this == o) return true;
+    if (!(o instanceof MarketCapAndTime)) return false;
     MarketCapAndTime that = (MarketCapAndTime) o;
     return getTime() == that.getTime() && Double.compare(that.getMarketCap(), getMarketCap()) == 0;
   }

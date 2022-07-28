@@ -12,7 +12,8 @@ class CoinModelAssembler implements RepresentationModelAssembler<Coin, EntityMod
   @Override
   public EntityModel<Coin> toModel(Coin coin) {
 
-    return EntityModel.of(coin, //
+    return EntityModel.of(
+        coin, //
         linkTo(methodOn(CoinController.class).one(coin.getName())).withSelfRel(),
         linkTo(methodOn(CoinController.class).all()).withRel("coins"));
   }
