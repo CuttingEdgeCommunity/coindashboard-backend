@@ -38,7 +38,7 @@ public class CoinController {
   }
   // end::get-aggregate-root[]
 
-  @GetMapping("/coins/{id}")
+  @GetMapping("/coins/{name}")
   EntityModel<Coin> one(@PathVariable String name) {
 
     Coin coin = repository.findById(name) //
