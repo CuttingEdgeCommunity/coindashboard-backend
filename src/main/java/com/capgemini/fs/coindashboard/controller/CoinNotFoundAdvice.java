@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class CoinsNotFoundAdvice {
+public class CoinNotFoundAdvice {
 
   @ResponseBody
-  @ExceptionHandler(CoinsNotFoundException.class)
+  @ExceptionHandler(CoinNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  String employeeNotFoundHandler(CoinsNotFoundException ex) {
+  String employeeNotFoundHandler(CoinNotFoundException ex) {
     return ex.getMessage();
   }
 }

@@ -16,15 +16,15 @@ public class LoadDatabase {
 
 
   @Bean
-  CommandLineRunner initDatabase(CoinsRepository repository) {
+  CommandLineRunner initDatabase(CoinRepository repository) {
     ArrayList<MarketCapAndTime> firstCoin = new ArrayList<>();
     firstCoin.add(new MarketCapAndTime(12L, 12.5));
     return args -> {
-      log.info("Preloading " + repository.save(new Coins("SC", firstCoin)));
-      log.info("Preloading " + repository.save(new Coins("SC", firstCoin)));
-      log.info("Preloading " + repository.save(new Coins("SC", firstCoin)));
-      log.info("Preloading " + repository.save(new Coins("SC", firstCoin)));
-      log.info("Preloading " + repository.save(new Coins("SC", firstCoin)));
+      log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
+      log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
+      log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
+      log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
+      log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
       log.info("Loading"+1L);
 
     };

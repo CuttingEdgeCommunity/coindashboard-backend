@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Coins {
+public class Coin {
   private @Id
   @GeneratedValue Long id;
   private String name;
@@ -17,10 +17,10 @@ public class Coins {
   private ArrayList<MarketCapAndTime> historicalData;
 
 
-  public Coins(){
+  public Coin(){
 
   }
-  public Coins(String name, ArrayList<MarketCapAndTime> historicalData) {
+  public Coin(String name, ArrayList<MarketCapAndTime> historicalData) {
     this.name = name;
     this.historicalData = historicalData;
   }
@@ -66,11 +66,11 @@ public class Coins {
   public boolean equals(Object o) {
     if (this == o)
       return true;
-    if (!(o instanceof Coins))
+    if (!(o instanceof Coin))
       return false;
-    Coins coins = (Coins) o;
-    return Objects.equals(getId(), coins.getId()) && Objects.equals(getName(), coins.getName())
-        && Objects.equals(getHistoricalData(), coins.getHistoricalData());
+    Coin coin = (Coin) o;
+    return Objects.equals(getId(), coin.getId()) && Objects.equals(getName(), coin.getName())
+        && Objects.equals(getHistoricalData(), coin.getHistoricalData());
   }
 
   @Override
