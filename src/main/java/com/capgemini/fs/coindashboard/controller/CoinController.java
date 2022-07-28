@@ -17,9 +17,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class CoinController {
 
   private final CoinRepository repository;
+  private final CoinModelAssembler assembler;
 
-  public CoinController(CoinRepository repository) {
+  public CoinController(CoinRepository repository, CoinModelAssembler assembler) {
     this.repository = repository;
+    this.assembler = assembler;
   }
 
 
@@ -28,13 +30,11 @@ public class CoinController {
   @GetMapping("/coins")
   CollectionModel<EntityModel<Coin>> all() {
 
-    List<EntityModel<Coin>> coins = repository.findAll().stream()
-        .map(coin -> EntityModel.of(coin,
-            linkTo(methodOn(CoinController.class).one(coin.getName())).withSelfRel(),
-            linkTo(methodOn(CoinController.class).all()).withRel("employees")))
+    List<EntityModel<Coin>> employees = repository.findAll().stream() //
+        .map(assembler::toModel) //
         .collect(Collectors.toList());
 
-    return CollectionModel.of(coins, linkTo(methodOn(CoinController.class).all()).withSelfRel());
+    return CollectionModel.of(employees, linkTo(methodOn(CoinController.class).all()).withSelfRel());
   }
   // end::get-aggregate-root[]
 
@@ -44,9 +44,7 @@ public class CoinController {
     Coin coin = repository.findById(name) //
         .orElseThrow(() -> new CoinNotFoundException(name));
 
-    return EntityModel.of(coin, //
-        linkTo(methodOn(CoinController.class).one(name)).withSelfRel(),
-        linkTo(methodOn(CoinController.class).all()).withRel("coins"));
+    return assembler.toModel(coin);
   }
 
 }
