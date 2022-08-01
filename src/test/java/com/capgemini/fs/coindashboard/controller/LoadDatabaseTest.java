@@ -15,7 +15,7 @@ class LoadDatabaseTest {
 
   @Test
   public void initDatabase() throws Exception{
-    this.clr.run("input.txt","input2.txt");
+    this.clr.run();
 
   }
 }
