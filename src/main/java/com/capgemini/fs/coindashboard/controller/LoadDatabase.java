@@ -25,8 +25,6 @@ public class LoadDatabase {
       log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
       log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
       log.info("Preloading " + repository.save(new Coin("SC", firstCoin)));
-      log.info("Loading"+1L);
-
     };
   }
 }

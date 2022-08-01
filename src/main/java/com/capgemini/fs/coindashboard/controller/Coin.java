@@ -1,12 +1,13 @@
 package com.capgemini.fs.coindashboard.controller;
 
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.Objects;
+
+
 
 @Entity
 public class Coin {
@@ -66,9 +67,8 @@ public class Coin {
   public boolean equals(Object o) {
     if (this == o)
       return true;
-    if (!(o instanceof Coin))
+    if (!(o instanceof Coin coin))
       return false;
-    Coin coin = (Coin) o;
     return Objects.equals(getId(), coin.getId()) && Objects.equals(getName(), coin.getName())
         && Objects.equals(getHistoricalData(), coin.getHistoricalData());
   }

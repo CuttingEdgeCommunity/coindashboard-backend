@@ -1,16 +1,15 @@
 package com.capgemini.fs.coindashboard.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @RestController
@@ -30,15 +29,15 @@ public class CoinController {
   @GetMapping("/coins")
   CollectionModel<EntityModel<Coin>> all() {
 
-    List<EntityModel<Coin>> employees = repository.findAll().stream() //
+    List<EntityModel<Coin>> coins = repository.findAll().stream() //
         .map(assembler::toModel) //
         .collect(Collectors.toList());
 
-    return CollectionModel.of(employees, linkTo(methodOn(CoinController.class).all()).withSelfRel());
+    return CollectionModel.of(coins, linkTo(methodOn(CoinController.class).all()).withSelfRel());
   }
   // end::get-aggregate-root[]
 
-  @GetMapping("/coins/{id}")
+  @GetMapping("/coins/{name}")
   EntityModel<Coin> one(@PathVariable String name) {
 
     Coin coin = repository.findById(name) //
