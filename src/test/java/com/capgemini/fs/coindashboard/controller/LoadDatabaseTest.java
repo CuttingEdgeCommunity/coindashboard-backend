@@ -10,12 +10,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class LoadDatabaseTest {
-  @Autowired
-  private CommandLineRunner clr;
+  @Autowired private CommandLineRunner clr;
 
   @Test
-  public void initDatabase() throws Exception{
+  public void initDatabase() throws Exception {
     this.clr.run();
-
   }
 }
