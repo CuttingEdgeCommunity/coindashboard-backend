@@ -12,7 +12,7 @@ class CoinGeckoClientTest {
   @Test
   void invoke() throws IOException {
     var s = new ApiClient();
-    var x = s.invoke(new RequestBuilder()
+    var x = s.invokeGet(new RequestBuilder()
       .buildRequestURI("https://api.coingecko.com/api/v3/coins/markets",
         new ArrayList<>(), new LinkedHashMap<>(){{
         put("ids", "bitcoin,ethereum");

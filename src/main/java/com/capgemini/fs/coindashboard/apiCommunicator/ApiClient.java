@@ -31,7 +31,7 @@ public class ApiClient {
     return sb.toString();
   }
 
-  public String invoke(String uri) throws IOException {
+  public String invokeGet(String uri) throws IOException {
     InputStream response = requestBuilder
       .buildURLConnectionGET(uri)
       .getInputStream();
