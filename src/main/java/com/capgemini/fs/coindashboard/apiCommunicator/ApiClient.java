@@ -1,14 +1,12 @@
-package com.capgemini.fs.apiCommunicator.coinGeckoCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator;
 
-import com.capgemini.fs.apiCommunicator.utils.RequestBuilder;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URLConnection;
 
-public class CoinGeckoClient {
+public class ApiClient {
   private final RequestBuilder requestBuilder = new RequestBuilder();
 
   private String convertStreamToString(InputStream is) {

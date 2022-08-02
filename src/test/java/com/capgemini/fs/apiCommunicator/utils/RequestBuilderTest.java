@@ -1,5 +1,6 @@
 package com.capgemini.fs.apiCommunicator.utils;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

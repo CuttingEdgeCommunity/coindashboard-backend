@@ -1,4 +1,4 @@
-package com.capgemini.fs.apiCommunicator.utils;
+package com.capgemini.fs.coindashboard.apiCommunicator.utils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

@@ -1,18 +1,17 @@
 package com.capgemini.fs.apiCommunicator.coinGeckoCommunicator;
 
-import com.capgemini.fs.apiCommunicator.utils.RequestBuilder;
+import com.capgemini.fs.coindashboard.apiCommunicator.ApiClient;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CoinGeckoClientTest {
   @Test
   void invoke() throws IOException {
-    var s = new CoinGeckoClient();
+    var s = new ApiClient();
     var x = s.invoke(new RequestBuilder()
       .buildRequestURI("https://api.coingecko.com/api/v3/coins/markets",
         new ArrayList<>(), new LinkedHashMap<>(){{
