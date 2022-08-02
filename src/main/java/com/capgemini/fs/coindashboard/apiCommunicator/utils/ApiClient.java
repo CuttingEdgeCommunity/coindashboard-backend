@@ -52,14 +52,14 @@ public class ApiClient { // TODO: make this autowired
     return buildResponse(status, body);
   }
 
-  private Response buildResponse(int status, String body){
+  private Response buildResponse(int status, String body) throws JsonProcessingException {
     Response response = new Response();
     response.setResponseCode(status);
-    response.setResponseBody(body);
+    response.setResponseBody(parseResponse(body));
     return response;
   }
 
-  public JsonNode parseResponse(String json) throws JsonProcessingException { // TODO: Move outside of this class
+  private JsonNode parseResponse(String json) throws JsonProcessingException { // TODO: Move outside of this class
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readTree(json);
   }
