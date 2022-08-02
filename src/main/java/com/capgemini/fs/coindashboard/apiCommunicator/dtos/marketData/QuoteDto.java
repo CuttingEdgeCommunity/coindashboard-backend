@@ -10,5 +10,12 @@ public class QuoteDto {
   private float price;
   private List<DeltaDto> deltas;
   private long lastUpdateTimestamp;
+
+  public QuoteDto(String vsCurrency, float price, List<DeltaDto> deltas, long lastUpdateTimestamp) {
+    this.vsCurrency = vsCurrency;
+    this.price = price;
+    this.deltas = deltas;
+    this.lastUpdateTimestamp = lastUpdateTimestamp;
+  }
 }
 
