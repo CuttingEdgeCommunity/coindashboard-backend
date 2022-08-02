@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RequestBuilder {
-  public URLConnection buildURLConnectionGET(String uri, Map<String,List<String>> headers)
+  public HttpURLConnection buildURLConnectionGET(String uri, Map<String,List<String>> headers)
       throws IOException {
     HttpURLConnection connection = (HttpURLConnection)new URL(uri).openConnection();
     connection.setRequestMethod("GET");
@@ -23,19 +23,9 @@ public class RequestBuilder {
 
     return connection;
   }
-  public URLConnection buildURLConnectionGET(String uri)
+  public HttpURLConnection buildURLConnectionGET(String uri)
       throws IOException {
     return this.buildURLConnectionGET(uri, new LinkedHashMap<>());
-  }
-  public HttpRequest buildHttpGetRequest(String uri, Map<String,List<String>> headers) {
-    var request = HttpRequest.newBuilder(
-            URI.create(uri))
-        .GET();
-    headers.forEach((k,vs)->
-      vs.forEach(v->
-        request.header(URLEncoder.encode(k, StandardCharsets.UTF_8),
-            URLEncoder.encode(v, StandardCharsets.UTF_8))));
-    return request.build();
   }
   public String buildRequestURI(String baseURL, List<String> pathParams, Map<String, String> queryParams){
     StringBuilder sb = new StringBuilder(baseURL);

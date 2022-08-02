@@ -27,18 +27,6 @@ class RequestBuilderTest {
     }};
     assertEquals("abc.com/param1/1/true?qp1=1&qp2=asd&qp3=true", rb.buildRequestURI("abc.com",pathParams,queryParams));
   }
-  @Test
-  void buildHttpGetRequest() {
-    List<String> headerValues1 = new ArrayList<>(){{
-      add("val1");
-      add("val2");
-    }};
-    var req = rb.buildHttpGetRequest("http://hello.com/",
-      new LinkedHashMap<>(){{
-        put("hd1", headerValues1);
-      }});
-    assertEquals(headerValues1,req.headers().allValues("hd1"));
-  }
 
   @Test
   void buildURLConnection() throws IOException {

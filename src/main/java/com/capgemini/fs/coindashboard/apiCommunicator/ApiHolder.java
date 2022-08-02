@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Component("ApiHolder")
+@Component
 public class ApiHolder { // TODO: placeholder name
   private final Map<ApiProviderEnum, ApiCommunicator> apiCommunicators;
 
   @Autowired
   public ApiHolder(Set<ApiCommunicator> apiCommunicatorSet){
-    this.apiCommunicators = new HashMap<ApiProviderEnum, ApiCommunicator>();
+    this.apiCommunicators = new HashMap<>();
     apiCommunicatorSet.forEach(
         strategy ->this.apiCommunicators.put(strategy.getApiProvider(), strategy));
   }

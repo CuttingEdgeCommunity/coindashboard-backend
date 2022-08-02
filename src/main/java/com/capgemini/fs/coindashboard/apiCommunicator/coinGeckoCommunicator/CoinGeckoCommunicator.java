@@ -1,8 +1,8 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.ApiClient;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.CoinMarketDataResponse;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.CoinMarketDataResult;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiCommunicator;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -18,12 +18,12 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
   }
 
   @Override
-  public CoinMarketDataResponse getCurrentListing(List<String> coins, List<String> vsCurrencies) {
+  public CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies) {
     return null;
   }
 
   @Override
-  public CoinMarketDataResponse getHistoricalListing(List<String> coins, List<String> vsCurrencies,
+  public CoinMarketDataResult getHistoricalListing(List<String> coins, List<String> vsCurrencies,
       Long timestamp) {
     return null;
   }
