@@ -12,7 +12,7 @@ public class CoinNotFoundAdvice {
   @ResponseBody
   @ExceptionHandler(CoinNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  String employeeNotFoundHandler(CoinNotFoundException ex) {
+  String coinNotFoundHandler(CoinNotFoundException ex) {
     return ex.getMessage();
   }
 }

@@ -8,8 +8,8 @@ import javax.persistence.Id;
 
 @Entity
 public class Coin {
-  private @Id @GeneratedValue Long id;
-  private String name;
+  private @GeneratedValue Long id;
+  private @Id String name;
 
   private ArrayList<MarketCapAndTime> historicalData;
 

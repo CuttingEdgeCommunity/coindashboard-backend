@@ -27,13 +27,12 @@ public class CoinController {
   @GetMapping("/coins")
   CollectionModel<EntityModel<Coin>> all() {
 
-    List<EntityModel<Coin>> employees =
+    List<EntityModel<Coin>> coins =
         repository.findAll().stream() //
             .map(assembler::toModel) //
             .collect(Collectors.toList());
 
-    return CollectionModel.of(
-        employees, linkTo(methodOn(CoinController.class).all()).withSelfRel());
+    return CollectionModel.of(coins, linkTo(methodOn(CoinController.class).all()).withSelfRel());
   }
   // end::get-aggregate-root[]
 
