@@ -22,7 +22,6 @@ public class MarketCapAndTimeTest {
 
   @Test
   void testEqualsAndHashCode() {
-    System.out.println("Testing equals and hashCode...");
     Assertions.assertTrue(x.equals(y) && y.equals(x));
     assertEquals(x.hashCode(), y.hashCode());
   }
