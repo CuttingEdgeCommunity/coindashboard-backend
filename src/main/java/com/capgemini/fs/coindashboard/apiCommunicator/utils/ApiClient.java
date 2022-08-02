@@ -5,13 +5,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.List;
+import java.util.Map;
+import org.springframework.stereotype.Component;
 
-public class ApiClient { // TODO: make this autowired
-
-  private final RequestBuilder requestBuilder = new RequestBuilder();
+@Component
+public class ApiClient {
 
   public Response invokeGet(String uri) throws IOException {
-    var connection = requestBuilder.buildURLConnectionGET(uri);
+    var connection = RequestBuilder.buildURLConnectionGET(uri);
+    return getResponse(connection);
+  }
+
+  public Response invokeGet(String uri, Map<String, List<String>> headers) throws IOException {
+    var connection = RequestBuilder.buildURLConnectionGET(uri, headers);
+    return getResponse(connection);
+  }
+
+  private Response getResponse(HttpURLConnection connection) throws IOException {
     int status = connection.getResponseCode();
     String body;
     try {
@@ -19,7 +31,6 @@ public class ApiClient { // TODO: make this autowired
     } catch (FileNotFoundException e) {
       body = InputStreamParser.convertStreamToString(connection.getErrorStream());
     }
-
     return buildResponse(status, body);
   }
 

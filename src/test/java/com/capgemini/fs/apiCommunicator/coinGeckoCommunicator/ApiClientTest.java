@@ -12,14 +12,14 @@ class ApiClientTest {
   @Test
   void invoke() throws IOException {
     var s = new ApiClient();
-    var x = s.invokeGet(new RequestBuilder()
+    var x = s.invokeGet(RequestBuilder
         .buildRequestURI("https://api.coingecko.com/api/v3/coins/markets",
             new ArrayList<>(), new LinkedHashMap<>() {{
               put("ids", "bitcoin,ethereum");
               put("vs_currency", "usd");
               put("price_change_percentage", "1h,24h,7d");
             }}));
-    var y = s.invokeGet(new RequestBuilder()
+    var y = s.invokeGet(RequestBuilder
         .buildRequestURI("https://api.coingecko.com/api/v3/coins/mardkets",
             new ArrayList<>(), new LinkedHashMap<>() {{
               put("ids", "bitcoin,ethereum");
