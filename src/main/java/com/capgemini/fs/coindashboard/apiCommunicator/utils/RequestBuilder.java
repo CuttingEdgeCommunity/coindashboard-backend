@@ -50,9 +50,8 @@ public class RequestBuilder {
       pathParams.forEach(p -> sb.append(
           String.format("/%s", URLEncoder.encode(p, StandardCharsets.UTF_8)))
       );
-    } else if (sb.charAt(sb.length() - 1) != '/') {
-      sb.append("/");
     }
+//
 
     if (queryParams.size() > 0) {
       sb.append("?");

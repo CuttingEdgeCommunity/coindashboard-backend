@@ -15,19 +15,20 @@ import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CoinMarketCapCommunicator implements ApiCommunicator {
 
   private final ApiProviderEnum providerEnum = ApiProviderEnum.COIN_MARKET_CAP;
-  @Autowired
-  private ApiClient client;
+  //  @Autowired
+  private final ApiClient client = new ApiClient();
+  //  @Autowired
+  private final CoinMarketCapResponseParser parser = new CoinMarketCapResponseParser();
   private static final Logger log = LogManager.getLogger(CoinMarketCapCommunicator.class);
 
-  private final String path = "sandbox-api.coinmarketcap.com";
-  private final String version = "v1";
+  private final String path = "https://sandbox-api.coinmarketcap.com";
+  private final String version = "v2";
   private final String url = path + "/" + version; // TODO: move to env
 
   private final String key = "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c";
@@ -45,8 +46,8 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
   @Override
   public CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies) {
     HashMap<String, String> queryParams = new HashMap<>() {{
-      put("ids", String.join(",", coins));
-      put("vs_currency", String.join(",", vsCurrencies));
+      put("slug", String.join(",", coins));
+      put("convert", String.join(",", vsCurrencies));
     }};
     String requestUrl = RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest",
         queryParams);
@@ -57,13 +58,23 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
       log.error(e.getMessage());
       return new CoinMarketDataResult(ResultStatus.FAILURE, e.getMessage(), null);
     }
-
+    if (response == null) {
+      return new CoinMarketDataResult(ResultStatus.FAILURE, "unknown error", null);
+    }
     if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
       return new CoinMarketDataResult(ResultStatus.FAILURE,
           response.getResponseBody().get("error").asText(), null);
     }
 
-    return null;
+    CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult(ResultStatus.SUCCESS, null,
+        null);
+    try {
+      return new CoinMarketDataResult(ResultStatus.SUCCESS, null,
+          this.parser.parseGetCoinsQuoteResult(response.getResponseBody()));
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return new CoinMarketDataResult(ResultStatus.FAILURE, e.getMessage(), new ArrayList<>());
+    }
   }
 
   @Override

@@ -9,13 +9,14 @@ public class QuoteDto {
   private String vsCurrency;
   private float price;
   private List<DeltaDto> deltas;
-  private long lastUpdateTimestamp;
+  private long lastUpdateTimestampMillis;
 
-  public QuoteDto(String vsCurrency, float price, List<DeltaDto> deltas, long lastUpdateTimestamp) {
+  public QuoteDto(String vsCurrency, float price, List<DeltaDto> deltas,
+      long lastUpdateTimestampMillis) {
     this.vsCurrency = vsCurrency;
     this.price = price;
     this.deltas = deltas;
-    this.lastUpdateTimestamp = lastUpdateTimestamp;
+    this.lastUpdateTimestampMillis = lastUpdateTimestampMillis;
   }
 }
 
