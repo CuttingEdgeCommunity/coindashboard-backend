@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.controller;
+package com.capgemini.fs.coindashboard.controller.exceptionHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

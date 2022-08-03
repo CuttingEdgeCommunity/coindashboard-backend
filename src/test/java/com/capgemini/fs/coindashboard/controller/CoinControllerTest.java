@@ -1,29 +1,37 @@
 package com.capgemini.fs.coindashboard.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.capgemini.fs.coindashboard.controller.exceptionHandler.CoinNotFoundAdvice;
+import com.capgemini.fs.coindashboard.controller.exceptionHandler.CoinNotFoundException;
+import com.capgemini.fs.coindashboard.utilDataTypes.Coin;
+import com.capgemini.fs.coindashboard.utilDataTypes.MarketCapAndTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
-public class CoinControllerMockMvcStandaloneTest {
-
+public class CoinControllerTest {
+  private static final Logger log = LogManager.getLogger(CoinController.class);
   private MockMvc mvc;
 
   @Mock private CoinRepository coinRepository;
@@ -31,15 +39,11 @@ public class CoinControllerMockMvcStandaloneTest {
 
   @InjectMocks private CoinController coinController;
 
-  // This object will be magically initialized by the initFields method below.
-  private JacksonTester<Coin> jsonCoin;
-
-  private ArrayList<MarketCapAndTime> firstCoin = new ArrayList<>();
+  public ArrayList<MarketCapAndTime> firstCoin = new ArrayList<>();
 
   @BeforeEach
   public void setup() {
     firstCoin.add(new MarketCapAndTime(12L, 12.5));
-    JacksonTester.initFields(this, new ObjectMapper());
     mvc =
         MockMvcBuilders.standaloneSetup(coinController)
             .setControllerAdvice(new CoinNotFoundAdvice())
@@ -47,24 +51,23 @@ public class CoinControllerMockMvcStandaloneTest {
   }
 
   @Test
+  public void canRetrieveByAll() throws Exception {
+    Coin coin = new Coin("BTC", firstCoin);
+    Collection<Coin> coins = new ArrayList<>();
+    coins.add(coin);
+    Mockito.when(coinRepository.findAll()).thenReturn((List<Coin>) coins);
+    mvc.perform(get("/coins")).andDo(MockMvcResultHandlers.log()).andExpect(status().isOk());
+  }
+
+  @Test
   public void canRetrieveByNameWhenExists() throws Exception {
-    // given
-    given(coinRepository.findById("BTC")).willReturn(Optional.of(new Coin("BTC", firstCoin)));
-    System.out.println(coinRepository.findById("BTC"));
-
-    // when
-    MockHttpServletResponse response =
-        mvc.perform(get("/coins/BTC").accept(MediaTypes.ALPS_JSON)).andReturn().getResponse();
-
-    // then
-    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-    assertThat(response.getContentAsString())
-        .isEqualTo(jsonCoin.write(new Coin("BTC", firstCoin)).getJson());
+    Coin coin = new Coin("BTC", firstCoin);
+    Mockito.when(coinRepository.findById("BTC")).thenReturn(Optional.of(coin));
+    mvc.perform(get("/coins/BTC")).andDo(MockMvcResultHandlers.log()).andExpect(status().isOk());
   }
 
   @Test
   public void canRetrieveByNameWhenDoesNotExist() throws Exception {
-    // given
     given(coinRepository.findById("BTC")).willThrow(new CoinNotFoundException("BTC"));
     // when
     MockHttpServletResponse response =
@@ -72,6 +75,6 @@ public class CoinControllerMockMvcStandaloneTest {
 
     // then
     assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    assertThat(response.getContentAsString()).isEqualTo("Could not find coin: BTC");
+    assertThat(response.getContentAsString()).isEqualTo("Could not find coin BTC");
   }
 }

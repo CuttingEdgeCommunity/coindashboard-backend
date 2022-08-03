@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.controller;
+package com.capgemini.fs.coindashboard.utilDataTypes;
 
 import java.util.ArrayList;
 import java.util.Objects;

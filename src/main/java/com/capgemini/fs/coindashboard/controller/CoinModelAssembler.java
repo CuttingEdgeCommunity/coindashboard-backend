@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import com.capgemini.fs.coindashboard.utilDataTypes.Coin;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

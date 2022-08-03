@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class LoadDatabaseTest {
+class ControllerConfigurationTest {
   @Autowired private CommandLineRunner clr;
 
   @Test

@@ -1,7 +1,8 @@
-package com.capgemini.fs.coindashboard.controller;
+package com.capgemini.fs.coindashboard.controller.utilDataTypes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.capgemini.fs.coindashboard.utilDataTypes.MarketCapAndTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,14 +10,16 @@ import org.junit.jupiter.api.Test;
 public class MarketCapAndTimeTest {
   MarketCapAndTime x;
   MarketCapAndTime y;
+
   @BeforeEach
-  void setup(){
-    x = new MarketCapAndTime(2L,2.0);
-    y = new MarketCapAndTime(2L,2.0);
+  void setup() {
+    x = new MarketCapAndTime(2L, 2.0);
+    y = new MarketCapAndTime(2L, 2.0);
   }
+
   @Test
   void testToString() {
-    String expected = "{time=2"  + ", marketCap=2.0}";
+    String expected = "{time=2" + ", marketCap=2.0}";
     Assertions.assertEquals(expected, x.toString());
   }
 
