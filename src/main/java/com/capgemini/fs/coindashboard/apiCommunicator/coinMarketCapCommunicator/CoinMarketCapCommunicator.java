@@ -49,6 +49,7 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
       put("slug", String.join(",", coins));
       put("convert", String.join(",", vsCurrencies));
     }};
+
     String requestUrl = RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest",
         queryParams);
     Response response;
@@ -56,24 +57,29 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
       response = this.client.invokeGet(requestUrl, this.headers);
     } catch (IOException e) {
       log.error(e.getMessage());
-      return new CoinMarketDataResult(ResultStatus.FAILURE, e.getMessage(), null);
+      return new CoinMarketDataResult(this.providerEnum, ResultStatus.FAILURE, e.getMessage(),
+          null);
     }
     if (response == null) {
-      return new CoinMarketDataResult(ResultStatus.FAILURE, "unknown error", null);
+      return new CoinMarketDataResult(this.providerEnum, ResultStatus.FAILURE, "unknown error",
+          null);
     }
     if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
-      return new CoinMarketDataResult(ResultStatus.FAILURE,
+      log.error(response.getResponseBody().get("error").asText());
+      return new CoinMarketDataResult(this.providerEnum, ResultStatus.FAILURE,
           response.getResponseBody().get("error").asText(), null);
     }
 
-    CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult(ResultStatus.SUCCESS, null,
+    CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult(this.providerEnum,
+        ResultStatus.SUCCESS, null,
         null);
     try {
-      return new CoinMarketDataResult(ResultStatus.SUCCESS, null,
+      return new CoinMarketDataResult(this.providerEnum, ResultStatus.SUCCESS, null,
           this.parser.parseGetCoinsQuoteResult(response.getResponseBody()));
     } catch (Exception e) {
       log.error(e.getMessage());
-      return new CoinMarketDataResult(ResultStatus.FAILURE, e.getMessage(), new ArrayList<>());
+      return new CoinMarketDataResult(this.providerEnum, ResultStatus.FAILURE, e.getMessage(),
+          new ArrayList<>());
     }
   }
 

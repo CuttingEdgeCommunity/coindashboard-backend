@@ -1,5 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.ResultStatus;
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ public class CoinMarketDataResult extends Result {
 
   private ArrayList<CoinMarketDataDto> coinMarketDataDTOS;
 
-  public CoinMarketDataResult(ResultStatus status, String errorMessage,
+  public CoinMarketDataResult(ApiProviderEnum provider, ResultStatus status, String errorMessage,
       ArrayList<CoinMarketDataDto> coinMarketDataDTOS) {
-    super(status, errorMessage);
+    super(provider, status, errorMessage);
     this.coinMarketDataDTOS = coinMarketDataDTOS;
   }
 }
