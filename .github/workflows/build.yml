@@ -5,7 +5,6 @@ on:
   push:
     branches-ignore:
       - "github_workflow"
-  workflow_dispatch:
 
 
 env:
