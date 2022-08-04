@@ -6,15 +6,12 @@ import lombok.Data;
 @Data
 public class QuoteDto {
 
-  private String vsCurrency;
-  private float price;
+  private List<PriceDto> prices;
   private List<DeltaDto> deltas;
   private long lastUpdateTimestampMillis;
 
-  public QuoteDto(String vsCurrency, float price, List<DeltaDto> deltas,
-      long lastUpdateTimestampMillis) {
-    this.vsCurrency = vsCurrency;
-    this.price = price;
+  public QuoteDto(List<PriceDto> prices, List<DeltaDto> deltas, long lastUpdateTimestampMillis) {
+    this.prices = prices;
     this.deltas = deltas;
     this.lastUpdateTimestampMillis = lastUpdateTimestampMillis;
   }
