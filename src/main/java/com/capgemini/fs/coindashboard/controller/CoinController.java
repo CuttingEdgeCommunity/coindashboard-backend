@@ -58,8 +58,8 @@ public class CoinController {
   EntityModel<Coin> one(@PathVariable String name) {
     // cache entry
     Coin coin =
-        repository
-            .findById(name) //
+        coinService
+            .getCoinByName(name) //
             .orElseThrow(() -> new CoinNotFoundException(name));
 
     return assembler.toModel(coin);
@@ -86,5 +86,4 @@ public class CoinController {
   void deleteCoin(@PathVariable String name) {
     repository.deleteById(name);
   }
-
 }
