@@ -33,9 +33,6 @@ jobs:
       - name: Run the Maven verify phase
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=cuttingedgecommunity -Dsonar.projectKey=CuttingEdgeCommunity_coindashboard-backend -Dsonar.host.url=https://sonarcloud.io
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
       - name: Show target folder
         run: ls && ls target
 
@@ -49,6 +46,6 @@ jobs:
       - name: Build and push container image to registry
         uses: docker/build-push-action@v2
         with:
+          context: .
           push: true
           tags: ghcr.io/cuttingedgecommunity/coindashboard-backend:latest
-          file: ./Dockerfile
