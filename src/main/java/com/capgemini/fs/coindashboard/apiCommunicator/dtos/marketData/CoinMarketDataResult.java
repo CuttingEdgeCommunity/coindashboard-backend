@@ -18,4 +18,8 @@ public class CoinMarketDataResult extends Result {
     super(provider, status, errorMessage);
     this.coinMarketDataDTOS = coinMarketDataDTOS;
   }
+
+  public CoinMarketDataResult() {
+    super();
+  }
 }

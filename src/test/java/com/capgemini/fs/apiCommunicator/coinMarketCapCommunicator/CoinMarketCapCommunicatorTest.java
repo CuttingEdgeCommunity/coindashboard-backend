@@ -36,13 +36,30 @@ class CoinMarketCapCommunicatorTest {
 
   @Test
   void getCurrentListing() {
-    coinMarketCapCommunicator.getCurrentListing(
+    var x = coinMarketCapCommunicator.getCurrentListing(
         new ArrayList<>() {{
-          add("bitcoin,ethereum");
+          add("btc");
+          add("eth");
         }},
         new ArrayList<>() {{
           add("usd");
+          add("eur");
         }});
+    System.out.println();
+  }
+
+  @Test
+  void getHistoricalListing() {
+    var x = coinMarketCapCommunicator.getHistoricalListing(
+        new ArrayList<>() {{
+          add("btc");
+          add("eth");
+        }},
+        new ArrayList<>() {{
+          add("usd");
+          add("eur");
+        }},
+        1659601993L);
     System.out.println();
   }
 }
