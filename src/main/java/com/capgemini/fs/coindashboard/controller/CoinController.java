@@ -86,4 +86,5 @@ public class CoinController {
   void deleteCoin(@PathVariable String name) {
     repository.deleteById(name);
   }
+
 }

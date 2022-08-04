@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CoinServiceImplementation implements CoinService {
+public class CoinServiceImplementation implements CoinService,CoinDateRetriever {
   private static final Logger LOG = LogManager.getLogger(CoinServiceImplementation.class);
   private ArrayList<Coin> coins = new ArrayList<>();
 
@@ -21,25 +21,12 @@ public class CoinServiceImplementation implements CoinService {
     return coins;
   }
 
-  private void createCoinData(ArrayList<Coin> coins) {
-    // coins.add(Coin.builder().id(1).name("Bitcoin"))
-  }
-
   @Override
   @CustomCoinCachingAnnotation
   public Coin getCoinById(Integer id) {
-    retrieveDataFromDatabase();
+    CoinDateRetriever.retrieveDataFromDatabase(coins);
     LOG.info("Getting coins from database...");
     return coins.get(id);
   }
 
-  private void retrieveDataFromDatabase() {
-    try {
-      createCoinData(coins);
-      LOG.info("Sleep for 4 sec to make impression of a real server...");
-      Thread.sleep(4000);
-    } catch (InterruptedException ex) {
-      LOG.error(ex.getMessage());
-    }
-  }
 }

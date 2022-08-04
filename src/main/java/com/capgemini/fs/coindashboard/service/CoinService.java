@@ -2,7 +2,8 @@ package com.capgemini.fs.coindashboard.service;
 
 import com.capgemini.fs.coindashboard.utilDataTypes.Coin;
 import java.util.ArrayList;
-
+import org.springframework.stereotype.Repository;
+@Repository
 public interface CoinService {
   ArrayList<Coin> getCoins();
 
