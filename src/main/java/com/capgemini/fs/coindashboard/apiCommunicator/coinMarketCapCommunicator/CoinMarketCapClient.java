@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class CoinMarketCapClient {
 
-  private final ApiClient client = new ApiClient();
+  @Autowired
+  private ApiClient client;
+
   private static final Logger log = LogManager.getLogger(CoinMarketCapClient.class);
   private final String path = "https://sandbox-api.coinmarketcap.com";
   private final String version = "v2";
@@ -43,7 +46,7 @@ class CoinMarketCapClient {
       put("symbol", String.join(",", coins));
       put("convert", String.join(",", vsCurrencies));
       put("time_start", Long.toString(timestamp));
-      put("count", "100");
+      put("count", "1");
     }};
 
     String requestUrl = RequestBuilder.buildRequestURI(

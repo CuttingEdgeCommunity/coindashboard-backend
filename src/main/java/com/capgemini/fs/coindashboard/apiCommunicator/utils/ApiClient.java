@@ -3,12 +3,11 @@ package com.capgemini.fs.coindashboard.apiCommunicator.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.FileNotFoundException;
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ApiClient {
@@ -28,7 +27,7 @@ public class ApiClient {
     String body;
     try {
       body = InputStreamParser.convertStreamToString(connection.getInputStream());
-    } catch (FileNotFoundException e) {
+    } catch (Exception e) {
       body = InputStreamParser.convertStreamToString(connection.getErrorStream());
     }
     return buildResponse(status, body);

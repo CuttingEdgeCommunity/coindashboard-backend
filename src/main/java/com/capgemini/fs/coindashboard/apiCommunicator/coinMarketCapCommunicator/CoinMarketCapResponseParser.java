@@ -39,6 +39,7 @@ class CoinMarketCapResponseParser {
       if (error != null) {
         result.setStatus(ResultStatus.FAILURE);
         result.setErrorMessage(error);
+        return result;
       }
 
       result.setStatus(ResultStatus.SUCCESS);
@@ -113,6 +114,7 @@ class CoinMarketCapResponseParser {
       if (error != null) {
         result.setStatus(ResultStatus.FAILURE);
         result.setErrorMessage(error);
+        return result;
       }
 
       result.setStatus(ResultStatus.SUCCESS);

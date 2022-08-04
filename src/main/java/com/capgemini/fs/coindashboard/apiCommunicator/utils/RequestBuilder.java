@@ -45,13 +45,8 @@ public class RequestBuilder {
 
   public static String buildRequestURI(String baseURL, List<String> pathParams,
       Map<String, String> queryParams) {
+    baseURL = String.format(baseURL, pathParams.toArray());
     StringBuilder sb = new StringBuilder(baseURL);
-    if (pathParams.size() > 0) {
-      pathParams.forEach(p -> sb.append(
-          String.format("/%s", URLEncoder.encode(p, StandardCharsets.UTF_8)))
-      );
-    }
-//
 
     if (queryParams.size() > 0) {
       sb.append("?");

@@ -1,8 +1,7 @@
-package com.capgemini.fs.apiCommunicator.utils;
+package com.capgemini.fs.coindashboard.apiCommunicator.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -24,7 +23,7 @@ class RequestBuilderTest {
       put("qp3", "true");
     }};
     assertEquals("abc.com/param1/1/true?qp1=1&qp2=asd&qp3=true",
-        RequestBuilder.buildRequestURI("abc.com", pathParams, queryParams));
+        RequestBuilder.buildRequestURI("abc.com/%s/%s/%s", pathParams, queryParams));
   }
 
   @Test
