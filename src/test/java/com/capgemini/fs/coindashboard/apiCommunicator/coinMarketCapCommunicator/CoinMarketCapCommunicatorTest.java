@@ -66,7 +66,6 @@ class CoinMarketCapCommunicatorTest extends CoinMarketCapTestBaseClass {
     assertEquals(ApiProviderEnum.COIN_MARKET_CAP, error.getProvider());
     assertEquals(ResultStatus.SUCCESS, correct.getStatus());
     assertEquals(ResultStatus.FAILURE, error.getStatus());
-    System.out.println();
   }
 
   @Test
@@ -79,6 +78,5 @@ class CoinMarketCapCommunicatorTest extends CoinMarketCapTestBaseClass {
     assertEquals(ApiProviderEnum.COIN_MARKET_CAP, error.getProvider());
     assertEquals(ResultStatus.SUCCESS, correct.getStatus());
     assertEquals(ResultStatus.FAILURE, error.getStatus());
-    System.out.println();
   }
 }

@@ -23,7 +23,7 @@ class CoinMarketCapClientTest extends CoinMarketCapTestBaseClass {
 
   private final Map<String, List<String>> headers = new HashMap<>() {{
     put("X-CMC_PRO_API_KEY", new ArrayList<>() {{
-      add("b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c");
+      add("dc8ad4b3-5f8a-4190-84e9-34efc1fd81a9");
     }});
   }};
   @Autowired
@@ -34,13 +34,13 @@ class CoinMarketCapClientTest extends CoinMarketCapTestBaseClass {
 
   @BeforeEach
   public void setUp() throws IOException {
-    String correctLatestUri = "https://sandbox-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=btc%2Ceth&convert=usd%2Ceur";
+    String correctLatestUri = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=btc%2Ceth&convert=usd%2Ceur";
     String correctHistoricalUri = String.format(
-        "https://sandbox-api.coinmarketcap.com/v2/cryptocurrency/quotes/historical?symbol=btc%%2Ceth&convert=usd%%2Ceur&time_start=%s&count=1",
+        "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/historical?symbol=btc%%2Ceth&convert=usd%%2Ceur&time_start=%s&count=1",
         this.timestamp);
-    String errorLatestUri = "https://sandbox-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=btc%2C+eth&convert=usd%2Ceur";
+    String errorLatestUri = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=btc%2C+eth&convert=usd%2Ceur";
     String errorHistoricalUri = String.format(
-        "https://sandbox-api.coinmarketcap.com/v2/cryptocurrency/quotes/historical?symbol=btc%%2C+eth&convert=usd%%2Ceur&time_start=%s&count=1",
+        "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/historical?symbol=btc%%2C+eth&convert=usd%%2Ceur&time_start=%s&count=1",
         this.timestamp);
 
     Mockito.when(apiClient.invokeGet(correctLatestUri, this.headers))
