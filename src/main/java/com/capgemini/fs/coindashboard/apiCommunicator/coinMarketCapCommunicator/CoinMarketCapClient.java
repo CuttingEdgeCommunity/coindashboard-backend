@@ -19,11 +19,11 @@ class CoinMarketCapClient {
   private ApiClient client;
 
   private static final Logger log = LogManager.getLogger(CoinMarketCapClient.class);
-  private final String path = "https://sandbox-api.coinmarketcap.com";
+  private final String path = "https://pro-api.coinmarketcap.com";
   private final String version = "v2";
   private final String url = path + "/" + version; // TODO: move to env
 
-  private final String key = "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c";
+  private final String key = "dc8ad4b3-5f8a-4190-84e9-34efc1fd81a9";
   private final Map<String, List<String>> headers = new HashMap<>() {{
     put("X-CMC_PRO_API_KEY", new ArrayList<>() {{
       add(key);
