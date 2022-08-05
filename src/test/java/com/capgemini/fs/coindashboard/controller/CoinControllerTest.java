@@ -7,11 +7,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.capgemini.fs.coindashboard.controller.exceptionHandler.CoinNotFoundAdvice;
 import com.capgemini.fs.coindashboard.controller.exceptionHandler.CoinNotFoundException;
+import com.capgemini.fs.coindashboard.service.CoinService;
 import com.capgemini.fs.coindashboard.utilDataTypes.Coin;
 import com.capgemini.fs.coindashboard.utilDataTypes.MarketCapAndTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 public class CoinControllerTest {
   private static final Logger log = LogManager.getLogger(CoinController.class);
   private MockMvc mvc;
-
+  @Mock private CoinService coinService;
   @Mock private CoinRepository coinRepository;
   @Mock private CoinModelAssembler coinModelAssembler;
 
@@ -53,22 +52,22 @@ public class CoinControllerTest {
   @Test
   public void canRetrieveByAll() throws Exception {
     Coin coin = new Coin("BTC", firstCoin);
-    Collection<Coin> coins = new ArrayList<>();
+    ArrayList<Coin> coins = new ArrayList<>();
     coins.add(coin);
-    Mockito.when(coinRepository.findAll()).thenReturn((List<Coin>) coins);
+    Mockito.when(coinService.getCoins()).thenReturn(coins);
     mvc.perform(get("/coins")).andDo(MockMvcResultHandlers.log()).andExpect(status().isOk());
   }
 
   @Test
   public void canRetrieveByNameWhenExists() throws Exception {
     Coin coin = new Coin("BTC", firstCoin);
-    Mockito.when(coinRepository.findById("BTC")).thenReturn(Optional.of(coin));
+    Mockito.when(coinService.getCoinByName("BTC")).thenReturn(Optional.of(coin));
     mvc.perform(get("/coins/BTC")).andDo(MockMvcResultHandlers.log()).andExpect(status().isOk());
   }
 
   @Test
   public void canRetrieveByNameWhenDoesNotExist() throws Exception {
-    given(coinRepository.findById("BTC")).willThrow(new CoinNotFoundException("BTC"));
+    given(coinService.getCoinByName("BTC")).willThrow(new CoinNotFoundException("BTC"));
     // when
     MockHttpServletResponse response =
         mvc.perform(get("/coins/BTC").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
