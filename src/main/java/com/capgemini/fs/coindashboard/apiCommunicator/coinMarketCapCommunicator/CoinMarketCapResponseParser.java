@@ -86,10 +86,10 @@ class CoinMarketCapResponseParser {
         var pctChange24h = quote.getValue().get("percent_change_24h").asDouble();
         var pctChange7d = quote.getValue().get("percent_change_7d").asDouble();
         var pctChange30d = quote.getValue().get("percent_change_30d").asDouble();
-        var nominalChange1h = currentPrice * pctChange1h;
-        var nominalChange24h = currentPrice * pctChange24h;
-        var nominalChange7d = currentPrice * pctChange7d;
-        var nominalChange30d = currentPrice * pctChange30d;
+        var nominalChange1h = this.calculateNominalDelta(currentPrice, pctChange1h);
+        var nominalChange24h = this.calculateNominalDelta(currentPrice, pctChange24h);
+        var nominalChange7d = this.calculateNominalDelta(currentPrice, pctChange7d);
+        var nominalChange30d = this.calculateNominalDelta(currentPrice, pctChange30d);
         List<DeltaDto> deltas = new ArrayList<>() {{
           add(new DeltaDto(IntervalEnum.ONE_HOUR, pctChange1h, nominalChange1h));
           add(new DeltaDto(IntervalEnum.ONE_DAY, pctChange24h, nominalChange24h));
@@ -159,5 +159,9 @@ class CoinMarketCapResponseParser {
           name, symbol, quoteDtos));
     }
     return result;
+  }
+
+  public double calculateNominalDelta(double current, double deltaPct) {
+    return current - (current / (1 + deltaPct / 100));
   }
 }
