@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.ResultStatus;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import org.junit.jupiter.api.Test;
 
@@ -58,5 +59,12 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
         resultCorrect.get(0).getQuoteMap().get("USD").getPrices().get(0).getPrice());
   }
 
+  @Test
+  void calculateNominalDelta() {
+    DecimalFormat df = new DecimalFormat("###.####");
+    assertEquals("2,9126", df.format(parser.calculateNominalDelta(100, 3)));
+    assertEquals("-3,0928", df.format(parser.calculateNominalDelta(100, -3)));
+    assertEquals("0", df.format(parser.calculateNominalDelta(100, 0)));
+  }
 
 }
