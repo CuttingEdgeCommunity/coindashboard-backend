@@ -10,6 +10,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class RequestBuilderTest {
+
   @Test
   void buildRequestURL() {
     List<String> pathParams = new ArrayList<>() {{
@@ -17,7 +18,7 @@ class RequestBuilderTest {
       add("1");
       add("true");
     }};
-    Map<String,String> queryParams = new LinkedHashMap<>(){{
+    Map<String, String> queryParams = new LinkedHashMap<>() {{
       put("qp1", "1");
       put("qp2", "asd");
       put("qp3", "true");
@@ -37,7 +38,7 @@ class RequestBuilderTest {
           put("hd1", headerValues1);
         }});
 //    var s = req.getRequestProperties().get("hd1");
-    assertEquals(String.join(",",headerValues1),
-     req.getRequestProperties().get("hd1").get(0));
+    assertEquals(String.join("%2C", headerValues1),
+        req.getRequestProperties().get("hd1").get(0));
   }
 }

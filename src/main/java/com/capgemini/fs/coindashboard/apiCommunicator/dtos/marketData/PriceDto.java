@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class PriceDto {
 
-  private float price;
+  private double price;
   private long timestamp;
 
-  public PriceDto(float price, long timestamp) {
+  public PriceDto(double price, long timestamp) {
     this.price = price;
     this.timestamp = timestamp;
   }

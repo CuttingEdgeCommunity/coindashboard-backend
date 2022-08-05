@@ -6,10 +6,10 @@ import lombok.Data;
 public class DeltaDto {
 
   private IntervalEnum interval;
-  private float percentChange;
-  private float nominalChange;
+  private double percentChange;
+  private double nominalChange;
 
-  public DeltaDto(IntervalEnum interval, float percentChange, float nominalChange) {
+  public DeltaDto(IntervalEnum interval, double percentChange, double nominalChange) {
     this.interval = interval;
     this.percentChange = percentChange;
     this.nominalChange = nominalChange;

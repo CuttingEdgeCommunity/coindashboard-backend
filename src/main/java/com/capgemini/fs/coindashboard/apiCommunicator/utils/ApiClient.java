@@ -3,11 +3,11 @@ package com.capgemini.fs.coindashboard.apiCommunicator.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ApiClient {
@@ -40,7 +40,7 @@ public class ApiClient {
     return response;
   }
 
-  private JsonNode parseResponse(String json)
+  public JsonNode parseResponse(String json)
       throws JsonProcessingException {
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readTree(json);

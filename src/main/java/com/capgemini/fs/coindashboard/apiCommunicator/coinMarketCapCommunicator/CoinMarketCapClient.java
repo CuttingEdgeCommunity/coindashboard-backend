@@ -6,6 +6,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +31,7 @@ class CoinMarketCapClient {
   }};
 
   public Response getCoinQuotes(List<String> coins, List<String> vsCurrencies) throws IOException {
-    HashMap<String, String> queryParams = new HashMap<>() {{
+    LinkedHashMap<String, String> queryParams = new LinkedHashMap<>() {{
       put("symbol", String.join(",", coins));
       put("convert", String.join(",", vsCurrencies));
     }};
@@ -42,7 +43,7 @@ class CoinMarketCapClient {
 
   public Response getHistoricalCoinQuotes(List<String> coins, List<String> vsCurrencies,
       long timestamp) throws IOException {
-    HashMap<String, String> queryParams = new HashMap<>() {{
+    LinkedHashMap<String, String> queryParams = new LinkedHashMap<>() {{
       put("symbol", String.join(",", coins));
       put("convert", String.join(",", vsCurrencies));
       put("time_start", Long.toString(timestamp));

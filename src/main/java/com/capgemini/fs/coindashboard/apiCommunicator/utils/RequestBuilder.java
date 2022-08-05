@@ -20,7 +20,7 @@ public class RequestBuilder {
     connection.setRequestMethod("GET");
     headers.forEach((k, vs) ->
         connection.setRequestProperty(URLEncoder.encode(k, StandardCharsets.UTF_8),
-            String.join(",", vs)));
+            String.join(URLEncoder.encode(",", StandardCharsets.UTF_8), vs)));
     return connection;
   }
 

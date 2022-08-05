@@ -7,7 +7,6 @@ import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.DeltaDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.IntervalEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.PriceDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.QuoteDto;
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.TimeFormatter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,17 +26,17 @@ class CoinMarketCapResponseParser {
 
   private static final Logger log = LogManager.getLogger(CoinMarketCapResponseParser.class);
 
-  private String parseStatus(JsonNode status) {
+  public String parseStatus(JsonNode status) {
     if (status.get("error_code").asInt() != 0) {
       return status.get("error_message").asText();
     }
     return null;
   }
 
-  public CoinMarketDataResult parseGetCoinsQuoteResult(Response apiResponse) {
+  public CoinMarketDataResult parseQuoteLatestResult(JsonNode apiResponseBody) {
     CoinMarketDataResult result = new CoinMarketDataResult();
     try {
-      String error = this.parseStatus(apiResponse.getResponseBody().get("status"));
+      String error = this.parseStatus(apiResponseBody.get("status"));
       if (error != null) {
         result.setStatus(ResultStatus.FAILURE);
         result.setErrorMessage(error);
@@ -46,7 +45,7 @@ class CoinMarketCapResponseParser {
 
       result.setStatus(ResultStatus.SUCCESS);
       result.setCoinMarketDataDTOS(
-          this.parseMarketDataLatestQuote(apiResponse.getResponseBody().get("data")));
+          this.parseCoinsQuoteLatestResult(apiResponseBody.get("data")));
       return result;
     } catch (Exception e) {
       log.error(e.getMessage());
@@ -56,7 +55,7 @@ class CoinMarketCapResponseParser {
     }
   }
 
-  public ArrayList<CoinMarketDataDto> parseMarketDataLatestQuote(JsonNode data)
+  public ArrayList<CoinMarketDataDto> parseCoinsQuoteLatestResult(JsonNode data)
       throws ParseException {
     ArrayList<CoinMarketDataDto> result = new ArrayList<>();
     ObjectMapper mapper = new ObjectMapper();
@@ -72,8 +71,6 @@ class CoinMarketCapResponseParser {
       }
       String name = coin.getKey();
       String symbol = coin.getValue().get("symbol").asText();
-      long lastUpdated = TimeFormatter.convertStringToTimestamp(
-          coin.getValue().get("last_updated").asText(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").getTime();
 
       Map<String, QuoteDto> quoteDtos = new LinkedHashMap<>();
       Map<String, ObjectNode> quotesConverted = mapper.convertValue(coin.getValue().get("quote"),
@@ -81,14 +78,14 @@ class CoinMarketCapResponseParser {
           });
 
       for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
-        var currentPrice = (float) quote.getValue().get("price").asDouble();
+        var currentPrice = quote.getValue().get("price").asDouble();
         var timestamp = TimeFormatter.convertStringToTimestamp(
                 quote.getValue().get("last_updated").asText(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             .getTime();
-        var pctChange1h = (float) quote.getValue().get("percent_change_1h").asDouble();
-        var pctChange24h = (float) quote.getValue().get("percent_change_24h").asDouble();
-        var pctChange7d = (float) quote.getValue().get("percent_change_7d").asDouble();
-        var pctChange30d = (float) quote.getValue().get("percent_change_30d").asDouble();
+        var pctChange1h = quote.getValue().get("percent_change_1h").asDouble();
+        var pctChange24h = quote.getValue().get("percent_change_24h").asDouble();
+        var pctChange7d = quote.getValue().get("percent_change_7d").asDouble();
+        var pctChange30d = quote.getValue().get("percent_change_30d").asDouble();
         var nominalChange1h = currentPrice * pctChange1h;
         var nominalChange24h = currentPrice * pctChange24h;
         var nominalChange7d = currentPrice * pctChange7d;
@@ -111,10 +108,10 @@ class CoinMarketCapResponseParser {
   }
 
 
-  public CoinMarketDataResult parseGetCoinsHistoricalQuoteResult(Response apiResponse) {
+  public CoinMarketDataResult parseQuoteHistoricalResult(JsonNode apiResponseBody) {
     CoinMarketDataResult result = new CoinMarketDataResult();
     try {
-      String error = this.parseStatus(apiResponse.getResponseBody().get("status"));
+      String error = this.parseStatus(apiResponseBody.get("status"));
       if (error != null) {
         result.setStatus(ResultStatus.FAILURE);
         result.setErrorMessage(error);
@@ -123,7 +120,7 @@ class CoinMarketCapResponseParser {
 
       result.setStatus(ResultStatus.SUCCESS);
       result.setCoinMarketDataDTOS(
-          this.parseMarketDataHistoricalQuote(apiResponse.getResponseBody().get("data")));
+          this.parseCoinsQuoteHistoricalResult(apiResponseBody.get("data")));
       return result;
     } catch (Exception e) {
       log.error(e.getMessage());
@@ -133,7 +130,7 @@ class CoinMarketCapResponseParser {
     }
   }
 
-  private ArrayList<CoinMarketDataDto> parseMarketDataHistoricalQuote(JsonNode data)
+  public ArrayList<CoinMarketDataDto> parseCoinsQuoteHistoricalResult(JsonNode data)
       throws ParseException {
     ArrayList<CoinMarketDataDto> result = new ArrayList<>();
     ObjectMapper mapper = new ObjectMapper();
@@ -150,7 +147,7 @@ class CoinMarketCapResponseParser {
           coin.getValue().get("quotes").get(0).get("quote"), new TypeReference<>() {
           });
       for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
-        var currentPrice = (float) quote.getValue().get("price").asDouble();
+        var currentPrice = quote.getValue().get("price").asDouble();
         var timestamp = TimeFormatter.convertStringToTimestamp(
                 quote.getValue().get("timestamp").asText(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             .getTime();

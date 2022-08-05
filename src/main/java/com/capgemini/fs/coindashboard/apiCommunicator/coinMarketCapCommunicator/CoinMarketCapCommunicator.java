@@ -31,7 +31,7 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
   public CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies) {
     try {
       Response response = this.client.getCoinQuotes(coins, vsCurrencies);
-      var ret = parser.parseGetCoinsQuoteResult(response);
+      var ret = parser.parseQuoteLatestResult(response.getResponseBody());
       ret.setProvider(this.providerEnum);
       if (ret.getStatus() == ResultStatus.SUCCESS &&
           ret.getCoinMarketDataDTOS().size() != coins.size()) {
@@ -52,7 +52,7 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
     try {
       Response response = this.client.getHistoricalCoinQuotes(coins, vsCurrencies, timestamp);
 
-      var ret = parser.parseGetCoinsHistoricalQuoteResult(response);
+      var ret = parser.parseQuoteHistoricalResult(response.getResponseBody());
       ret.setProvider(this.providerEnum);
       if (ret.getStatus() == ResultStatus.SUCCESS &&
           ret.getCoinMarketDataDTOS().size() != coins.size()) {
