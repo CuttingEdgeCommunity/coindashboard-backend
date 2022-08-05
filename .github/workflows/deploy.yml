@@ -3,7 +3,7 @@ name: deploy
 on:
   push:
     branches:
-      - "github_workflow"
+      - "main"
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
