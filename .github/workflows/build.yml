@@ -41,7 +41,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.ref == "refs/heads/github_workflow"
+    if: github.ref == 'refs/heads/github_workflow'
 
     steps:
       - uses: actions/checkout@v3
