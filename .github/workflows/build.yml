@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: target
-          path: target/
+          path: target/*.jar
 
   deploy:
     runs-on: ubuntu-latest
