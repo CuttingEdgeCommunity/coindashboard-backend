@@ -65,6 +65,9 @@ public class ApiHolder { // TODO: placeholder name
       if (entry.getKey() == ApiProviderEnum.COIN_GECKO && Objects.equals(coinName, "btc")) {
         coinName = "bitcoin";
       }
+      if (entry.getKey() == ApiProviderEnum.COIN_GECKO && Objects.equals(coinName, "eth")) {
+        continue;
+      }
       String finalCoinName = coinName;
       CoinMarketDataResult result = entry.getValue().getHistoricalListing(
           new ArrayList<>() {{
