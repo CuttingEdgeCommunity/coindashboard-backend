@@ -15,12 +15,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class CoinMarketCapCommunicator implements ApiCommunicator {
 
+  private static final Logger log = LogManager.getLogger(CoinMarketCapCommunicator.class);
   private final ApiProviderEnum providerEnum = ApiProviderEnum.COIN_MARKET_CAP;
   @Autowired
   private CoinMarketCapClient client;
   @Autowired
   private CoinMarketCapResponseParser parser;
-  private static final Logger log = LogManager.getLogger(CoinMarketCapCommunicator.class);
 
   @Override
   public ApiProviderEnum getApiProvider() {

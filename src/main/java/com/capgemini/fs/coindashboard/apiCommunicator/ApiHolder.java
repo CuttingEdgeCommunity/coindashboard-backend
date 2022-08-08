@@ -3,23 +3,25 @@ package com.capgemini.fs.coindashboard.apiCommunicator;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.CoinMarketDataResult;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApiHolder { // TODO: placeholder name
 
+  // Strategies are sorted by apiProviderEnumOrder
   private final Map<ApiProviderEnum, ApiCommunicator> apiCommunicators;
 
   @Autowired
   public ApiHolder(Set<ApiCommunicator> apiCommunicatorSet) {
-    this.apiCommunicators = new HashMap<>();
+    this.apiCommunicators = new TreeMap<>();
     apiCommunicatorSet.forEach(
         strategy -> this.apiCommunicators.put(strategy.getApiProvider(), strategy));
   }
@@ -36,8 +38,12 @@ public class ApiHolder { // TODO: placeholder name
     boolean stop = false;
     while (iterator.hasNext() && !stop) {
       Map.Entry<ApiProviderEnum, ApiCommunicator> entry = iterator.next();
+      if (entry.getKey() == ApiProviderEnum.COIN_GECKO && Objects.equals(coinName, "btc")) {
+        coinName = "bitcoin";
+      }
+      String finalCoinName = coinName;
       CoinMarketDataResult result = entry.getValue().getCurrentListing(new ArrayList<>() {{
-        add(coinName);
+        add(finalCoinName);
       }}, new ArrayList<>() {{
         add("usd");
       }});
@@ -56,9 +62,13 @@ public class ApiHolder { // TODO: placeholder name
     boolean stop = false;
     while (iterator.hasNext() && !stop) {
       Map.Entry<ApiProviderEnum, ApiCommunicator> entry = iterator.next();
+      if (entry.getKey() == ApiProviderEnum.COIN_GECKO && Objects.equals(coinName, "btc")) {
+        coinName = "bitcoin";
+      }
+      String finalCoinName = coinName;
       CoinMarketDataResult result = entry.getValue().getHistoricalListing(
           new ArrayList<>() {{
-            add(coinName);
+            add(finalCoinName);
           }},
           new ArrayList<>() {{
             add("usd");

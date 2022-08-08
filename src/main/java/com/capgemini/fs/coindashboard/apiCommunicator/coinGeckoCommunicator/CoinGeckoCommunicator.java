@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CoinGeckoCommunicator implements ApiCommunicator {
 
-  ApiClient client = new ApiClient();
+  @Autowired
+  ApiClient client;
   ApiProviderEnum apiProvider = ApiProviderEnum.COIN_GECKO;
 
   @Override
@@ -49,16 +51,22 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
       assert response != null;
       ArrayList<CoinMarketDataDto> coinMarketDataDtos = parser.CurrentParser(response, currency);
       coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
+      if (coinMarketDataDtos.size() > 0) {
+        coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
+      } else {
+        coinMarketDataResult.setStatus(ResultStatus.FAILURE);
+      }
     }
     return coinMarketDataResult;
   }
 
-    @Override
+  @Override
   public CoinMarketDataResult getHistoricalListing(List<String> coins, List<String> vsCurrencies,
       Long timestamp) {
     CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult();
     for (String coin : coins) {
       for (String currency : vsCurrencies) {
+        coinMarketDataResult.setProvider(this.apiProvider);
         Response response = null;
         try {
           response = client.invokeGet(RequestBuilder
@@ -79,6 +87,11 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
         CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, coin, currency);
         coinMarketDataDtos.add(coinMarketDataDto);
         coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
+        if (coinMarketDataDtos.size() > 0) {
+          coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
+        } else {
+          coinMarketDataResult.setStatus(ResultStatus.FAILURE);
+        }
       }
     }
     return coinMarketDataResult;

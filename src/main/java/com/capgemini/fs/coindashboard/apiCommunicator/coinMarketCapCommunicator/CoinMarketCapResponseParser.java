@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
+@Component
 class CoinMarketCapResponseParser {
 
   private static final Logger log = LogManager.getLogger(CoinMarketCapResponseParser.class);
