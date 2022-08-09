@@ -1,6 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.CoinMarketDataResult;
+import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
 import java.util.List;
 
 public interface ApiCommunicator {
@@ -9,6 +9,6 @@ public interface ApiCommunicator {
 
   CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies);
 
-  CoinMarketDataResult getHistoricalListing(List<String> coins, List<String> vsCurrencies,
-      Long timestamp);
+  CoinMarketDataResult getHistoricalListing(
+      List<String> coins, List<String> vsCurrencies, Long timestamp);
 }

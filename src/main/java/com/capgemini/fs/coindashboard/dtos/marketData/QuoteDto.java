@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import java.util.List;
 import lombok.Data;
@@ -16,4 +16,3 @@ public class QuoteDto {
     this.lastUpdateTimestampMillis = lastUpdateTimestampMillis;
   }
 }
-

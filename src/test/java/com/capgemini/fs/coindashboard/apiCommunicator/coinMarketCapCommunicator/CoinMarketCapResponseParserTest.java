@@ -3,7 +3,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.ResultStatus;
+import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,8 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
   @Test
   void parseCoinsQuoteLatestResult() throws ParseException {
     var resultCorrect = parser.parseCoinsQuoteLatestResult(correctLatest.get("data"));
-    assertEquals(0.4378632733017602,
+    assertEquals(
+        0.4378632733017602,
         resultCorrect.get(0).getQuoteMap().get("USD").getDeltas().get(0).getPercentChange());
   }
 
@@ -55,7 +56,8 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
   @Test
   void parseCoinsQuoteHistoricalResult() throws ParseException {
     var resultCorrect = parser.parseCoinsQuoteHistoricalResult(correctHistorical.get("data"));
-    assertEquals(0.716910918341749,
+    assertEquals(
+        0.716910918341749,
         resultCorrect.get(0).getQuoteMap().get("USD").getPrices().get(0).getPrice());
   }
 
@@ -66,5 +68,4 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
     assertEquals("-3,0928", df.format(parser.calculateNominalDelta(100, -3)));
     assertEquals("0", df.format(parser.calculateNominalDelta(100, 0)));
   }
-
 }

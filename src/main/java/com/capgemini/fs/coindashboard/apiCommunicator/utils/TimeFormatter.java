@@ -15,5 +15,4 @@ public class TimeFormatter {
 
     return new Timestamp(date.getTime());
   }
-
 }

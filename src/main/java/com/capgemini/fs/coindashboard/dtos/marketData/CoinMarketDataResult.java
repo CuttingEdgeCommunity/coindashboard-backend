@@ -1,8 +1,8 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.Result;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.ResultStatus;
+import com.capgemini.fs.coindashboard.dtos.common.Result;
+import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import java.util.ArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,10 @@ public class CoinMarketDataResult extends Result {
 
   private ArrayList<CoinMarketDataDto> coinMarketDataDTOS;
 
-  public CoinMarketDataResult(ApiProviderEnum provider, ResultStatus status, String errorMessage,
+  public CoinMarketDataResult(
+      ApiProviderEnum provider,
+      ResultStatus status,
+      String errorMessage,
       ArrayList<CoinMarketDataDto> coinMarketDataDTOS) {
     super(provider, status, errorMessage);
     this.coinMarketDataDTOS = coinMarketDataDTOS;

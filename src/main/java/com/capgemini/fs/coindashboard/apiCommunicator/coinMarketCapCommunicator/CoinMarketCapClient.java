@@ -22,38 +22,48 @@ class CoinMarketCapClient {
   private final String version = "v2";
   private final String url = path + "/" + version; // TODO: move to env
   private final String key = "dc8ad4b3-5f8a-4190-84e9-34efc1fd81a9";
-  private final Map<String, List<String>> headers = new HashMap<>() {{
-    put("X-CMC_PRO_API_KEY", new ArrayList<>() {{
-      add(key);
-    }});
-  }};
-  @Autowired
-  private ApiClient client;
+  private final Map<String, List<String>> headers =
+      new HashMap<>() {
+        {
+          put(
+              "X-CMC_PRO_API_KEY",
+              new ArrayList<>() {
+                {
+                  add(key);
+                }
+              });
+        }
+      };
+  @Autowired private ApiClient client;
 
   public Response getCoinQuotes(List<String> coins, List<String> vsCurrencies) throws IOException {
-    LinkedHashMap<String, String> queryParams = new LinkedHashMap<>() {{
-      put("symbol", String.join(",", coins));
-      put("convert", String.join(",", vsCurrencies));
-    }};
+    LinkedHashMap<String, String> queryParams =
+        new LinkedHashMap<>() {
+          {
+            put("symbol", String.join(",", coins));
+            put("convert", String.join(",", vsCurrencies));
+          }
+        };
 
-    String requestUrl = RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest",
-        queryParams);
+    String requestUrl =
+        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest", queryParams);
     return this.client.invokeGet(requestUrl, this.headers);
   }
 
-  public Response getHistoricalCoinQuotes(List<String> coins, List<String> vsCurrencies,
-      long timestamp) throws IOException {
-    LinkedHashMap<String, String> queryParams = new LinkedHashMap<>() {{
-      put("symbol", String.join(",", coins));
-      put("convert", String.join(",", vsCurrencies));
-      put("time_start", Long.toString(timestamp));
-      put("count", "1");
-    }};
+  public Response getHistoricalCoinQuotes(
+      List<String> coins, List<String> vsCurrencies, long timestamp) throws IOException {
+    LinkedHashMap<String, String> queryParams =
+        new LinkedHashMap<>() {
+          {
+            put("symbol", String.join(",", coins));
+            put("convert", String.join(",", vsCurrencies));
+            put("time_start", Long.toString(timestamp));
+            put("count", "1");
+          }
+        };
 
-    String requestUrl = RequestBuilder.buildRequestURI(
-        this.url + "/cryptocurrency/quotes/historical",
-        queryParams);
+    String requestUrl =
+        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/historical", queryParams);
     return this.client.invokeGet(requestUrl, this.headers);
   }
-
 }

@@ -16,11 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class ApiHolderTest {
 
-
-  @MockBean
-  public CoinMarketCapCommunicator coinMarketCapCommunicator;
-  @MockBean
-  public CoinGeckoCommunicator coinGeckoCommunicator;
+  @MockBean public CoinMarketCapCommunicator coinMarketCapCommunicator;
+  @MockBean public CoinGeckoCommunicator coinGeckoCommunicator;
   private ApiHolder apiHolder;
 
   @BeforeEach
@@ -29,23 +26,23 @@ class ApiHolderTest {
         .thenReturn(ApiProviderEnum.COIN_GECKO);
     Mockito.when(this.coinMarketCapCommunicator.getApiProvider())
         .thenReturn(ApiProviderEnum.COIN_MARKET_CAP);
-    this.apiHolder = new ApiHolder(
-        new HashSet<>(List.of(this.coinGeckoCommunicator, this.coinMarketCapCommunicator)));
+    this.apiHolder =
+        new ApiHolder(
+            new HashSet<>(List.of(this.coinGeckoCommunicator, this.coinMarketCapCommunicator)));
   }
 
   @Test
   void getApiCommunicator() {
-    assertSame(this.coinGeckoCommunicator,
-        apiHolder.getApiCommunicator(ApiProviderEnum.COIN_GECKO));
-    assertSame(this.coinMarketCapCommunicator,
+    assertSame(
+        this.coinGeckoCommunicator, apiHolder.getApiCommunicator(ApiProviderEnum.COIN_GECKO));
+    assertSame(
+        this.coinMarketCapCommunicator,
         apiHolder.getApiCommunicator(ApiProviderEnum.COIN_MARKET_CAP));
   }
 
   @Test
-  void getCoinMarketData() {
-  }
+  void getCoinMarketData() {}
 
   @Test
-  void getHistoricalCoinMarketData() {
-  }
+  void getHistoricalCoinMarketData() {}
 }

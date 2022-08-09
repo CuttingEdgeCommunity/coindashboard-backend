@@ -3,6 +3,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.capgemini.fs.coindashboard.dtos.marketData.PriceDto;
 import org.junit.jupiter.api.Test;
 
 class PriceDtoTest {

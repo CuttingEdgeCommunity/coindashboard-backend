@@ -1,11 +1,11 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.utils.resultBuilder;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.CoinMarketDataDto;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.CoinMarketDataResult;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.DeltaDto;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.IntervalEnum;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.PriceDto;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.QuoteDto;
+import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
+import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
+import com.capgemini.fs.coindashboard.dtos.marketData.DeltaDto;
+import com.capgemini.fs.coindashboard.dtos.marketData.IntervalEnum;
+import com.capgemini.fs.coindashboard.dtos.marketData.PriceDto;
+import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 import java.util.Map;

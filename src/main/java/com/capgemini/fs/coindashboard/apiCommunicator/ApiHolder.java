@@ -1,7 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.ResultStatus;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData.CoinMarketDataResult;
+import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
+import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +33,8 @@ public class ApiHolder { // TODO: placeholder name
   public List<CoinMarketDataResult> getCoinMarketData(
       String coinName) { // TODO: handle crypto names (ie. btc = bitcoin = 1 inCMC)
     List<CoinMarketDataResult> results = new ArrayList<>();
-    Iterator<Entry<ApiProviderEnum, ApiCommunicator>> iterator = this.apiCommunicators.entrySet()
-        .iterator();
+    Iterator<Entry<ApiProviderEnum, ApiCommunicator>> iterator =
+        this.apiCommunicators.entrySet().iterator();
     boolean stop = false;
     while (iterator.hasNext() && !stop) {
       Map.Entry<ApiProviderEnum, ApiCommunicator> entry = iterator.next();
@@ -42,11 +42,20 @@ public class ApiHolder { // TODO: placeholder name
         coinName = "bitcoin";
       }
       String finalCoinName = coinName;
-      CoinMarketDataResult result = entry.getValue().getCurrentListing(new ArrayList<>() {{
-        add(finalCoinName);
-      }}, new ArrayList<>() {{
-        add("usd");
-      }});
+      CoinMarketDataResult result =
+          entry
+              .getValue()
+              .getCurrentListing(
+                  new ArrayList<>() {
+                    {
+                      add(finalCoinName);
+                    }
+                  },
+                  new ArrayList<>() {
+                    {
+                      add("usd");
+                    }
+                  });
       results.add(result);
       if (result.getStatus() == ResultStatus.SUCCESS) {
         stop = true;
@@ -57,8 +66,8 @@ public class ApiHolder { // TODO: placeholder name
 
   public List<CoinMarketDataResult> getHistoricalCoinMarketData(String coinName, long timestamp) {
     List<CoinMarketDataResult> results = new ArrayList<>();
-    Iterator<Entry<ApiProviderEnum, ApiCommunicator>> iterator = this.apiCommunicators.entrySet()
-        .iterator();
+    Iterator<Entry<ApiProviderEnum, ApiCommunicator>> iterator =
+        this.apiCommunicators.entrySet().iterator();
     boolean stop = false;
     while (iterator.hasNext() && !stop) {
       Map.Entry<ApiProviderEnum, ApiCommunicator> entry = iterator.next();
@@ -69,14 +78,21 @@ public class ApiHolder { // TODO: placeholder name
         continue;
       }
       String finalCoinName = coinName;
-      CoinMarketDataResult result = entry.getValue().getHistoricalListing(
-          new ArrayList<>() {{
-            add(finalCoinName);
-          }},
-          new ArrayList<>() {{
-            add("usd");
-          }},
-          timestamp);
+      CoinMarketDataResult result =
+          entry
+              .getValue()
+              .getHistoricalListing(
+                  new ArrayList<>() {
+                    {
+                      add(finalCoinName);
+                    }
+                  },
+                  new ArrayList<>() {
+                    {
+                      add("usd");
+                    }
+                  },
+                  timestamp);
       results.add(result);
       if (result.getStatus() == ResultStatus.SUCCESS) {
         stop = true;

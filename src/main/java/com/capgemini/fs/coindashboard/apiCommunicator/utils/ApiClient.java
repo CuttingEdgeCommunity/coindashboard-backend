@@ -40,8 +40,7 @@ public class ApiClient {
     return response;
   }
 
-  public JsonNode parseResponse(String json)
-      throws JsonProcessingException {
+  public JsonNode parseResponse(String json) throws JsonProcessingException {
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readTree(json);
   }

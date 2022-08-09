@@ -15,22 +15,33 @@ public class CoinMarketCapTestBaseClass {
   public List<String> coins, coinserr, vsCurr;
   public final Long timestamp = 1659601993L;
 
-
   @BeforeEach
   void setup() throws JsonProcessingException {
-    this.coins = new ArrayList<>() {{
-      add("btc");
-      add("eth");
-    }};
-    this.coinserr = new ArrayList<>() {{
-      add("btc");
-      add(" eth");
-    }};
-    this.vsCurr = new ArrayList<>() {{
-      add("usd");
-      add("eur");
-    }};
-    this.correctLatest = new ApiClient().parseResponse("""
+    this.coins =
+        new ArrayList<>() {
+          {
+            add("btc");
+            add("eth");
+          }
+        };
+    this.coinserr =
+        new ArrayList<>() {
+          {
+            add("btc");
+            add(" eth");
+          }
+        };
+    this.vsCurr =
+        new ArrayList<>() {
+          {
+            add("usd");
+            add("eur");
+          }
+        };
+    this.correctLatest =
+        new ApiClient()
+            .parseResponse(
+                """
         {
             "status": {
                 "timestamp": "2022-08-05T05:04:13.735Z",
@@ -395,7 +406,10 @@ public class CoinMarketCapTestBaseClass {
                 ]
             }
         }""");
-    this.correctHistorical = new ApiClient().parseResponse("""
+    this.correctHistorical =
+        new ApiClient()
+            .parseResponse(
+                """
         {
             "status": {
                 "timestamp": "2022-08-05T04:34:08.908Z",
@@ -846,7 +860,10 @@ public class CoinMarketCapTestBaseClass {
                 }
             }
         }""");
-    this.error = new ApiClient().parseResponse("""
+    this.error =
+        new ApiClient()
+            .parseResponse(
+                """
         {
             "status": {
                 "timestamp": "2022-08-05T04:53:20.395Z",

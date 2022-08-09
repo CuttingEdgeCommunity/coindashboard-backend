@@ -3,29 +3,53 @@ package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.capgemini.fs.coindashboard.dtos.marketData.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
 
 class CoinMarketDataDtoTest {
 
-  private final QuoteDto quote = new QuoteDto(new ArrayList<>() {{
-    add(new PriceDto(123d, 123L));
-  }}, new ArrayList<>() {{
-    add(new DeltaDto(IntervalEnum.ONE_HOUR, 123d, 123d));
-  }}, 1233L);
-  private final CoinMarketDataDto coinMarketDataA = new CoinMarketDataDto("1", "11",
-      new LinkedHashMap<>() {{
-        put("usd", quote);
-      }});
-  private final CoinMarketDataDto coinMarketDataB = new CoinMarketDataDto("1", "11",
-      new LinkedHashMap<>() {{
-        put("usd", quote);
-      }});
-  private final CoinMarketDataDto coinMarketDataC = new CoinMarketDataDto("1", "11",
-      new LinkedHashMap<>() {{
-        put("udsd", quote);
-      }});
+  private final QuoteDto quote =
+      new QuoteDto(
+          new ArrayList<>() {
+            {
+              add(new PriceDto(123d, 123L));
+            }
+          },
+          new ArrayList<>() {
+            {
+              add(new DeltaDto(IntervalEnum.ONE_HOUR, 123d, 123d));
+            }
+          },
+          1233L);
+  private final CoinMarketDataDto coinMarketDataA =
+      new CoinMarketDataDto(
+          "1",
+          "11",
+          new LinkedHashMap<>() {
+            {
+              put("usd", quote);
+            }
+          });
+  private final CoinMarketDataDto coinMarketDataB =
+      new CoinMarketDataDto(
+          "1",
+          "11",
+          new LinkedHashMap<>() {
+            {
+              put("usd", quote);
+            }
+          });
+  private final CoinMarketDataDto coinMarketDataC =
+      new CoinMarketDataDto(
+          "1",
+          "11",
+          new LinkedHashMap<>() {
+            {
+              put("udsd", quote);
+            }
+          });
 
   @Test
   void testEquals() {
@@ -42,7 +66,9 @@ class CoinMarketDataDtoTest {
   @Test
   void testToString() {
     assertEquals(
-        "CoinMarketDataDto(name=1, symbol=11, quoteMap={usd=QuoteDto(prices=[PriceDto(price=123.0, timestamp=123)], deltas=[DeltaDto(interval=ONE_HOUR, percentChange=123.0, nominalChange=123.0)], lastUpdateTimestampMillis=1233)})",
+        "CoinMarketDataDto(name=1, symbol=11, quoteMap={usd=QuoteDto(prices=[PriceDto(price=123.0,"
+            + " timestamp=123)], deltas=[DeltaDto(interval=ONE_HOUR, percentChange=123.0,"
+            + " nominalChange=123.0)], lastUpdateTimestampMillis=1233)})",
         this.coinMarketDataA.toString());
   }
 }

@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.caching.annotation;
+package com.capgemini.fs.coindashboard.service.caching.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

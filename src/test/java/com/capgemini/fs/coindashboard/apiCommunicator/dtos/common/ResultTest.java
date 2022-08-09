@@ -4,14 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
+import com.capgemini.fs.coindashboard.dtos.common.Result;
+import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import org.junit.jupiter.api.Test;
 
 class ResultTest {
 
-  private final Result resultA = new Result(ApiProviderEnum.COIN_MARKET_CAP, ResultStatus.SUCCESS,
-      null);
-  private final Result resultB = new Result(ApiProviderEnum.COIN_MARKET_CAP, ResultStatus.FAILURE,
-      null);
+  private final Result resultA =
+      new Result(ApiProviderEnum.COIN_MARKET_CAP, ResultStatus.SUCCESS, null);
+  private final Result resultB =
+      new Result(ApiProviderEnum.COIN_MARKET_CAP, ResultStatus.FAILURE, null);
   private final Result resultC = new Result();
   private final Result resultD = new Result();
 
@@ -31,8 +33,8 @@ class ResultTest {
 
   @Test
   void testToString() {
-    assertEquals("Result(provider=COIN_MARKET_CAP, status=FAILURE, errorMessage=null)",
-        resultB.toString());
+    assertEquals(
+        "Result(provider=COIN_MARKET_CAP, status=FAILURE, errorMessage=null)", resultB.toString());
   }
 
   @Test
