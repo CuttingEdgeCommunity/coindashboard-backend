@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.common.ResultStatus;
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,10 +35,10 @@ class CoinMarketCapCommunicatorTest extends CoinMarketCapTestBaseClass {
   @Autowired
   private CoinMarketCapCommunicator coinMarketCapCommunicator;
 
-  @MockBean
-  private ApiClient apiClient;
-  @MockBean
-  private CoinMarketCapClient client;
+//  @MockBean
+//  private ApiClient apiClient;
+@MockBean
+private CoinMarketCapClient client;
 
   @BeforeEach
   public void setUp() throws IOException {

@@ -40,8 +40,8 @@ class CoinMarketCapResponseParser {
     try {
       String error = this.parseStatus(apiResponseBody.get("status"));
       if (error != null) {
-        result.setStatus(ResultStatus.FAILURE);
         result.setErrorMessage(error);
+        result.setStatus(false);
         return result;
       }
 
@@ -51,8 +51,8 @@ class CoinMarketCapResponseParser {
       return result;
     } catch (Exception e) {
       log.error(e.getMessage());
-      result.setStatus(ResultStatus.FAILURE);
       result.setErrorMessage(e.getMessage());
+      result.setStatus(false);
       return result;
     }
   }
@@ -66,6 +66,9 @@ class CoinMarketCapResponseParser {
         });
     for (Map.Entry<String, JsonNode> coin :
         responseBodyConverted.entrySet()) {
+      if (coin.getValue().size() == 0) {
+        continue;
+      }
       if (coin.getValue().getNodeType()
           == JsonNodeType.ARRAY) // For some reason cmc sometimes returns an array of coins for a symbol
       {
@@ -115,14 +118,14 @@ class CoinMarketCapResponseParser {
     try {
       String error = this.parseStatus(apiResponseBody.get("status"));
       if (error != null) {
-        result.setStatus(ResultStatus.FAILURE);
         result.setErrorMessage(error);
+        result.setStatus(false);
         return result;
       }
 
-      result.setStatus(ResultStatus.SUCCESS);
       result.setCoinMarketDataDTOS(
           this.parseCoinsQuoteHistoricalResult(apiResponseBody.get("data")));
+      result.setStatus(false);
       return result;
     } catch (Exception e) {
       log.error(e.getMessage());
@@ -141,10 +144,12 @@ class CoinMarketCapResponseParser {
         });
     for (Map.Entry<String, ObjectNode> coin :
         responseBodyConverted.entrySet()) {
+      if (coin.getValue().size() == 0) {
+        continue;
+      }
       String name = coin.getKey();
       String symbol = coin.getValue().get("symbol").asText();
       Map<String, QuoteDto> quoteDtos = new LinkedHashMap<>();
-      long lastUpdated = 0;
       Map<String, ObjectNode> quotesConverted = mapper.convertValue(
           coin.getValue().get("quotes").get(0).get("quote"), new TypeReference<>() {
           });
