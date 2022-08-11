@@ -1,10 +1,8 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import com.capgemini.fs.coindashboard.dtos.marketData.DeltaDto;
-import com.capgemini.fs.coindashboard.dtos.marketData.IntervalEnum;
 import org.junit.jupiter.api.Test;
 
 class DeltaDtoTest {

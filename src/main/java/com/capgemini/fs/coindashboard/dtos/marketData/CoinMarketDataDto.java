@@ -15,4 +15,7 @@ public class CoinMarketDataDto {
     this.symbol = symbol;
     this.quoteMap = quoteMap;
   }
+
+  public CoinMarketDataDto() {
+  }
 }

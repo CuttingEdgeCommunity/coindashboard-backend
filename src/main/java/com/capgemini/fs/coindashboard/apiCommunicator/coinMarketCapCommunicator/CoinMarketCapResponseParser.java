@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -81,6 +82,8 @@ class CoinMarketCapResponseParser {
 
       for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
         var currentPrice = quote.getValue().get("price").asDouble();
+        var marketCap = quote.getValue().get("market_cap").asDouble();
+        var volumeOneDay = quote.getValue().get("volume_24h").asDouble();
         var timestamp =
             TimeFormatter.convertStringToTimestamp(
                     quote.getValue().get("last_updated").asText(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -106,13 +109,7 @@ class CoinMarketCapResponseParser {
         quoteDtos.put(
             quote.getKey(),
             new QuoteDto(
-                new ArrayList<>() {
-                  {
-                    add(new PriceDto(currentPrice, timestamp));
-                  }
-                },
-                deltas,
-                timestamp));
+                currentPrice, marketCap, volumeOneDay, new ArrayList<>(), deltas, timestamp));
       }
       result.add(new CoinMarketDataDto(name, symbol, quoteDtos));
     }
@@ -154,25 +151,36 @@ class CoinMarketCapResponseParser {
       String name = coin.getKey();
       String symbol = coin.getValue().get("symbol").asText();
       Map<String, QuoteDto> quoteDtos = new LinkedHashMap<>();
-      Map<String, ObjectNode> quotesConverted =
-          mapper.convertValue(
-              coin.getValue().get("quotes").get(0).get("quote"), new TypeReference<>() {});
-      for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
-        var currentPrice = quote.getValue().get("price").asDouble();
-        var timestamp =
-            TimeFormatter.convertStringToTimestamp(
-                    quote.getValue().get("timestamp").asText(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .getTime();
-        quoteDtos.put(
-            quote.getKey(),
-            new QuoteDto(
-                new ArrayList<>() {
-                  {
-                    add(new PriceDto(currentPrice, timestamp));
-                  }
-                },
-                new ArrayList<>(),
-                timestamp));
+      List<ObjectNode> quotesConverted =
+          mapper.convertValue(coin.getValue().get("quotes"), new TypeReference<>() {
+          });
+      for (ObjectNode quote : quotesConverted) {
+        Map<String, ObjectNode> quoteConverted =
+            mapper.convertValue(quote.get("quote"), new TypeReference<>() {
+            });
+        for (Map.Entry<String, ObjectNode> singleQuote : quoteConverted.entrySet()) {
+          var price = singleQuote.getValue().get("price").asDouble();
+          var timestamp =
+              TimeFormatter.convertStringToTimestamp(
+                      singleQuote.getValue().get("timestamp").asText(),
+                      "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                  .getTime();
+          if (quoteDtos.containsKey(singleQuote.getKey())) {
+            quoteDtos
+                .get(singleQuote.getKey())
+                .getPriceHistory()
+                .add(0, new PriceDto(price, timestamp));
+          } else {
+            quoteDtos.put(
+                singleQuote.getKey(),
+                new QuoteDto(
+                    new LinkedList<>() {
+                      {
+                        push(new PriceDto(price, timestamp));
+                      }
+                    }));
+          }
+        }
       }
       result.add(new CoinMarketDataDto(name, symbol, quoteDtos));
     }

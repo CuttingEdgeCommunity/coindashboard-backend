@@ -1,11 +1,9 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.common;
+package com.capgemini.fs.coindashboard.dtos.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
-import com.capgemini.fs.coindashboard.dtos.common.Result;
-import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import org.junit.jupiter.api.Test;
 
 class ResultTest {

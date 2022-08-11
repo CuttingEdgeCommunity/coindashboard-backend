@@ -1,9 +1,8 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import com.capgemini.fs.coindashboard.dtos.marketData.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
@@ -12,6 +11,9 @@ class CoinMarketDataDtoTest {
 
   private final QuoteDto quote =
       new QuoteDto(
+          123d,
+          123d,
+          123d,
           new ArrayList<>() {
             {
               add(new PriceDto(123d, 123L));
@@ -66,7 +68,8 @@ class CoinMarketDataDtoTest {
   @Test
   void testToString() {
     assertEquals(
-        "CoinMarketDataDto(name=1, symbol=11, quoteMap={usd=QuoteDto(prices=[PriceDto(price=123.0,"
+        "CoinMarketDataDto(name=1, symbol=11, quoteMap={usd=QuoteDto(currentPrice=123.0,"
+            + " marketCap=123.0, volumeOneDay=123.0, priceHistory=[PriceDto(price=123.0,"
             + " timestamp=123)], deltas=[DeltaDto(interval=ONE_HOUR, percentChange=123.0,"
             + " nominalChange=123.0)], lastUpdateTimestampMillis=1233)})",
         this.coinMarketDataA.toString());

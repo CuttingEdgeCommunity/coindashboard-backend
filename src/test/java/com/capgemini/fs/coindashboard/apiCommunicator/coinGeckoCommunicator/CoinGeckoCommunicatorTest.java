@@ -1,4 +1,4 @@
-package com.capgemini.fs.apiCommunicator.coinGeckoCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import org.junit.jupiter.api.Test;
 

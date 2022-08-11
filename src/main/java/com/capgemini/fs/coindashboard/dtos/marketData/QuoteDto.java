@@ -27,4 +27,12 @@ public class QuoteDto {
     this.deltas = deltas;
     this.lastUpdateTimestampMillis = lastUpdateTimestampMillis;
   }
+
+  public QuoteDto(List<PriceDto> priceHistory) {
+    this();
+    this.priceHistory = priceHistory;
+  }
+
+  public QuoteDto() {
+  }
 }

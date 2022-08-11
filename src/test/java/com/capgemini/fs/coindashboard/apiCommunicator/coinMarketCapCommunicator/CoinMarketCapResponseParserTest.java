@@ -57,8 +57,8 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
   void parseCoinsQuoteHistoricalResult() throws ParseException {
     var resultCorrect = parser.parseCoinsQuoteHistoricalResult(correctHistorical.get("data"));
     assertEquals(
-        0.716910918341749,
-        resultCorrect.get(0).getQuoteMap().get("USD").getPrices().get(0).getPrice());
+        0.565101283929111,
+        resultCorrect.get(0).getQuoteMap().get("USD").getPriceHistory().get(0).getPrice());
   }
 
   @Test
