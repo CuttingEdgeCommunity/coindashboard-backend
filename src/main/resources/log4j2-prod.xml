@@ -22,7 +22,7 @@
             <AppenderRef ref="file"/>
             <AppenderRef ref="Console"/>
         </Logger>
-        <Root level="warn">
+        <Root level="info">
             <AppenderRef ref="file"/>
             <AppenderRef ref="Console"/>
         </Root>
