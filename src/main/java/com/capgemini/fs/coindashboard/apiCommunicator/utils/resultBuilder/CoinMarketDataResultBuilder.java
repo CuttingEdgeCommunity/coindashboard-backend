@@ -22,7 +22,9 @@ public interface CoinMarketDataResultBuilder {
 
   void setCoinMarketDataDTOS(JsonNode data);
 
-  CoinMarketDataDto buildSingleCoinMarketDataDto(JsonNode data);
+  List<CoinMarketDataDto> buildCoinMarketDataDtoList(JsonNode data);
+
+  CoinMarketDataDto buildSingleCoinMarketDataDto(String coinName, JsonNode data);
 
   Map<String, QuoteDto> buildQuoteDtoMap(JsonNode data);
 
