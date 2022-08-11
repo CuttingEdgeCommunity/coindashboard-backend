@@ -66,7 +66,7 @@ public class CoinController {
   ResponseEntity<String> chart(
       @PathVariable String name,
       @RequestParam(defaultValue = "0", required = false) long chart_from,
-      @RequestParam(defaultValue = "o", required = false) long chart_to) {
+      @RequestParam(defaultValue = "0", required = false) long chart_to) {
     String chart =
         coinService
             .getChart(name, chart_from, chart_to)
