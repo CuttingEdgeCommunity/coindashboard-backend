@@ -5,4 +5,11 @@ services:
     restart: always
     ports:
       - 8080:8080
+  mongo:
+    build: ./mongo
+    container_name: mongo
+    ports:
+      - "20003:27017"
+    volumes:
+      - mongodbdata:/data/db
 
