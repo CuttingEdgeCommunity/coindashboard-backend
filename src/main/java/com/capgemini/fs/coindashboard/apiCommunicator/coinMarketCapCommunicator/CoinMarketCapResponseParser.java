@@ -82,8 +82,8 @@ class CoinMarketCapResponseParser {
 
       for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
         var currentPrice = quote.getValue().get("price").asDouble();
-        var marketCap = quote.getValue().get("market_cap").asDouble();
-        var volumeOneDay = quote.getValue().get("volume_24h").asDouble();
+        var marketCap = quote.getValue().get("market_cap").asLong();
+        var volumeOneDay = quote.getValue().get("volume_24h").asLong();
         var timestamp =
             TimeFormatter.convertStringToTimestamp(
                     quote.getValue().get("last_updated").asText(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

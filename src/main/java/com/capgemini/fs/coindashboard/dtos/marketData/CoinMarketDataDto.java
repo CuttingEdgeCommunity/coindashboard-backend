@@ -16,6 +16,9 @@ public class CoinMarketDataDto {
     this.quoteMap = quoteMap;
   }
 
+  public CoinMarketDataDto(Map<String, QuoteDto> quoteMap) {
+    this.quoteMap = quoteMap;
+  }
   public CoinMarketDataDto() {
   }
 }

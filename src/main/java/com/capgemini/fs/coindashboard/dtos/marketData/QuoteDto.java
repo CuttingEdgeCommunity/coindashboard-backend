@@ -15,8 +15,8 @@ public class QuoteDto {
 
   public QuoteDto(
       double currentPrice,
-      double marketCap,
-      double volumeOneDay,
+      long marketCap,
+      long volumeOneDay,
       List<PriceDto> priceHistory,
       List<DeltaDto> deltas,
       long lastUpdateTimestampMillis) {

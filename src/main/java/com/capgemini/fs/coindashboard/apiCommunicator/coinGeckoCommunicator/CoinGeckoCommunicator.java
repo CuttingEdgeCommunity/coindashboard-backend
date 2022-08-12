@@ -20,12 +20,20 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
 
   @Autowired ApiClient client;
   ApiProviderEnum apiProvider = ApiProviderEnum.COIN_GECKO;
-
+  @Autowired
+  CoinGeckoResponseParser parser;
   @Override
   public ApiProviderEnum getApiProvider() {
     return this.apiProvider;
   }
 
+  public String CoinId(String name){
+    if (name.equals("Bitcoin")){
+      return "bitcoin";
+    } else {
+      return name;
+    }
+  }
   @Override
   public CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies) {
     final int maxcoinsamount = 250;
@@ -51,7 +59,6 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
         coinMarketDataResult.setStatus(ResultStatus.FAILURE);
         coinMarketDataResult.setErrorMessage(e.getMessage());
       }
-      CoinGeckoResponseParser parser = new CoinGeckoResponseParser();
       assert response != null;
       ArrayList<CoinMarketDataDto> coinMarketDataDtos = parser.CurrentParser(response, currency);
       coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
@@ -71,33 +78,33 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
     for (String coin : coins) {
       for (String currency : vsCurrencies) {
         coinMarketDataResult.setProvider(this.apiProvider);
-        Response response = null;
+        Response response;
+        ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
         try {
-          response =
-              client.invokeGet(
-                  RequestBuilder.buildRequestURI(
-                      "https://api.coingecko.com/api/v3/coins/" + coin + "/market_chart",
-                      new ArrayList<>(),
-                      new LinkedHashMap<>() {
-                        {
-                          put("vs_currency", currency);
-                          put("days", "1");
-                          // put("interval", "hourly"); służy do zmniejszenie dokładności danych,
-                          // raczej niepotrzebne bo chcemy jak najwięcej
-                        }
-                      }));
+          response = client.invokeGet(RequestBuilder
+              .buildRequestURI(
+                  "https://api.coingecko.com/api/v3/coins/" + CoinId(coin) + "/market_chart",
+                  new ArrayList<>(), new LinkedHashMap<>() {{
+                    put("vs_currency", currency);
+                    put("days", "1");
+                    //put("interval", "hourly"); use to decrease accuracy of data
+                  }}));
+          CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, CoinId(coin), currency);
+          coinMarketDataDtos.add(coinMarketDataDto);
+
         } catch (IOException e) {
           coinMarketDataResult.setStatus(ResultStatus.FAILURE);
           coinMarketDataResult.setErrorMessage(e.getMessage());
         }
-        ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
-        CoinGeckoResponseParser parser = new CoinGeckoResponseParser();
-        assert response != null;
-        CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, coin, currency);
-        coinMarketDataDtos.add(coinMarketDataDto);
-        coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
+        //ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
+        //CoinGeckoResponseParser parser = new CoinGeckoResponseParser();
+        //assert response != null;
+        //CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, coin, currency);
+        //coinMarketDataDtos.add(coinMarketDataDto);
+
         if (coinMarketDataDtos.size() > 0) {
           coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
+          coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
         } else {
           coinMarketDataResult.setStatus(ResultStatus.FAILURE);
         }
@@ -105,4 +112,5 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
     }
     return coinMarketDataResult;
   }
+
 }

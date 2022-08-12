@@ -12,8 +12,8 @@ class CoinMarketDataDtoTest {
   private final QuoteDto quote =
       new QuoteDto(
           123d,
-          123d,
-          123d,
+          123L,
+          123L,
           new ArrayList<>() {
             {
               add(new PriceDto(123d, 123L));

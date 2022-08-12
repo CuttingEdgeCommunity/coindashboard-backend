@@ -11,8 +11,8 @@ class QuoteDtoTest {
   private final QuoteDto quoteA =
       new QuoteDto(
           123d,
-          123d,
-          123d,
+          123L,
+          123L,
           new ArrayList<>() {
             {
               add(new PriceDto(123d, 123L));
@@ -27,8 +27,8 @@ class QuoteDtoTest {
   private final QuoteDto quoteB =
       new QuoteDto(
           123d,
-          123d,
-          123d,
+          123L,
+          123L,
           new ArrayList<>() {
             {
               add(new PriceDto(123d, 123L));
@@ -43,8 +43,8 @@ class QuoteDtoTest {
   private final QuoteDto quoteC =
       new QuoteDto(
           123d,
-          123d,
-          123d,
+          123L,
+          123L,
           new ArrayList<>() {
             {
               add(new PriceDto(13d, 123L));
