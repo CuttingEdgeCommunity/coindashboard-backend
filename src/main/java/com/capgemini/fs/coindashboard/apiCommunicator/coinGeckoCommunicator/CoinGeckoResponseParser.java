@@ -85,9 +85,9 @@ public class CoinGeckoResponseParser {
     return coinMarketDataDtos;
   }
 
-  CoinMarketDataDto HistoricalParser(Response response, String coinId, String vs_currency) {
+  CoinMarketDataDto HistoricalParser(Response response, String name, String vs_currency) {
     CoinMarketDataDto coinMarketDataDto;
-    List<DeltaDto> deltas = new ArrayList<>();
+//  List<DeltaDto> deltas = new ArrayList<>();
     List<PriceDto> prices = new ArrayList<>();
     Map<String, QuoteDto> quoteMaps = new LinkedHashMap<>();
     for (int i = 0; i < response.getResponseBody().get("prices").size(); i++) {
@@ -104,7 +104,7 @@ public class CoinGeckoResponseParser {
 //                .get(response.getResponseBody().get("prices").size() - 1)
 //                .get(0)
 //                .asLong()));
-    coinMarketDataDto = new CoinMarketDataDto(quoteMaps);
+    coinMarketDataDto = new CoinMarketDataDto(name,quoteMaps);
     return coinMarketDataDto;
   }
 }

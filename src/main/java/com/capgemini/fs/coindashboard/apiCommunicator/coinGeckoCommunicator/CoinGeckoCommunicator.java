@@ -89,7 +89,7 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
                     put("days", "1");
                     //put("interval", "hourly"); use to decrease accuracy of data
                   }}));
-          CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, CoinId(coin), currency);
+          CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, coin, currency);
           coinMarketDataDtos.add(coinMarketDataDto);
 
         } catch (IOException e) {
