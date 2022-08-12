@@ -51,7 +51,7 @@ public class CoinController {
 
   @GetMapping("/coins/{name}/marketdata")
   ResponseEntity<String> marketData(
-      @PathVariable String name,
+      @PathVariable @NotBlank @Size(max = 50) String name,
       @RequestParam(defaultValue = "usd", required = false) @NotBlank @Size(max = 10)
       String vs_currency) {
     String coinMarketData =
