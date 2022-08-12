@@ -20,8 +20,7 @@ public @interface ValidTimestamp {
   class Validator implements ConstraintValidator<ValidTimestamp, Long> {
 
     @Override
-    public void initialize(ValidTimestamp requiredIfChecked) {
-    }
+    public void initialize(ValidTimestamp requiredIfChecked) {}
 
     public boolean isValid(Long value, ConstraintValidatorContext context) {
       return (value != null && value >= 0 && value <= System.currentTimeMillis());

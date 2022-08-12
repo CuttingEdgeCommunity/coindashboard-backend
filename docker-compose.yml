@@ -6,10 +6,12 @@ services:
     ports:
       - 8080:8080
   mongo:
-    build: ./mongo
-    container_name: mongo
+    build: ./mongoDB
+    container_name: mongoDB
     ports:
-      - "20003:27017"
+      - "27017:27017"
     volumes:
       - mongodbdata:/data/db
+volumes:
+  mongodbdata:
 

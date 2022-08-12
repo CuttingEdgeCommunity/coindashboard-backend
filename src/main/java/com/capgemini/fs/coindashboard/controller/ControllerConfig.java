@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableCaching
-public class ControllerConfiguration {
+public class ControllerConfig {
 
-  private static final Logger log = LogManager.getLogger(ControllerConfiguration.class);
+  private static final Logger log = LogManager.getLogger(ControllerConfig.class);
 
   // place where we should load cache from communicator branch
   @Bean(name = "coinServiceBean")

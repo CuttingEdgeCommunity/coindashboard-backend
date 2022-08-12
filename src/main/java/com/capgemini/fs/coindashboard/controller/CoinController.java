@@ -33,15 +33,15 @@ public class CoinController {
   }
 
   @GetMapping("/coins")
-    // future validation required
+  // future validation required
   ResponseEntity<String> all(
       @RequestParam(defaultValue = "0", required = false)
-      @Min(value = 0, message = "Take has to be bigger or equal to 0")
-      @Max(value = 300, message = "Take cannot be more than 300")
-      int take,
+          @Min(value = 0, message = "Take has to be bigger or equal to 0")
+          @Max(value = 300, message = "Take cannot be more than 300")
+          int take,
       @RequestParam(defaultValue = "1", required = false)
-      @Min(value = 0, message = "Page has to be bigger or equal to 0")
-      int page) {
+          @Min(value = 0, message = "Page has to be bigger or equal to 0")
+          int page) {
     String coinInfo =
         coinService.getCoinInfo(take, page).orElseThrow(ServerIsNotRespondingException::new);
     String location =
@@ -53,7 +53,7 @@ public class CoinController {
   ResponseEntity<String> marketData(
       @PathVariable @NotBlank @Size(max = 50) String name,
       @RequestParam(defaultValue = "usd", required = false) @NotBlank @Size(max = 10)
-      String vs_currency) {
+          String vs_currency) {
     String coinMarketData =
         coinService
             .getCoinMarketData(name, vs_currency) //

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CoinServiceImplementation implements CoinService, CoinDataRetriever {
+public class CoinServiceImplementation implements CoinService {
   private static final Logger LOG = LogManager.getLogger(CoinServiceImplementation.class);
 
   @Override
