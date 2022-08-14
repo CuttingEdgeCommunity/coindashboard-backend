@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiCommunicator;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapCommunicator;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
@@ -12,20 +13,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CoinGeckoCommunicator implements ApiCommunicator {
 
-  @Autowired ApiClient client;
-  ApiProviderEnum apiProvider = ApiProviderEnum.COIN_GECKO;
-  @Autowired
-  CoinGeckoResponseParser parser;
+  private static final Logger log = LogManager.getLogger(CoinGeckoCommunicator.class);
+
+  private final ApiProviderEnum providerEnum = ApiProviderEnum.COIN_GECKO;
+
+  @Autowired private CoinGeckoClient client;
+  @Autowired private CoinGeckoResponseParser parser;
   @Override
-  public ApiProviderEnum getApiProvider() {
-    return this.apiProvider;
-  }
+  public ApiProviderEnum getApiProvider() {return this.providerEnum;}
 
   public String CoinId(String name){
     if (name.equals("Bitcoin")){
@@ -34,33 +37,47 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
       return name;
     }
   }
+  //Calculating how many days of price history should be returned from CoinGecko.
+  //0 will give last day data, any negative or small* number (expect 0) will give max available data
+  //*small= timestamp before first available data in Coingecko about coin.
+  public String days(long timestamp){
+    if (timestamp == 0){
+      timestamp = System.currentTimeMillis();
+    }
+    long time_diff = System.currentTimeMillis()-timestamp;
+    final long $1day_in_Millis = 86400000L;
+    final long $90days_in_Millis = 7776000000L;
+    if (time_diff<=$1day_in_Millis){
+      return "1";
+    } else if (time_diff<=$90days_in_Millis) {
+      return "90";
+    } else {
+      return "max";
+    }
+  }
+
   @Override
   public CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies) {
     final int maxcoinsamount = 250;
     CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult();
-    coinMarketDataResult.setProvider(this.apiProvider);
-    Response response = null;
+    coinMarketDataResult.setProvider(this.providerEnum);
+    Response response;
     for (String currency : vsCurrencies) {
-      try {
-        response =
-            client.invokeGet(
-                RequestBuilder.buildRequestURI(
-                    "https://api.coingecko.com/api/v3/coins/markets",
-                    new ArrayList<>(),
-                    new LinkedHashMap<>() {
-                      {
-                        put("ids", String.join(",", coins));
-                        put("vs_currency", currency);
-                        put("price_change_percentage", "1h,24h,7d,30d");
-                        put("per_page", maxcoinsamount + "");
-                      }
-                    }));
+      ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
+      try
+      {
+        //response = this.client.getCoinsMarkets(coins, currency, "market_cap_desc", maxcoinsamount+"", "", "false", "1h,24h,7d,30d");
+        response = this.client.getCoinsMarkets(coins, currency, "", maxcoinsamount + "", "", "", "1h,24h,7d,30d");
+        if (response.getResponseCode() == 200) {
+          coinMarketDataDtos = parser.CurrentParser(response, currency);
+        } else {
+          coinMarketDataResult.setStatus(ResultStatus.FAILURE);
+          coinMarketDataResult.setErrorMessage("");
+        }
       } catch (IOException e) {
         coinMarketDataResult.setStatus(ResultStatus.FAILURE);
         coinMarketDataResult.setErrorMessage(e.getMessage());
       }
-      assert response != null;
-      ArrayList<CoinMarketDataDto> coinMarketDataDtos = parser.CurrentParser(response, currency);
       coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
       if (coinMarketDataDtos.size() > 0) {
         coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
@@ -72,23 +89,15 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
   }
 
   @Override
-  public CoinMarketDataResult getHistoricalListing(
-      List<String> coins, List<String> vsCurrencies, Long timestamp) {
+  public CoinMarketDataResult getHistoricalListing(List<String> coins, List<String> vsCurrencies, Long timestamp) {
     CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult();
     for (String coin : coins) {
       for (String currency : vsCurrencies) {
-        coinMarketDataResult.setProvider(this.apiProvider);
+        coinMarketDataResult.setProvider(this.providerEnum);
         Response response;
         ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
         try {
-          response = client.invokeGet(RequestBuilder
-              .buildRequestURI(
-                  "https://api.coingecko.com/api/v3/coins/" + CoinId(coin) + "/market_chart",
-                  new ArrayList<>(), new LinkedHashMap<>() {{
-                    put("vs_currency", currency);
-                    put("days", "1");
-                    //put("interval", "hourly"); use to decrease accuracy of data
-                  }}));
+          response = this.client.getMarketChart(CoinId(coin),currency,days(timestamp));
           CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, coin, currency);
           coinMarketDataDtos.add(coinMarketDataDto);
 

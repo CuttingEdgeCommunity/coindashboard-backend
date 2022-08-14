@@ -44,7 +44,7 @@ public class CoinGeckoResponseParser {
               .getResponseBody()
               .get(i)
               .get("price_change_percentage_1h_in_currency")
-              .floatValue();
+              .asDouble();
       deltas.add(
           new DeltaDto(
               IntervalEnum.ONE_HOUR, pctChange, current_price * (pctChange / (100 + pctChange))));
@@ -53,7 +53,7 @@ public class CoinGeckoResponseParser {
               .getResponseBody()
               .get(i)
               .get("price_change_percentage_24h_in_currency")
-              .floatValue();
+              .asDouble();
       deltas.add(
           new DeltaDto(
               IntervalEnum.ONE_DAY, pctChange, current_price * (pctChange / (100 + pctChange))));
@@ -62,7 +62,7 @@ public class CoinGeckoResponseParser {
               .getResponseBody()
               .get(i)
               .get("price_change_percentage_7d_in_currency")
-              .floatValue();
+              .asDouble();
       deltas.add(
           new DeltaDto(
               IntervalEnum.SEVEN_DAY, pctChange, current_price * (pctChange / (100 + pctChange))));
@@ -70,8 +70,8 @@ public class CoinGeckoResponseParser {
           response
               .getResponseBody()
               .get(i)
-              .get("price_change_percentage_1h_in_currency")
-              .floatValue();
+              .get("price_change_percentage_30d_in_currency")
+              .asDouble();
       deltas.add(
           new DeltaDto(
               IntervalEnum.THIRTY_DAY, pctChange, current_price * (pctChange / (100 + pctChange))));
