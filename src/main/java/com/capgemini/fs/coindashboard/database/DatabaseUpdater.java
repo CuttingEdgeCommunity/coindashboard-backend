@@ -12,10 +12,8 @@ public class DatabaseUpdater {
 
   private boolean enabled = false;
 
-  @Autowired
-  private UpdateQueries updateQueries;
-  @Autowired
-  private ApiHolder apiHolder;
+  @Autowired private UpdateQueries updateQueries;
+  @Autowired private ApiHolder apiHolder;
 
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

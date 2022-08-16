@@ -21,10 +21,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class ApiHolderTest {
 
-  @MockBean
-  public CoinMarketCapCommunicator coinMarketCapCommunicator;
-  @MockBean
-  public CoinGeckoCommunicator coinGeckoCommunicator;
+  @MockBean public CoinMarketCapCommunicator coinMarketCapCommunicator;
+  @MockBean public CoinGeckoCommunicator coinGeckoCommunicator;
   private ApiHolder apiHolder;
 
   private final List<String> coins = new ArrayList<>(List.of("btc"));
