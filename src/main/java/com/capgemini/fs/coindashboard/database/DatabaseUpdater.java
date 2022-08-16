@@ -1,7 +1,6 @@
 package com.capgemini.fs.coindashboard.database;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
-import com.capgemini.fs.coindashboard.database.queries.GetQueries;
 import com.capgemini.fs.coindashboard.database.queries.UpdateQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -14,8 +13,6 @@ public class DatabaseUpdater {
   private boolean enabled = false;
 
   @Autowired
-  private GetQueries getQueries;
-  @Autowired
   private UpdateQueries updateQueries;
   @Autowired
   private ApiHolder apiHolder;
@@ -26,9 +23,21 @@ public class DatabaseUpdater {
 
   @Async
   @Scheduled(fixedDelay = 1500)
-  public void singleCoinUpdater() {
+  public void singleCoinUpdate() {
     if (this.enabled) {
       var coinMarketData = this.apiHolder.getCoinMarketData("btc");
+      if (coinMarketData != null) {
+        this.updateQueries.UpdateCoinCurrentQuote(
+            "bitcoin", coinMarketData.getCoinMarketDataDTOS().get(0).getQuoteMap().get("usd"));
+      }
+    }
+  }
+
+  @Async
+  @Scheduled(cron = "*/5 * * * *")
+  public void chartUpdate() {
+    if (this.enabled) {
+      this.updateQueries.UpdateEveryCoinPriceChart();
     }
   }
 }
