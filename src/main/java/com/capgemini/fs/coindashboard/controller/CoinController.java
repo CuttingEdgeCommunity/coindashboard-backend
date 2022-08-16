@@ -52,13 +52,13 @@ public class CoinController {
   @GetMapping("/coins/{name}/marketdata")
   ResponseEntity<String> marketData(
       @PathVariable
-      @NotBlank(message = "name cannot be blank")
-      @Size(max = 50, message = "name cannot be longer than 50 characters")
-      String name,
+          @NotBlank(message = "name cannot be blank")
+          @Size(max = 50, message = "name cannot be longer than 50 characters")
+          String name,
       @RequestParam(defaultValue = "usd", required = false)
-      @NotBlank(message = "vs_currency cannot be blank")
-      @Size(max = 10, message = "vs_currency cannot be longer than 10 characters")
-      String vs_currency) {
+          @NotBlank(message = "vs_currency cannot be blank")
+          @Size(max = 10, message = "vs_currency cannot be longer than 10 characters")
+          String vs_currency) {
     String coinMarketData =
         coinService
             .getCoinMarketData(name, vs_currency) //
@@ -76,9 +76,9 @@ public class CoinController {
   @GetMapping("/coins/{name}")
   ResponseEntity<String> details(
       @PathVariable
-      @NotBlank(message = "name cannot be blank")
-      @Size(max = 50, message = "name cannot be longer than 50 characters")
-      String name) {
+          @NotBlank(message = "name cannot be blank")
+          @Size(max = 50, message = "name cannot be longer than 50 characters")
+          String name) {
     String coinDetails =
         coinService.getCoinDetails(name).orElseThrow(() -> new CoinNotFoundException(name));
     String location =
