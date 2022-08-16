@@ -51,9 +51,14 @@ public class CoinController {
 
   @GetMapping("/coins/{name}/marketdata")
   ResponseEntity<String> marketData(
-      @PathVariable @NotBlank @Size(max = 50) String name,
-      @RequestParam(defaultValue = "usd", required = false) @NotBlank @Size(max = 10)
-          String vs_currency) {
+      @PathVariable
+      @NotBlank(message = "name cannot be blank")
+      @Size(max = 50, message = "name cannot be longer than 50 characters")
+      String name,
+      @RequestParam(defaultValue = "usd", required = false)
+      @NotBlank(message = "vs_currency cannot be blank")
+      @Size(max = 10, message = "vs_currency cannot be longer than 10 characters")
+      String vs_currency) {
     String coinMarketData =
         coinService
             .getCoinMarketData(name, vs_currency) //
@@ -69,7 +74,11 @@ public class CoinController {
   }
 
   @GetMapping("/coins/{name}")
-  ResponseEntity<String> details(@PathVariable @NotBlank @Size(max = 50) String name) {
+  ResponseEntity<String> details(
+      @PathVariable
+      @NotBlank(message = "name cannot be blank")
+      @Size(max = 50, message = "name cannot be longer than 50 characters")
+      String name) {
     String coinDetails =
         coinService.getCoinDetails(name).orElseThrow(() -> new CoinNotFoundException(name));
     String location =
@@ -82,6 +91,9 @@ public class CoinController {
       @PathVariable @NotBlank @Size(max = 50) String name,
       @RequestParam(defaultValue = "0", required = false) @ValidTimestamp long chart_from,
       @RequestParam(defaultValue = "0", required = false) @ValidTimestamp long chart_to) {
+    if (!(chart_from < chart_to)) {
+      return ResponseEntity.badRequest().body("chart_to cannot be before chart_from");
+    }
     String chart =
         coinService
             .getChart(name, chart_from, chart_to)
