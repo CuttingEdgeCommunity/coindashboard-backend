@@ -43,7 +43,7 @@ class CoinGeckoClientTest extends CoinGeckoTestBaseClass {
             this.timestamp);
 
     Mockito.when(apiClient.invokeGet(correctLatestUri)).thenReturn(this.correctLatestR);
-    Mockito.when(apiClient.invokeGet(correctHistoricalUri)).thenReturn(this.correctHistoricalR);
+    Mockito.when(apiClient.invokeGet(correctHistoricalUri)).thenReturn(this.btcCorrectHistoricalR);
     Mockito.when(apiClient.invokeGet(errorLatestUri)).thenReturn(this.errorR);
     Mockito.when(apiClient.invokeGet(errorHistoricalUri)).thenReturn(this.errorR);
   }

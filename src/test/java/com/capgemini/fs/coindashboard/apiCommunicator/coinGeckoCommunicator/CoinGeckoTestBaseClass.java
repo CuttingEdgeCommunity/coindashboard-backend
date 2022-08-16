@@ -1,11 +1,9 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
@@ -13,19 +11,13 @@ import java.util.List;
 
 public class CoinGeckoTestBaseClass {
 
-  public JsonNode correctLatest, correctHistorical, error;
+  public JsonNode correctLatest, correctHistoricalBTC, correctHistoricalETH, error, errorHistorical;
 
-  //correctLatest = odpowiedź od api coinmarketcapa na zapytanie latest ? (w coingecko na coins/markets) ?
-  //correctHistorical = odpowiedź od api coinmarketcapa na zapytanie historical ? (w coingecko na coins/{id}/market_chart) ?
-  //error = zawsze taka sama postac niezaleznie od zapytania w cmp, niewiadomo jak w cg
-  public Response correctLatestR, correctHistoricalR, errorR;
+  public Response correctLatestR, btcCorrectHistoricalR, ethCorrectHistoricalR, errorR, errorHistoricalR, eurCorrectLatestR;
   public List<String> coins, coinserr, vsCurr;
   public String order = "", per_page = "250", page = "", sparkline = "";
   public String deltas = "1h,24h,7d,30d";
-    //coins = poprawne wprowadzenie coinów ?
-    //coinserr = błędne wprowadzenie coinów ?
-    //vsCurr = poprawne wprowadzenie vsCurr ? A błędne?
-  public final Long timestamp = 1659601993L;
+  public final Long timestamp = 0L;
 
   @BeforeEach
   void setup() throws JsonProcessingException {
@@ -125,861 +117,2351 @@ public class CoinGeckoTestBaseClass {
             """
         );
 
-    /*
-        new ApiClient()
-            .parseResponse(
-                """
-        {
-            "status": {
-                "timestamp": "2022-08-05T05:04:13.735Z",
-                "error_code": 0,
-                "error_message": null,
-                "elapsed": 1,
-                "credit_count": 2,
-                "notice": null
-            },
-            "data": {
-                "BTC": [
-                    {
-                        "id": 915,
-                        "name": "xux6l0ru03",
-                        "symbol": "BTC",
-                        "slug": "gxz1seh3xd",
-                        "is_active": 9396,
-                        "is_fiat": null,
-                        "circulating_supply": 5928,
-                        "total_supply": 4532,
-                        "max_supply": 723,
-                        "date_added": "2022-08-05T05:04:13.734Z",
-                        "num_market_pairs": 1318,
-                        "cmc_rank": 5301,
-                        "last_updated": "2022-08-05T05:04:13.734Z",
-                        "tags": [
-                            "oaxgpud2kz8",
-                            "phkar3plw",
-                            "d2gry3vnfge",
-                            "kdzozo75hgm",
-                            "mzhz2dttf6",
-                            "5d4r4g38z7",
-                            "6v5bekd2zan",
-                            "9fo1khu5snw",
-                            "jtvp3jjvw6l",
-                            "p3n0klw7vno"
-                        ],
-                        "platform": null,
-                        "self_reported_circulating_supply": null,
-                        "self_reported_market_cap": null,
-                        "quote": {
-                            "EUR": {
-                                "price": 0.3847972592307525,
-                                "volume_24h": 0.09616789612331678,
-                                "volume_change_24h": 0.9038227755722696,
-                                "percent_change_1h": 0.4378632733017602,
-                                "percent_change_24h": 0.5252797683057568,
-                                "percent_change_7d": 0.8796581138709574,
-                                "percent_change_30d": 0.45463360248521445,
-                                "market_cap": 0.6537436479855845,
-                                "market_cap_dominance": 6065,
-                                "fully_diluted_market_cap": 0.667649577818437,
-                                "last_updated": "2022-08-05T05:04:13.734Z"
-                            },
-                            "USD": {
-                                "price": 0.3847972592307525,
-                                "volume_24h": 0.09616789612331678,
-                                "volume_change_24h": 0.9038227755722696,
-                                "percent_change_1h": 0.4378632733017602,
-                                "percent_change_24h": 0.5252797683057568,
-                                "percent_change_7d": 0.8796581138709574,
-                                "percent_change_30d": 0.45463360248521445,
-                                "market_cap": 0.6537436479855845,
-                                "market_cap_dominance": 6065,
-                                "fully_diluted_market_cap": 0.667649577818437,
-                                "last_updated": "2022-08-05T05:04:13.734Z"
-                            }
-                        }
-                    },
-                    {
-                        "id": 6209,
-                        "name": "apxf7sex6p",
-                        "symbol": "BTC",
-                        "slug": "rt8g6eytz5j",
-                        "is_active": 7282,
-                        "is_fiat": null,
-                        "circulating_supply": 3966,
-                        "total_supply": 2669,
-                        "max_supply": 7918,
-                        "date_added": "2022-08-05T05:04:13.734Z",
-                        "num_market_pairs": 2724,
-                        "cmc_rank": 2839,
-                        "last_updated": "2022-08-05T05:04:13.734Z",
-                        "tags": [
-                            "mwgnoekltt",
-                            "6sa98ya7p4f",
-                            "ah9z1mufie5",
-                            "zsvwwletn8o",
-                            "cbb6dkyxwzj",
-                            "qrozh6elsd",
-                            "aqtfy9v78t7",
-                            "76vrrlr3t4",
-                            "chf7d459pnq",
-                            "omgwxjycuno"
-                        ],
-                        "platform": null,
-                        "self_reported_circulating_supply": null,
-                        "self_reported_market_cap": null,
-                        "quote": {
-                            "EUR": {
-                                "price": 0.38175804465968466,
-                                "volume_24h": 0.5004845032229457,
-                                "volume_change_24h": 0.023326503283758848,
-                                "percent_change_1h": 0.8272705479452827,
-                                "percent_change_24h": 0.2166342592200119,
-                                "percent_change_7d": 0.9600905261274526,
-                                "percent_change_30d": 0.3650928287751307,
-                                "market_cap": 0.42751285704418396,
-                                "market_cap_dominance": 9714,
-                                "fully_diluted_market_cap": 0.12278944751704901,
-                                "last_updated": "2022-08-05T05:04:13.734Z"
-                            },
-                            "USD": {
-                                "price": 0.38175804465968466,
-                                "volume_24h": 0.5004845032229457,
-                                "volume_change_24h": 0.023326503283758848,
-                                "percent_change_1h": 0.8272705479452827,
-                                "percent_change_24h": 0.2166342592200119,
-                                "percent_change_7d": 0.9600905261274526,
-                                "percent_change_30d": 0.3650928287751307,
-                                "market_cap": 0.42751285704418396,
-                                "market_cap_dominance": 9714,
-                                "fully_diluted_market_cap": 0.12278944751704901,
-                                "last_updated": "2022-08-05T05:04:13.734Z"
-                            }
-                        }
-                    },
-                    {
-                        "id": 3382,
-                        "name": "eoi1r26mwj",
-                        "symbol": "BTC",
-                        "slug": "ptkqqnqg8r",
-                        "is_active": 4663,
-                        "is_fiat": null,
-                        "circulating_supply": 5380,
-                        "total_supply": 6601,
-                        "max_supply": 1756,
-                        "date_added": "2022-08-05T05:04:13.734Z",
-                        "num_market_pairs": 4453,
-                        "cmc_rank": 8250,
-                        "last_updated": "2022-08-05T05:04:13.734Z",
-                        "tags": [
-                            "ngd8ucb1w3",
-                            "mawsf674cg",
-                            "3op1zq3immn",
-                            "aux066hylkt",
-                            "eegoow2m51p",
-                            "4d7kftm2mjb",
-                            "gefj274vawq",
-                            "vv4bhgmc55m",
-                            "w0onlqtyx9k",
-                            "hcjc76gnf5"
-                        ],
-                        "platform": null,
-                        "self_reported_circulating_supply": null,
-                        "self_reported_market_cap": null,
-                        "quote": {
-                            "EUR": {
-                                "price": 0.4207545460004636,
-                                "volume_24h": 0.05874933296788676,
-                                "volume_change_24h": 0.44978870060330434,
-                                "percent_change_1h": 0.8357021407569312,
-                                "percent_change_24h": 0.5786980627746363,
-                                "percent_change_7d": 0.8947774939099324,
-                                "percent_change_30d": 0.40272542124684696,
-                                "market_cap": 0.7839481088936322,
-                                "market_cap_dominance": 2681,
-                                "fully_diluted_market_cap": 0.24515053021470434,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            },
-                            "USD": {
-                                "price": 0.4207545460004636,
-                                "volume_24h": 0.05874933296788676,
-                                "volume_change_24h": 0.44978870060330434,
-                                "percent_change_1h": 0.8357021407569312,
-                                "percent_change_24h": 0.5786980627746363,
-                                "percent_change_7d": 0.8947774939099324,
-                                "percent_change_30d": 0.40272542124684696,
-                                "market_cap": 0.7839481088936322,
-                                "market_cap_dominance": 2681,
-                                "fully_diluted_market_cap": 0.24515053021470434,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            }
-                        }
-                    }
-                ],
-                "ETH": [
-                    {
-                        "id": 472,
-                        "name": "ndt42kb0rw",
-                        "symbol": "ETH",
-                        "slug": "wrpn3qxo9jr",
-                        "is_active": 4169,
-                        "is_fiat": null,
-                        "circulating_supply": 8555,
-                        "total_supply": 3990,
-                        "max_supply": 1982,
-                        "date_added": "2022-08-05T05:04:13.735Z",
-                        "num_market_pairs": 566,
-                        "cmc_rank": 8275,
-                        "last_updated": "2022-08-05T05:04:13.735Z",
-                        "tags": [
-                            "rrflip1ydjd",
-                            "dus96fq2vbs",
-                            "6n62i8c162j",
-                            "4nmowxph1ud",
-                            "umv827cqod",
-                            "lht9dnh8fed",
-                            "i79grlqlrs",
-                            "1mh3ostmmoh",
-                            "ma361twykw",
-                            "mrlxab75xas"
-                        ],
-                        "platform": null,
-                        "self_reported_circulating_supply": null,
-                        "self_reported_market_cap": null,
-                        "quote": {
-                            "EUR": {
-                                "price": 0.7723491164846645,
-                                "volume_24h": 0.09648972606917616,
-                                "volume_change_24h": 0.5104190556478101,
-                                "percent_change_1h": 0.4629243521979354,
-                                "percent_change_24h": 0.17337785302311803,
-                                "percent_change_7d": 0.43695309256927906,
-                                "percent_change_30d": 0.8671547911429736,
-                                "market_cap": 0.24550527938258004,
-                                "market_cap_dominance": 9985,
-                                "fully_diluted_market_cap": 0.7796593936798335,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            },
-                            "USD": {
-                                "price": 0.7723491164846645,
-                                "volume_24h": 0.09648972606917616,
-                                "volume_change_24h": 0.5104190556478101,
-                                "percent_change_1h": 0.4629243521979354,
-                                "percent_change_24h": 0.17337785302311803,
-                                "percent_change_7d": 0.43695309256927906,
-                                "percent_change_30d": 0.8671547911429736,
-                                "market_cap": 0.24550527938258004,
-                                "market_cap_dominance": 9985,
-                                "fully_diluted_market_cap": 0.7796593936798335,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            }
-                        }
-                    },
-                    {
-                        "id": 7867,
-                        "name": "gtmp5u5nqx9",
-                        "symbol": "ETH",
-                        "slug": "t4bgok459sm",
-                        "is_active": 8390,
-                        "is_fiat": null,
-                        "circulating_supply": 4706,
-                        "total_supply": 4238,
-                        "max_supply": 9972,
-                        "date_added": "2022-08-05T05:04:13.735Z",
-                        "num_market_pairs": 3980,
-                        "cmc_rank": 1831,
-                        "last_updated": "2022-08-05T05:04:13.735Z",
-                        "tags": [
-                            "vwau8j9jfb",
-                            "o91a7sg7n1k",
-                            "8f8bj6z0xor",
-                            "v5boxic03x",
-                            "upj8u7a585h",
-                            "0zypkijvz9jo",
-                            "5vikkio1qci",
-                            "hyslwgd9tdj",
-                            "xabl60enoub",
-                            "88567oxubjb"
-                        ],
-                        "platform": null,
-                        "self_reported_circulating_supply": null,
-                        "self_reported_market_cap": null,
-                        "quote": {
-                            "EUR": {
-                                "price": 0.1941304092637104,
-                                "volume_24h": 0.764545176390846,
-                                "volume_change_24h": 0.6807204914666145,
-                                "percent_change_1h": 0.9586356396677813,
-                                "percent_change_24h": 0.6288411597797805,
-                                "percent_change_7d": 0.5385867191696831,
-                                "percent_change_30d": 0.46264223729081055,
-                                "market_cap": 0.47413951481237726,
-                                "market_cap_dominance": 7812,
-                                "fully_diluted_market_cap": 0.5196335559710008,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            },
-                            "USD": {
-                                "price": 0.1941304092637104,
-                                "volume_24h": 0.764545176390846,
-                                "volume_change_24h": 0.6807204914666145,
-                                "percent_change_1h": 0.9586356396677813,
-                                "percent_change_24h": 0.6288411597797805,
-                                "percent_change_7d": 0.5385867191696831,
-                                "percent_change_30d": 0.46264223729081055,
-                                "market_cap": 0.47413951481237726,
-                                "market_cap_dominance": 7812,
-                                "fully_diluted_market_cap": 0.5196335559710008,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            }
-                        }
-                    },
-                    {
-                        "id": 7981,
-                        "name": "ywat3wgtn69",
-                        "symbol": "ETH",
-                        "slug": "qaxp8jset3",
-                        "is_active": 578,
-                        "is_fiat": null,
-                        "circulating_supply": 9071,
-                        "total_supply": 8355,
-                        "max_supply": 5873,
-                        "date_added": "2022-08-05T05:04:13.735Z",
-                        "num_market_pairs": 2310,
-                        "cmc_rank": 300,
-                        "last_updated": "2022-08-05T05:04:13.735Z",
-                        "tags": [
-                            "itn5ob59xwe",
-                            "dkp4pyo8ml9",
-                            "xlftoiywgq",
-                            "huoeep7mrrs",
-                            "bf56xjzt4o5",
-                            "tqyb8mne8fg",
-                            "iyklqlhjxs",
-                            "ktmu427zx5h",
-                            "w9pm3lwfa6",
-                            "5d2l34fzvdk"
-                        ],
-                        "platform": null,
-                        "self_reported_circulating_supply": null,
-                        "self_reported_market_cap": null,
-                        "quote": {
-                            "EUR": {
-                                "price": 0.37748344427532476,
-                                "volume_24h": 0.7829874227463993,
-                                "volume_change_24h": 0.2951376304798412,
-                                "percent_change_1h": 0.8665255746657403,
-                                "percent_change_24h": 0.46556805142155344,
-                                "percent_change_7d": 0.09594281877077626,
-                                "percent_change_30d": 0.9011129779094231,
-                                "market_cap": 0.30784674777457766,
-                                "market_cap_dominance": 897,
-                                "fully_diluted_market_cap": 0.7338858711930225,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            },
-                            "USD": {
-                                "price": 0.37748344427532476,
-                                "volume_24h": 0.7829874227463993,
-                                "volume_change_24h": 0.2951376304798412,
-                                "percent_change_1h": 0.8665255746657403,
-                                "percent_change_24h": 0.46556805142155344,
-                                "percent_change_7d": 0.09594281877077626,
-                                "percent_change_30d": 0.9011129779094231,
-                                "market_cap": 0.30784674777457766,
-                                "market_cap_dominance": 897,
-                                "fully_diluted_market_cap": 0.7338858711930225,
-                                "last_updated": "2022-08-05T05:04:13.735Z"
-                            }
-                        }
-                    }
-                ]
-            }
-        }""");
-
-         */
-    this.correctHistorical = new ObjectMapper().readTree
+    this.correctHistoricalBTC = new ObjectMapper().readTree
             (
                 """
-                    {"correctHistorical":"true"}
-                """
+                    {
+                            "prices": [
+                                [
+                                    1660581057860,
+                                    24227.50368656992
+                                ],
+                                [
+                                    1660581324495,
+                                    24238.317370760105
+                                ],
+                                [
+                                    1660581609008,
+                                    24223.082774986317
+                                ],
+                                [
+                                    1660581917890,
+                                    24203.227346934706
+                                ],
+                                [
+                                    1660582288173,
+                                    24211.45630897566
+                                ],
+                                [
+                                    1660582505353,
+                                    24205.342973609673
+                                ],
+                                [
+                                    1660582809297,
+                                    24237.60721046364
+                                ],
+                                [
+                                    1660583210070,
+                                    24224.60338210605
+                                ],
+                                [
+                                    1660583420349,
+                                    24233.063499439853
+                                ],
+                                [
+                                    1660583681792,
+                                    24264.712249123244
+                                ],
+                                [
+                                    1660584002284,
+                                    24251.28963107301
+                                ],
+                                [
+                                    1660584278151,
+                                    24215.972700297145
+                                ],
+                                [
+                                    1660584605104,
+                                    24247.92948952996
+                                ],
+                                [
+                                    1660584904922,
+                                    24209.616709371556
+                                ],
+                                [
+                                    1660585278650,
+                                    24141.9605203337
+                                ],
+                                [
+                                    1660585587909,
+                                    24141.51208679857
+                                ],
+                                [
+                                    1660585802756,
+                                    24146.706781287765
+                                ],
+                                [
+                                    1660586167404,
+                                    24119.538790648603
+                                ],
+                                [
+                                    1660586447525,
+                                    24147.792690464135
+                                ],
+                                [
+                                    1660586814224,
+                                    24141.567587993777
+                                ],
+                                [
+                                    1660587066132,
+                                    24119.63827641895
+                                ],
+                                [
+                                    1660587345423,
+                                    24131.616411664607
+                                ],
+                                [
+                                    1660587597259,
+                                    24140.825698810248
+                                ],
+                                [
+                                    1660588017749,
+                                    24122.464506082953
+                                ],
+                                [
+                                    1660588279040,
+                                    24117.919411315983
+                                ],
+                                [
+                                    1660588582571,
+                                    24121.67762449697
+                                ],
+                                [
+                                    1660588800140,
+                                    24107.181004948547
+                                ],
+                                [
+                                    1660589197455,
+                                    24106.31760751769
+                                ],
+                                [
+                                    1660589407570,
+                                    24140.08641643143
+                                ],
+                                [
+                                    1660589746945,
+                                    24133.43687156757
+                                ],
+                                [
+                                    1660589958087,
+                                    24138.152072266173
+                                ],
+                                [
+                                    1660590379657,
+                                    24149.65554169033
+                                ],
+                                [
+                                    1660590670105,
+                                    24067.393332349966
+                                ],
+                                [
+                                    1660590882675,
+                                    24060.248615686585
+                                ],
+                                [
+                                    1660591275964,
+                                    24094.706838578106
+                                ],
+                                [
+                                    1660591623677,
+                                    24085.378202313263
+                                ],
+                                [
+                                    1660591844519,
+                                    24078.376601252494
+                                ],
+                                [
+                                    1660592237971,
+                                    24074.283731548898
+                                ],
+                                [
+                                    1660592456965,
+                                    24110.705273975218
+                                ],
+                                [
+                                    1660592777325,
+                                    24062.06282688591
+                                ],
+                                [
+                                    1660593010775,
+                                    24081.284308143906
+                                ],
+                                [
+                                    1660593315445,
+                                    24055.313178402615
+                                ],
+                                [
+                                    1660593609724,
+                                    24047.217445499
+                                ],
+                                [
+                                    1660593915399,
+                                    24042.33231254925
+                                ],
+                                [
+                                    1660594266009,
+                                    24047.699753094756
+                                ],
+                                [
+                                    1660594626251,
+                                    24046.009636983646
+                                ],
+                                [
+                                    1660594869402,
+                                    24072.081063763093
+                                ],
+                                [
+                                    1660595243914,
+                                    24046.295923201098
+                                ],
+                                [
+                                    1660595394661,
+                                    24034.85115884545
+                                ],
+                                [
+                                    1660595809252,
+                                    24070.979992406108
+                                ],
+                                [
+                                    1660595995060,
+                                    24071.85437461929
+                                ],
+                                [
+                                    1660596372990,
+                                    24028.099755582767
+                                ],
+                                [
+                                    1660596757232,
+                                    24026.494509129054
+                                ],
+                                [
+                                    1660596954085,
+                                    24031.54671364497
+                                ],
+                                [
+                                    1660597186429,
+                                    24041.94144152471
+                                ],
+                                [
+                                    1660597621726,
+                                    24096.433917708324
+                                ],
+                                [
+                                    1660597773667,
+                                    24102.231770421276
+                                ],
+                                [
+                                    1660598133562,
+                                    24087.012275153324
+                                ],
+                                [
+                                    1660598469700,
+                                    24094.2036495347
+                                ],
+                                [
+                                    1660598829809,
+                                    24146.95306697812
+                                ],
+                                [
+                                    1660599074468,
+                                    24131.739445010026
+                                ],
+                                [
+                                    1660599361911,
+                                    24128.383212325607
+                                ],
+                                [
+                                    1660599603282,
+                                    24135.518472795393
+                                ],
+                                [
+                                    1660599969695,
+                                    24134.73302168897
+                                ],
+                                [
+                                    1660600246168,
+                                    24108.335969191892
+                                ],
+                                [
+                                    1660600522989,
+                                    24103.257056048813
+                                ],
+                                [
+                                    1660600907608,
+                                    24036.232181401978
+                                ],
+                                [
+                                    1660601132707,
+                                    24017.210680742235
+                                ],
+                                [
+                                    1660601493876,
+                                    24013.057109911388
+                                ],
+                                [
+                                    1660601703342,
+                                    24041.7644080811
+                                ],
+                                [
+                                    1660602094366,
+                                    24148.763350820984
+                                ],
+                                [
+                                    1660602394195,
+                                    24121.898628391995
+                                ],
+                                [
+                                    1660602754286,
+                                    24095.522101793973
+                                ],
+                                [
+                                    1660603035643,
+                                    24128.008187006097
+                                ],
+                                [
+                                    1660603214704,
+                                    24126.14927610236
+                                ],
+                                [
+                                    1660603562062,
+                                    24118.616463210812
+                                ],
+                                [
+                                    1660603943638,
+                                    24098.748745636
+                                ],
+                                [
+                                    1660604307356,
+                                    24054.94024317822
+                                ],
+                                [
+                                    1660604373499,
+                                    24061.88047491907
+                                ],
+                                [
+                                    1660604855359,
+                                    23995.21787612049
+                                ],
+                                [
+                                    1660605099214,
+                                    23994.692474094594
+                                ],
+                                [
+                                    1660605381618,
+                                    23969.525464199814
+                                ],
+                                [
+                                    1660605760153,
+                                    23848.343645341003
+                                ],
+                                [
+                                    1660606011999,
+                                    23889.5176392562
+                                ],
+                                [
+                                    1660606236107,
+                                    23918.467871944944
+                                ],
+                                [
+                                    1660606532257,
+                                    23924.84809403058
+                                ],
+                                [
+                                    1660606814585,
+                                    24179.57247195288
+                                ],
+                                [
+                                    1660607150072,
+                                    24186.852796232462
+                                ],
+                                [
+                                    1660607431382,
+                                    24187.317196041644
+                                ],
+                                [
+                                    1660607765155,
+                                    24179.014652309197
+                                ],
+                                [
+                                    1660608100830,
+                                    24146.458344333016
+                                ],
+                                [
+                                    1660608347439,
+                                    24141.738373894616
+                                ],
+                                [
+                                    1660608626146,
+                                    24141.993743819206
+                                ],
+                                [
+                                    1660608862383,
+                                    24164.750488157377
+                                ],
+                                [
+                                    1660609181272,
+                                    24089.371828416042
+                                ],
+                                [
+                                    1660609454289,
+                                    24056.12952945362
+                                ],
+                                [
+                                    1660609805992,
+                                    24037.418622677524
+                                ],
+                                [
+                                    1660610103692,
+                                    24030.40443891152
+                                ],
+                                [
+                                    1660610477512,
+                                    24039.191849813826
+                                ],
+                                [
+                                    1660610752192,
+                                    24103.58039582924
+                                ],
+                                [
+                                    1660611106021,
+                                    24111.452656907135
+                                ],
+                                [
+                                    1660611370506,
+                                    24154.438419303115
+                                ],
+                                [
+                                    1660611664975,
+                                    24152.310262387586
+                                ],
+                                [
+                                    1660611938381,
+                                    24199.929041623942
+                                ],
+                                [
+                                    1660612242678,
+                                    24193.592924335542
+                                ],
+                                [
+                                    1660612570441,
+                                    24189.14362703804
+                                ],
+                                [
+                                    1660612865137,
+                                    24186.88822244813
+                                ],
+                                [
+                                    1660613209918,
+                                    24228.11710189578
+                                ],
+                                [
+                                    1660613471419,
+                                    24223.484480169784
+                                ],
+                                [
+                                    1660613810638,
+                                    24238.557742392284
+                                ],
+                                [
+                                    1660614059786,
+                                    24212.674287323705
+                                ],
+                                [
+                                    1660614385681,
+                                    24212.494064588416
+                                ],
+                                [
+                                    1660614698899,
+                                    24189.43045981718
+                                ],
+                                [
+                                    1660614877158,
+                                    24201.106463423406
+                                ],
+                                [
+                                    1660615559261,
+                                    24171.457051814617
+                                ],
+                                [
+                                    1660616413320,
+                                    24176.8888759974
+                                ],
+                                [
+                                    1660617015031,
+                                    24180.486552680355
+                                ],
+                                [
+                                    1660617814095,
+                                    24137.791258394434
+                                ],
+                                [
+                                    1660618379303,
+                                    24114.431432845933
+                                ],
+                                [
+                                    1660618966099,
+                                    24103.166778587474
+                                ],
+                                [
+                                    1660619815939,
+                                    23870.83403330118
+                                ],
+                                [
+                                    1660620668124,
+                                    24004.22404905055
+                                ],
+                                [
+                                    1660621467301,
+                                    24132.181377331548
+                                ],
+                                [
+                                    1660621879966,
+                                    24115.774930707346
+                                ],
+                                [
+                                    1660622473041,
+                                    24144.16494015081
+                                ],
+                                [
+                                    1660623024211,
+                                    24140.596659040886
+                                ],
+                                [
+                                    1660623595843,
+                                    24101.53743740112
+                                ],
+                                [
+                                    1660624123885,
+                                    24059.155290900788
+                                ],
+                                [
+                                    1660624458176,
+                                    24047.793297316435
+                                ],
+                                [
+                                    1660624681009,
+                                    24042.153316418815
+                                ],
+                                [
+                                    1660624969519,
+                                    24052.346002676448
+                                ],
+                                [
+                                    1660625287688,
+                                    24035.253164771955
+                                ],
+                                [
+                                    1660625535294,
+                                    24046.923599429625
+                                ],
+                                [
+                                    1660625879735,
+                                    24035.73270827513
+                                ],
+                                [
+                                    1660626233401,
+                                    24021.41594466998
+                                ],
+                                [
+                                    1660626516615,
+                                    23942.978649932018
+                                ],
+                                [
+                                    1660626792769,
+                                    23945.191433004347
+                                ],
+                                [
+                                    1660627104137,
+                                    23932.877811059214
+                                ],
+                                [
+                                    1660627393278,
+                                    23936.50138906246
+                                ],
+                                [
+                                    1660627687356,
+                                    23903.241081596087
+                                ],
+                                [
+                                    1660628027123,
+                                    23928.369704217774
+                                ],
+                                [
+                                    1660628252116,
+                                    23911.196759466235
+                                ],
+                                [
+                                    1660628592306,
+                                    23915.728054705804
+                                ],
+                                [
+                                    1660628947591,
+                                    23894.983471956522
+                                ],
+                                [
+                                    1660629256713,
+                                    23911.398583269736
+                                ],
+                                [
+                                    1660629546613,
+                                    23929.305314059286
+                                ],
+                                [
+                                    1660629879012,
+                                    23933.19694910469
+                                ],
+                                [
+                                    1660630192229,
+                                    23987.532671162036
+                                ],
+                                [
+                                    1660630770315,
+                                    23991.821705819835
+                                ],
+                                [
+                                    1660631076249,
+                                    23992.343665193384
+                                ],
+                                [
+                                    1660631676193,
+                                    23990.773120386744
+                                ],
+                                [
+                                    1660632255341,
+                                    24019.84071858912
+                                ],
+                                [
+                                    1660632516463,
+                                    24023.67467124849
+                                ],
+                                [
+                                    1660632804537,
+                                    24035.737873158163
+                                ],
+                                [
+                                    1660633092946,
+                                    24021.23381401279
+                                ],
+                                [
+                                    1660633378966,
+                                    24012.322379761114
+                                ],
+                                [
+                                    1660633688402,
+                                    24015.438352838584
+                                ],
+                                [
+                                    1660634025240,
+                                    24014.495763271374
+                                ],
+                                [
+                                    1660634267310,
+                                    24014.769455432986
+                                ],
+                                [
+                                    1660634676352,
+                                    24022.492871952116
+                                ],
+                                [
+                                    1660635234350,
+                                    24023.218834277188
+                                ],
+                                [
+                                    1660635486845,
+                                    24045.73718721079
+                                ],
+                                [
+                                    1660635786550,
+                                    24041.018271705838
+                                ],
+                                [
+                                    1660636082016,
+                                    24011.612918239654
+                                ],
+                                [
+                                    1660636423723,
+                                    24034.338311501146
+                                ],
+                                [
+                                    1660636741601,
+                                    24038.356192318424
+                                ],
+                                [
+                                    1660636804010,
+                                    24033.12267658302
+                                ],
+                                [
+                                    1660637238546,
+                                    24042.986880401437
+                                ],
+                                [
+                                    1660637484569,
+                                    24042.897825455053
+                                ],
+                                [
+                                    1660637790342,
+                                    24027.013393225174
+                                ],
+                                [
+                                    1660638154877,
+                                    24027.08049413082
+                                ],
+                                [
+                                    1660638453854,
+                                    24024.245562880114
+                                ],
+                                [
+                                    1660638775830,
+                                    24028.883990589893
+                                ],
+                                [
+                                    1660639011077,
+                                    24022.004149287633
+                                ],
+                                [
+                                    1660639195790,
+                                    24035.88199394572
+                                ],
+                                [
+                                    1660639539371,
+                                    24046.414405747277
+                                ],
+                                [
+                                    1660639859236,
+                                    24038.599255318557
+                                ],
+                                [
+                                    1660640156985,
+                                    24035.349575549502
+                                ],
+                                [
+                                    1660640428274,
+                                    24037.556123300023
+                                ],
+                                [
+                                    1660640747168,
+                                    24005.780967426446
+                                ],
+                                [
+                                    1660641082850,
+                                    24053.99008064663
+                                ],
+                                [
+                                    1660641379494,
+                                    24042.52143559977
+                                ],
+                                [
+                                    1660641613318,
+                                    24055.14039831006
+                                ],
+                                [
+                                    1660641901747,
+                                    24062.401923321344
+                                ],
+                                [
+                                    1660642228587,
+                                    24109.835785825206
+                                ],
+                                [
+                                    1660642461995,
+                                    24098.928277941795
+                                ],
+                                [
+                                    1660642829221,
+                                    24119.750712783803
+                                ],
+                                [
+                                    1660643081248,
+                                    24125.53505254733
+                                ],
+                                [
+                                    1660643413082,
+                                    24104.219871268386
+                                ],
+                                [
+                                    1660643879551,
+                                    24104.118934862243
+                                ],
+                                [
+                                    1660644162383,
+                                    24095.148712619146
+                                ],
+                                [
+                                    1660644342302,
+                                    24093.804737482136
+                                ],
+                                [
+                                    1660644627168,
+                                    24104.1970956737
+                                ],
+                                [
+                                    1660644875833,
+                                    24092.730324260734
+                                ],
+                                [
+                                    1660645222421,
+                                    24093.448159902717
+                                ],
+                                [
+                                    1660645587119,
+                                    24083.32552219404
+                                ],
+                                [
+                                    1660645960765,
+                                    24068.649250144237
+                                ],
+                                [
+                                    1660646219111,
+                                    24079.762192409165
+                                ],
+                                [
+                                    1660646415072,
+                                    24071.463223519946
+                                ],
+                                [
+                                    1660646708135,
+                                    24043.69280440634
+                                ],
+                                [
+                                    1660647050771,
+                                    24033.539328873558
+                                ],
+                                [
+                                    1660647326926,
+                                    24032.547116099853
+                                ],
+                                [
+                                    1660647558365,
+                                    24035.843143819377
+                                ],
+                                [
+                                    1660647939432,
+                                    24023.339453594534
+                                ],
+                                [
+                                    1660648225214,
+                                    24041.735480949414
+                                ],
+                                [
+                                    1660648528431,
+                                    24059.37327541004
+                                ],
+                                [
+                                    1660648833428,
+                                    24132.952570771136
+                                ],
+                                [
+                                    1660649045937,
+                                    24095.678707431216
+                                ],
+                                [
+                                    1660649434870,
+                                    24088.115180881763
+                                ],
+                                [
+                                    1660649724647,
+                                    24085.376059131686
+                                ],
+                                [
+                                    1660649991126,
+                                    24080.474125420147
+                                ],
+                                [
+                                    1660650236389,
+                                    24071.22693806926
+                                ],
+                                [
+                                    1660650615041,
+                                    24053.00209767198
+                                ],
+                                [
+                                    1660650979512,
+                                    24056.935468992167
+                                ],
+                                [
+                                    1660651201535,
+                                    24043.493030561047
+                                ],
+                                [
+                                    1660651500544,
+                                    24051.448029134215
+                                ],
+                                [
+                                    1660651772276,
+                                    24047.559954574364
+                                ],
+                                [
+                                    1660652078925,
+                                    24080.32918408399
+                                ],
+                                [
+                                    1660652437247,
+                                    24075.991993982927
+                                ],
+                                [
+                                    1660652711390,
+                                    24073.568194154668
+                                ],
+                                [
+                                    1660653047089,
+                                    24062.4073375105
+                                ],
+                                [
+                                    1660653277341,
+                                    24034.92495318114
+                                ],
+                                [
+                                    1660653548993,
+                                    24033.56769850058
+                                ],
+                                [
+                                    1660653876083,
+                                    24014.00663289623
+                                ],
+                                [
+                                    1660654277884,
+                                    23997.263853395965
+                                ],
+                                [
+                                    1660654583846,
+                                    23998.375462689983
+                                ],
+                                [
+                                    1660654808118,
+                                    23993.556702232025
+                                ],
+                                [
+                                    1660655104167,
+                                    23972.43068150868
+                                ],
+                                [
+                                    1660655408948,
+                                    23973.851771055557
+                                ],
+                                [
+                                    1660655699768,
+                                    23987.4490367814
+                                ],
+                                [
+                                    1660655983449,
+                                    23971.540156376264
+                                ],
+                                [
+                                    1660656300308,
+                                    23969.22307192299
+                                ],
+                                [
+                                    1660656709302,
+                                    23949.587395818613
+                                ],
+                                [
+                                    1660656932756,
+                                    24012.48545528824
+                                ],
+                                [
+                                    1660657212394,
+                                    23979.142145299156
+                                ],
+                                [
+                                    1660657487266,
+                                    23988.402883984643
+                                ],
+                                [
+                                    1660657821408,
+                                    23973.865888932887
+                                ],
+                                [
+                                    1660658107845,
+                                    23897.222582918334
+                                ],
+                                [
+                                    1660658440868,
+                                    23908.5616049927
+                                ],
+                                [
+                                    1660658687019,
+                                    23866.392598108687
+                                ],
+                                [
+                                    1660659002598,
+                                    23898.585013872667
+                                ],
+                                [
+                                    1660659300785,
+                                    23850.84832685107
+                                ],
+                                [
+                                    1660659647594,
+                                    23829.650674340333
+                                ],
+                                [
+                                    1660659927464,
+                                    23867.120560756346
+                                ],
+                                [
+                                    1660660216572,
+                                    23850.90009566081
+                                ],
+                                [
+                                    1660660522738,
+                                    23800.35772187591
+                                ],
+                                [
+                                    1660660808103,
+                                    23745.15128317328
+                                ],
+                                [
+                                    1660661100537,
+                                    23761.417585598832
+                                ],
+                                [
+                                    1660661470139,
+                                    23744.98817917826
+                                ],
+                                [
+                                    1660661711068,
+                                    23740.669602298385
+                                ],
+                                [
+                                    1660662013591,
+                                    23748.937384747824
+                                ],
+                                [
+                                    1660662345459,
+                                    23732.969983530456
+                                ],
+                                [
+                                    1660662652064,
+                                    23724.16685725431
+                                ],
+                                [
+                                    1660662963110,
+                                    23753.66546791336
+                                ],
+                                [
+                                    1660663263544,
+                                    23770.033835554666
+                                ],
+                                [
+                                    1660663554365,
+                                    23820.616102766373
+                                ],
+                                [
+                                    1660663855965,
+                                    23822.03148606529
+                                ],
+                                [
+                                    1660664180246,
+                                    23840.88805064862
+                                ],
+                                [
+                                    1660664406169,
+                                    23852.75377764962
+                                ],
+                                [
+                                    1660664701499,
+                                    23833.56386673806
+                                ],
+                                [
+                                    1660664995846,
+                                    23858.160150039406
+                                ],
+                                [
+                                    1660665325236,
+                                    23927.207054359013
+                                ],
+                                [
+                                    1660665663017,
+                                    23948.888888531146
+                                ],
+                                [
+                                    1660665973701,
+                                    23886.46589064343
+                                ],
+                                [
+                                    1660666197909,
+                                    23895.03942738778
+                                ],
+                                [
+                                    1660666595226,
+                                    23899.920261937496
+                                ],
+                                [
+                                    1660666867964,
+                                    23877.912101838072
+                                ],
+                                [
+                                    1660667168980,
+                                    23887.694768130066
+                                ],
+                                [
+                                    1660667435000,
+                                    23858.379197186045
+                                ],
+                                [
+                                    1660667435377,
+                                    23858.379197186045
+                                ]
+                            ]
+                            }
+            """
             );
-        /*
-        new ApiClient()
-            .parseResponse(
+    this.correctHistoricalETH = new ObjectMapper().readTree
+        (
                 """
-        {
-            "status": {
-                "timestamp": "2022-08-05T04:34:08.908Z",
-                "error_code": 0,
-                "error_message": null,
-                "elapsed": 1,
-                "credit_count": 2,
-                "notice": null
-            },
-            "data": {
-                "BTC": {
-                    "id": 7276,
-                    "name": "2gsn1by2nuy",
-                    "symbol": "BTC",
-                    "is_active": 8153,
-                    "is_fiat": null,
-                    "quotes": [
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.716910918341749,
-                                    "volume_24h": 8217,
-                                    "market_cap": 0.8127545964818206,
-                                    "circulating_supply": 1798,
-                                    "total_supply": 7137,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.716910918341749,
-                                    "volume_24h": 8217,
-                                    "market_cap": 0.8127545964818206,
-                                    "circulating_supply": 1798,
-                                    "total_supply": 7137,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.8852041336573697,
-                                    "volume_24h": 5505,
-                                    "market_cap": 0.14413801327737574,
-                                    "circulating_supply": 4169,
-                                    "total_supply": 6466,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.8852041336573697,
-                                    "volume_24h": 5505,
-                                    "market_cap": 0.14413801327737574,
-                                    "circulating_supply": 4169,
-                                    "total_supply": 6466,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.7236781671872239,
-                                    "volume_24h": 3191,
-                                    "market_cap": 0.2172896709746912,
-                                    "circulating_supply": 2034,
-                                    "total_supply": 8023,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.7236781671872239,
-                                    "volume_24h": 3191,
-                                    "market_cap": 0.2172896709746912,
-                                    "circulating_supply": 2034,
-                                    "total_supply": 8023,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.7073290703702153,
-                                    "volume_24h": 5271,
-                                    "market_cap": 0.11234953218913457,
-                                    "circulating_supply": 7199,
-                                    "total_supply": 5228,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.7073290703702153,
-                                    "volume_24h": 5271,
-                                    "market_cap": 0.11234953218913457,
-                                    "circulating_supply": 7199,
-                                    "total_supply": 5228,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.9057030502092924,
-                                    "volume_24h": 5637,
-                                    "market_cap": 0.09391885232308095,
-                                    "circulating_supply": 9775,
-                                    "total_supply": 98,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.9057030502092924,
-                                    "volume_24h": 5637,
-                                    "market_cap": 0.09391885232308095,
-                                    "circulating_supply": 9775,
-                                    "total_supply": 98,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.4976884758429796,
-                                    "volume_24h": 6526,
-                                    "market_cap": 0.1767537543860076,
-                                    "circulating_supply": 6895,
-                                    "total_supply": 2979,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.4976884758429796,
-                                    "volume_24h": 6526,
-                                    "market_cap": 0.1767537543860076,
-                                    "circulating_supply": 6895,
-                                    "total_supply": 2979,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.8416202955773848,
-                                    "volume_24h": 2158,
-                                    "market_cap": 0.5156852473931561,
-                                    "circulating_supply": 3634,
-                                    "total_supply": 382,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.8416202955773848,
-                                    "volume_24h": 2158,
-                                    "market_cap": 0.5156852473931561,
-                                    "circulating_supply": 3634,
-                                    "total_supply": 382,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.8487444582920673,
-                                    "volume_24h": 6460,
-                                    "market_cap": 0.8706947130913145,
-                                    "circulating_supply": 9190,
-                                    "total_supply": 3159,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.8487444582920673,
-                                    "volume_24h": 6460,
-                                    "market_cap": 0.8706947130913145,
-                                    "circulating_supply": 9190,
-                                    "total_supply": 3159,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.6530962123881923,
-                                    "volume_24h": 6791,
-                                    "market_cap": 0.3888507380270525,
-                                    "circulating_supply": 6808,
-                                    "total_supply": 950,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.6530962123881923,
-                                    "volume_24h": 6791,
-                                    "market_cap": 0.3888507380270525,
-                                    "circulating_supply": 6808,
-                                    "total_supply": 950,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.565101283929111,
-                                    "volume_24h": 6523,
-                                    "market_cap": 0.45042231916458486,
-                                    "circulating_supply": 5573,
-                                    "total_supply": 4459,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.565101283929111,
-                                    "volume_24h": 6523,
-                                    "market_cap": 0.45042231916458486,
-                                    "circulating_supply": 5573,
-                                    "total_supply": 4459,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
+                {
+                            "prices": [
+                                [
+                                    1660153870507,
+                                    1837.5180099723846
+                                ],
+                                [
+                                    1660154157741,
+                                    1836.789040761647
+                                ],
+                                [
+                                    1660154411792,
+                                    1836.039048554514
+                                ],
+                                [
+                                    1660154760889,
+                                    1835.2774899895066
+                                ],
+                                [
+                                    1660155002016,
+                                    1832.6023724116437
+                                ],
+                                [
+                                    1660155360172,
+                                    1835.5445526866672
+                                ],
+                                [
+                                    1660155606894,
+                                    1834.4780155751537
+                                ],
+                                [
+                                    1660155978706,
+                                    1827.2567500597506
+                                ],
+                                [
+                                    1660156265532,
+                                    1826.565072367728
+                                ],
+                                [
+                                    1660156568973,
+                                    1826.565907916519
+                                ],
+                                [
+                                    1660156868804,
+                                    1826.523898957194
+                                ],
+                                [
+                                    1660157214199,
+                                    1825.183805898207
+                                ],
+                                [
+                                    1660157414837,
+                                    1819.231779184255
+                                ],
+                                [
+                                    1660157817421,
+                                    1817.9859035605268
+                                ],
+                                [
+                                    1660158054495,
+                                    1810.1578125211388
+                                ],
+                                [
+                                    1660158397058,
+                                    1811.8030748290164
+                                ],
+                                [
+                                    1660158786767,
+                                    1819.632381513591
+                                ],
+                                [
+                                    1660159024058,
+                                    1818.8754574793536
+                                ],
+                                [
+                                    1660159283158,
+                                    1822.6878791112254
+                                ],
+                                [
+                                    1660159604993,
+                                    1823.6389539828801
+                                ],
+                                [
+                                    1660159905284,
+                                    1824.3980240554122
+                                ],
+                                [
+                                    1660160295539,
+                                    1825.7167883866039
+                                ],
+                                [
+                                    1660160468939,
+                                    1825.6949450396955
+                                ],
+                                [
+                                    1660160723777,
+                                    1825.8935767118294
+                                ],
+                                [
+                                    1660161020183,
+                                    1823.9518836571306
+                                ],
+                                [
+                                    1660161367356,
+                                    1821.5272674907192
+                                ],
+                                [
+                                    1660161678506,
+                                    1820.2768522844192
+                                ],
+                                [
+                                    1660162028451,
+                                    1823.2766752508367
+                                ],
+                                [
+                                    1660162273173,
+                                    1824.8976607232685
+                                ],
+                                [
+                                    1660162596688,
+                                    1824.6271481619435
+                                ],
+                                [
+                                    1660162865494,
+                                    1824.3347284413803
+                                ],
+                                [
+                                    1660163231326,
+                                    1824.3666709955262
+                                ],
+                                [
+                                    1660163471636,
+                                    1825.1335436079755
+                                ],
+                                [
+                                    1660163769752,
+                                    1827.6989983363794
+                                ],
+                                [
+                                    1660164044432,
+                                    1827.468159744067
+                                ],
+                                [
+                                    1660164400206,
+                                    1830.5084637893274
+                                ],
+                                [
+                                    1660164559638,
+                                    1832.9882657788185
+                                ],
+                                [
+                                    1660164951749,
+                                    1835.6520800800931
+                                ],
+                                [
+                                    1660165239604,
+                                    1839.5099289036116
+                                ],
+                                [
+                                    1660165623442,
+                                    1833.3062868523775
+                                ],
+                                [
+                                    1660165811469,
+                                    1833.2167212915792
+                                ],
+                                [
+                                    1660166171334,
+                                    1836.7141847955786
+                                ],
+                                [
+                                    1660166441586,
+                                    1834.9191963523035
+                                ],
+                                [
+                                    1660166748774,
+                                    1842.8592413278277
+                                ],
+                                [
+                                    1660167064777,
+                                    1855.8407068414092
+                                ],
+                                [
+                                    1660167388518,
+                                    1861.8471137962601
+                                ],
+                                [
+                                    1660167614021,
+                                    1856.7680003973182
+                                ],
+                                [
+                                    1660167950053,
+                                    1855.7540672675716
+                                ],
+                                [
+                                    1660168203543,
+                                    1856.8748285184047
+                                ],
+                                [
+                                    1660168523654,
+                                    1855.331401719082
+                                ],
+                                [
+                                    1660168827510,
+                                    1858.380948961739
+                                ],
+                                [
+                                    1660169138919,
+                                    1859.49224904483
+                                ],
+                                [
+                                    1660169467567,
+                                    1864.7082070384758
+                                ],
+                                [
+                                    1660169769686,
+                                    1862.402206806802
+                                ],
+                                [
+                                    1660170000408,
+                                    1859.0497341401478
+                                ],
+                                [
+                                    1660170389579,
+                                    1862.4460512630085
+                                ],
+                                [
+                                    1660170678159,
+                                    1864.3351762119923
+                                ],
+                                [
+                                    1660171005483,
+                                    1860.3719280294874
+                                ],
+                                [
+                                    1660171249773,
+                                    1858.7963675886174
+                                ],
+                                [
+                                    1660171503881,
+                                    1858.2020720441749
+                                ],
+                                [
+                                    1660171873070,
+                                    1854.0115257592272
+                                ],
+                                [
+                                    1660172182158,
+                                    1853.961639913007
+                                ],
+                                [
+                                    1660172438042,
+                                    1854.8232533415398
+                                ],
+                                [
+                                    1660172788865,
+                                    1854.2299750416496
+                                ],
+                                [
+                                    1660173063001,
+                                    1856.6471176425464
+                                ],
+                                [
+                                    1660173339766,
+                                    1854.633387792926
+                                ],
+                                [
+                                    1660173660966,
+                                    1854.4326718525015
+                                ],
+                                [
+                                    1660173946256,
+                                    1852.9860823140095
+                                ],
+                                [
+                                    1660174219807,
+                                    1852.0915920344457
+                                ],
+                                [
+                                    1660174539009,
+                                    1851.788294020889
+                                ],
+                                [
+                                    1660174804255,
+                                    1853.1393505321234
+                                ],
+                                [
+                                    1660175151609,
+                                    1851.1853400205057
+                                ],
+                                [
+                                    1660175450423,
+                                    1850.5300720843509
+                                ],
+                                [
+                                    1660175768907,
+                                    1852.8785552656473
+                                ],
+                                [
+                                    1660176074579,
+                                    1853.0435771568502
+                                ],
+                                [
+                                    1660176383665,
+                                    1851.8401930307318
+                                ],
+                                [
+                                    1660176577873,
+                                    1856.4040524602735
+                                ],
+                                [
+                                    1660176948958,
+                                    1857.730836234752
+                                ],
+                                [
+                                    1660177216985,
+                                    1859.9595957897113
+                                ],
+                                [
+                                    1660177598267,
+                                    1858.3633157667884
+                                ],
+                                [
+                                    1660177879223,
+                                    1856.384206543577
+                                ],
+                                [
+                                    1660178233750,
+                                    1855.858476163287
+                                ],
+                                [
+                                    1660178550374,
+                                    1861.9465733220422
+                                ],
+                                [
+                                    1660178835033,
+                                    1863.706407483266
+                                ],
+                                [
+                                    1660179131871,
+                                    1866.3389112912703
+                                ],
+                                [
+                                    1660179417837,
+                                    1875.7309457250171
+                                ],
+                                [
+                                    1660179855170,
+                                    1876.5873799549822
+                                ],
+                                [
+                                    1660180008516,
+                                    1876.4290028806447
+                                ],
+                                [
+                                    1660180255848,
+                                    1872.4446242301697
+                                ],
+                                [
+                                    1660180586754,
+                                    1870.9640764275534
+                                ],
+                                [
+                                    1660180875004,
+                                    1874.4627900155265
+                                ],
+                                [
+                                    1660181167486,
+                                    1874.707526872938
+                                ],
+                                [
+                                    1660181427636,
+                                    1881.1242926209666
+                                ],
+                                [
+                                    1660181825866,
+                                    1881.8305360236739
+                                ],
+                                [
+                                    1660182130172,
+                                    1878.7353649256308
+                                ],
+                                [
+                                    1660182432650,
+                                    1885.8134171855108
+                                ],
+                                [
+                                    1660182781211,
+                                    1912.1513623537023
+                                ],
+                                [
+                                    1660183077076,
+                                    1907.4744774961266
+                                ],
+                                [
+                                    1660183632175,
+                                    1902.0268693057697
+                                ],
+                                [
+                                    1660183988817,
+                                    1893.0355993151077
+                                ],
+                                [
+                                    1660184213199,
+                                    1885.1612908672482
+                                ],
+                                [
+                                    1660184423817,
+                                    1878.6480023939505
+                                ],
+                                [
+                                    1660184700315,
+                                    1872.3190962299427
+                                ],
+                                [
+                                    1660185003877,
+                                    1870.4492969709195
+                                ],
+                                [
+                                    1660185361382,
+                                    1875.8016462488479
+                                ],
+                                [
+                                    1660185605880,
+                                    1877.845338784604
+                                ],
+                                [
+                                    1660185866159,
+                                    1879.410264536679
+                                ],
+                                [
+                                    1660186166081,
+                                    1877.0068771668687
+                                ],
+                                [
+                                    1660186506636,
+                                    1880.9228319700042
+                                ],
+                                [
+                                    1660186795835,
+                                    1880.2782637775224
+                                ],
+                                [
+                                    1660187149796,
+                                    1878.913462851217
+                                ],
+                                [
+                                    1660187404136,
+                                    1879.9403027457215
+                                ],
+                                [
+                                    1660187700999,
+                                    1880.183340367764
+                                ],
+                                [
+                                    1660188064677,
+                                    1883.250312903933
+                                ],
+                                [
+                                    1660188321225,
+                                    1880.686644353636
+                                ],
+                                [
+                                    1660188689216,
+                                    1880.947746667676
+                                ],
+                                [
+                                    1660188980718,
+                                    1882.2317900505468
+                                ],
+                                [
+                                    1660189283797,
+                                    1881.8610287855508
+                                ],
+                                [
+                                    1660189639053,
+                                    1882.2275770860354
+                                ],
+                                [
+                                    1660189828400,
+                                    1884.0999823388129
+                                ],
+                                [
+                                    1660190135646,
+                                    1885.8825745085394
+                                ],
+                                [
+                                    1660190483367,
+                                    1883.1870787052615
+                                ],
+                                [
+                                    1660190753583,
+                                    1884.9379446715889
+                                ],
+                                [
+                                    1660191043492,
+                                    1886.8709264726194
+                                ],
+                                [
+                                    1660191364267,
+                                    1886.604107932208
+                                ],
+                                [
+                                    1660191632589,
+                                    1885.2381309938653
+                                ],
+                                [
+                                    1660191960258,
+                                    1885.799353984524
+                                ],
+                                [
+                                    1660192315539,
+                                    1882.758878314702
+                                ],
+                                [
+                                    1660192571838,
+                                    1883.6134567356137
+                                ],
+                                [
+                                    1660192800320,
+                                    1882.8752776861543
+                                ],
+                                [
+                                    1660193115452,
+                                    1885.5403048844892
+                                ],
+                                [
+                                    1660193449508,
+                                    1883.3380673283955
+                                ],
+                                [
+                                    1660193714688,
+                                    1888.4324976697026
+                                ],
+                                [
+                                    1660194062208,
+                                    1890.6250462163903
+                                ],
+                                [
+                                    1660194457887,
+                                    1891.5062689842289
+                                ],
+                                [
+                                    1660194731411,
+                                    1894.0555585341306
+                                ],
+                                [
+                                    1660194879578,
+                                    1894.6806705433507
+                                ],
+                                [
+                                    1660195255884,
+                                    1899.0860411918056
+                                ],
+                                [
+                                    1660195568076,
+                                    1901.5299759808586
+                                ],
+                                [
+                                    1660195825082,
+                                    1897.9464990557792
+                                ],
+                                [
+                                    1660196158714,
+                                    1903.1394410132518
+                                ],
+                                [
+                                    1660196422020,
+                                    1903.4617172204235
+                                ],
+                                [
+                                    1660196758835,
+                                    1902.3793987545093
+                                ],
+                                [
+                                    1660197016076,
+                                    1902.5917475343165
+                                ],
+                                [
+                                    1660197352988,
+                                    1899.6554924916757
+                                ],
+                                [
+                                    1660197625088,
+                                    1896.1587252698282
+                                ],
+                                [
+                                    1660197992087,
+                                    1894.004926255352
+                                ],
+                                [
+                                    1660198226991,
+                                    1896.4394891977697
+                                ],
+                                [
+                                    1660198492851,
+                                    1896.3651684638498
+                                ],
+                                [
+                                    1660198828649,
+                                    1893.8644407627542
+                                ],
+                                [
+                                    1660199168618,
+                                    1898.0535213335575
+                                ],
+                                [
+                                    1660199513440,
+                                    1896.6310261779035
+                                ],
+                                [
+                                    1660199798006,
+                                    1895.5583898584198
+                                ],
+                                [
+                                    1660200054062,
+                                    1892.888187650466
+                                ],
+                                [
+                                    1660200458192,
+                                    1892.4873562468324
+                                ],
+                                [
+                                    1660200767734,
+                                    1889.5587474650094
+                                ],
+                                [
+                                    1660200916418,
+                                    1891.5192594309012
+                                ],
+                                [
+                                    1660201227690,
+                                    1890.1451571966936
+                                ],
+                                [
+                                    1660201508681,
+                                    1889.4267389038805
+                                ],
+                                [
+                                    1660201849142,
+                                    1887.0902293727522
+                                ],
+                                [
+                                    1660202055804,
+                                    1886.1787893752944
+                                ],
+                                [
+                                    1660202388973,
+                                    1889.7271767590973
+                                ],
+                                [
+                                    1660202704166,
+                                    1894.1804704114638
+                                ],
+                                [
+                                    1660203003557,
+                                    1892.7924523689555
+                                ],
+                                [
+                                    1660203311351,
+                                    1896.7667597161842
+                                ],
+                                [
+                                    1660203617739,
+                                    1891.8066472424268
+                                ],
+                                [
+                                    1660203904458,
+                                    1884.2461024291815
+                                ],
+                                [
+                                    1660204249750,
+                                    1882.9150342901453
+                                ],
+                                [
+                                    1660204482547,
+                                    1881.3217524362765
+                                ],
+                                [
+                                    1660204803126,
+                                    1886.3460258453003
+                                ],
+                                [
+                                    1660205109509,
+                                    1879.4090039535959
+                                ],
+                                [
+                                    1660205400935,
+                                    1882.8533489328904
+                                ],
+                                [
+                                    1660205714637,
+                                    1884.1184919253353
+                                ],
+                                [
+                                    1660205999980,
+                                    1884.1714892326486
+                                ],
+                                [
+                                    1660206310022,
+                                    1885.1277040449816
+                                ],
+                                [
+                                    1660206562446,
+                                    1885.3178281519731
+                                ],
+                                [
+                                    1660206871476,
+                                    1885.239156882118
+                                ],
+                                [
+                                    1660207265598,
+                                    1887.281811989545
+                                ],
+                                [
+                                    1660207499798,
+                                    1886.4438217948855
+                                ],
+                                [
+                                    1660207848477,
+                                    1887.4356875773976
+                                ],
+                                [
+                                    1660208137841,
+                                    1884.5685946511264
+                                ],
+                                [
+                                    1660208475143,
+                                    1890.0791709001091
+                                ],
+                                [
+                                    1660208694551,
+                                    1889.9554613612065
+                                ],
+                                [
+                                    1660209023813,
+                                    1889.6899743488718
+                                ],
+                                [
+                                    1660209429975,
+                                    1891.02031190841
+                                ],
+                                [
+                                    1660209586527,
+                                    1890.5313452112316
+                                ],
+                                [
+                                    1660210023025,
+                                    1887.8383917661324
+                                ],
+                                [
+                                    1660210247494,
+                                    1888.3458217510206
+                                ],
+                                [
+                                    1660210536798,
+                                    1887.718368745995
+                                ],
+                                [
+                                    1660210809988,
+                                    1890.137864853265
+                                ],
+                                [
+                                    1660211066837,
+                                    1888.5081183090915
+                                ],
+                                [
+                                    1660211484949,
+                                    1890.6815526146386
+                                ],
+                                [
+                                    1660211799794,
+                                    1887.865475314927
+                                ],
+                                [
+                                    1660212051101,
+                                    1885.4851046865017
+                                ],
+                                [
+                                    1660212321972,
+                                    1884.883705435599
+                                ],
+                                [
+                                    1660212580851,
+                                    1885.5676122045859
+                                ],
+                                [
+                                    1660212908011,
+                                    1882.1305046768007
+                                ],
+                                [
+                                    1660213184337,
+                                    1883.5784541924777
+                                ],
+                                [
+                                    1660213489390,
+                                    1886.1975237411073
+                                ],
+                                [
+                                    1660213785265,
+                                    1884.5463290480216
+                                ],
+                                [
+                                    1660214108586,
+                                    1888.347198163703
+                                ],
+                                [
+                                    1660214394951,
+                                    1887.0985738824622
+                                ],
+                                [
+                                    1660214663429,
+                                    1887.5119890977155
+                                ],
+                                [
+                                    1660215006073,
+                                    1889.6655065499115
+                                ],
+                                [
+                                    1660215311634,
+                                    1888.078429197215
+                                ],
+                                [
+                                    1660215560898,
+                                    1887.8955811890125
+                                ],
+                                [
+                                    1660215888368,
+                                    1888.0855816302146
+                                ],
+                                [
+                                    1660216168331,
+                                    1890.4536647486545
+                                ],
+                                [
+                                    1660216478010,
+                                    1891.2680148339577
+                                ],
+                                [
+                                    1660216810124,
+                                    1893.187828099011
+                                ],
+                                [
+                                    1660217094257,
+                                    1892.8136576407896
+                                ],
+                                [
+                                    1660217387767,
+                                    1895.0363256471157
+                                ],
+                                [
+                                    1660217712098,
+                                    1894.9872084962299
+                                ],
+                                [
+                                    1660218014308,
+                                    1894.3922301297916
+                                ],
+                                [
+                                    1660218269794,
+                                    1898.1440488250842
+                                ],
+                                [
+                                    1660218630716,
+                                    1901.5798805411
+                                ],
+                                [
+                                    1660218905825,
+                                    1906.473622782458
+                                ],
+                                [
+                                    1660219209084,
+                                    1905.5556683720663
+                                ],
+                                [
+                                    1660219574412,
+                                    1909.8107942068118
+                                ],
+                                [
+                                    1660219856926,
+                                    1909.1286721694046
+                                ],
+                                [
+                                    1660220173710,
+                                    1918.5977767156407
+                                ],
+                                [
+                                    1660220411362,
+                                    1921.2488014037501
+                                ],
+                                [
+                                    1660220709185,
+                                    1924.7055554955546
+                                ],
+                                [
+                                    1660221009901,
+                                    1925.2623195690135
+                                ],
+                                [
+                                    1660221324493,
+                                    1927.746220197432
+                                ],
+                                [
+                                    1660221566681,
+                                    1925.6383734306548
+                                ],
+                                [
+                                    1660221927695,
+                                    1921.1592513423482
+                                ],
+                                [
+                                    1660222212638,
+                                    1928.4407779362286
+                                ],
+                                [
+                                    1660222510933,
+                                    1927.2895066865171
+                                ],
+                                [
+                                    1660222817719,
+                                    1935.0072069139592
+                                ],
+                                [
+                                    1660223093288,
+                                    1931.6845373610038
+                                ],
+                                [
+                                    1660223381451,
+                                    1922.303177038147
+                                ],
+                                [
+                                    1660223694596,
+                                    1919.714130165233
+                                ],
+                                [
+                                    1660224039306,
+                                    1909.8798263135386
+                                ],
+                                [
+                                    1660224366189,
+                                    1911.194640418823
+                                ],
+                                [
+                                    1660224622141,
+                                    1915.0773067063997
+                                ],
+                                [
+                                    1660224971148,
+                                    1913.8246248373089
+                                ],
+                                [
+                                    1660225195343,
+                                    1905.252589996917
+                                ],
+                                [
+                                    1660225493828,
+                                    1911.1880958338772
+                                ],
+                                [
+                                    1660225844459,
+                                    1914.1867857608574
+                                ],
+                                [
+                                    1660226148898,
+                                    1913.512887465787
+                                ],
+                                [
+                                    1660226417186,
+                                    1912.4405543383236
+                                ],
+                                [
+                                    1660226849627,
+                                    1914.1965944416384
+                                ],
+                                [
+                                    1660227042291,
+                                    1922.56524215895
+                                ],
+                                [
+                                    1660227358991,
+                                    1926.1012041516533
+                                ],
+                                [
+                                    1660227639865,
+                                    1924.976884929805
+                                ],
+                                [
+                                    1660227887902,
+                                    1918.5661125322474
+                                ],
+                                [
+                                    1660228260380,
+                                    1917.7719361405573
+                                ],
+                                [
+                                    1660228587943,
+                                    1907.6833165299292
+                                ],
+                                [
+                                    1660228779437,
+                                    1903.982746801684
+                                ],
+                                [
+                                    1660229122480,
+                                    1900.2900836435274
+                                ],
+                                [
+                                    1660229470902,
+                                    1904.2932649378556
+                                ],
+                                [
+                                    1660229709678,
+                                    1904.130098879848
+                                ],
+                                [
+                                    1660229999307,
+                                    1904.3837664753325
+                                ],
+                                [
+                                    1660230287428,
+                                    1903.9890302415276
+                                ],
+                                [
+                                    1660230597006,
+                                    1901.561833855232
+                                ],
+                                [
+                                    1660230917858,
+                                    1905.7634085957216
+                                ],
+                                [
+                                    1660231219436,
+                                    1894.1747973444758
+                                ],
+                                [
+                                    1660231470673,
+                                    1896.3898898676696
+                                ],
+                                [
+                                    1660231777191,
+                                    1897.244643844359
+                                ],
+                                [
+                                    1660232143753,
+                                    1900.985877975949
+                                ],
+                                [
+                                    1660232478886,
+                                    1901.3755673048872
+                                ],
+                                [
+                                    1660232758247,
+                                    1899.9820427210402
+                                ],
+                                [
+                                    1660232988496,
+                                    1895.0707186124332
+                                ],
+                                [
+                                    1660233304490,
+                                    1892.8678186092825
+                                ],
+                                [
+                                    1660233596479,
+                                    1893.4927118031083
+                                ],
+                                [
+                                    1660233985992,
+                                    1895.2903729390437
+                                ],
+                                [
+                                    1660234210601,
+                                    1892.9858335841668
+                                ],
+                                [
+                                    1660234570511,
+                                    1893.3767722230639
+                                ],
+                                [
+                                    1660234885043,
+                                    1894.9133330358598
+                                ],
+                                [
+                                    1660235128390,
+                                    1894.5351566313955
+                                ],
+                                [
+                                    1660235460271,
+                                    1893.7336589815554
+                                ],
+                                [
+                                    1660235774128,
+                                    1897.1800995881547
+                                ],
+                                [
+                                    1660236003417,
+                                    1895.672928203875
+                                ],
+                                [
+                                    1660236328721,
+                                    1895.5974829422503
+                                ],
+                                [
+                                    1660236633516,
+                                    1895.576643160473
+                                ],
+                                [
+                                    1660236886749,
+                                    1896.867832656677
+                                ],
+                                [
+                                    1660237210105,
+                                    1899.1144332737235
+                                ],
+                                [
+                                    1660237551592,
+                                    1899.4660687156195
+                                ],
+                                [
+                                    1660237875241,
+                                    1902.883955220819
+                                ],
+                                [
+                                    1660238112542,
+                                    1903.7061875837128
+                                ],
+                                [
+                                    1660238417613,
+                                    1907.7492150568685
+                                ],
+                                [
+                                    1660238674652,
+                                    1907.3590068294293
+                                ],
+                                [
+                                    1660238977703,
+                                    1905.3425114626004
+                                ],
+                                [
+                                    1660239274363,
+                                    1904.8230124843083
+                                ],
+                                [
+                                    1660239624444,
+                                    1906.2353358368825
+                                ],
+                                [
+                                    1660239906233,
+                                    1907.4895341520664
+                                ],
+                                [
+                                    1660240034000,
+                                    1907.2969513394744
+                                ]
+                            ]
                         }
-                    ]
-                },
-                "ETH": {
-                    "id": 1540,
-                    "name": "b9a4ey1wb1l",
-                    "symbol": "ETH",
-                    "is_active": 5001,
-                    "is_fiat": null,
-                    "quotes": [
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.2558505127048438,
-                                    "volume_24h": 3284,
-                                    "market_cap": 0.31376675015097755,
-                                    "circulating_supply": 8721,
-                                    "total_supply": 9116,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.2558505127048438,
-                                    "volume_24h": 3284,
-                                    "market_cap": 0.31376675015097755,
-                                    "circulating_supply": 8721,
-                                    "total_supply": 9116,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.041637210497798005,
-                                    "volume_24h": 1472,
-                                    "market_cap": 0.769883741659368,
-                                    "circulating_supply": 3318,
-                                    "total_supply": 173,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.041637210497798005,
-                                    "volume_24h": 1472,
-                                    "market_cap": 0.769883741659368,
-                                    "circulating_supply": 3318,
-                                    "total_supply": 173,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.41284683031486535,
-                                    "volume_24h": 3835,
-                                    "market_cap": 0.48313372591364145,
-                                    "circulating_supply": 1136,
-                                    "total_supply": 9009,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.41284683031486535,
-                                    "volume_24h": 3835,
-                                    "market_cap": 0.48313372591364145,
-                                    "circulating_supply": 1136,
-                                    "total_supply": 9009,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.8501625219678648,
-                                    "volume_24h": 807,
-                                    "market_cap": 0.26371306856961163,
-                                    "circulating_supply": 7750,
-                                    "total_supply": 7753,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.8501625219678648,
-                                    "volume_24h": 807,
-                                    "market_cap": 0.26371306856961163,
-                                    "circulating_supply": 7750,
-                                    "total_supply": 7753,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.8133178726494081,
-                                    "volume_24h": 1625,
-                                    "market_cap": 0.9850419785565452,
-                                    "circulating_supply": 7636,
-                                    "total_supply": 4651,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.8133178726494081,
-                                    "volume_24h": 1625,
-                                    "market_cap": 0.9850419785565452,
-                                    "circulating_supply": 7636,
-                                    "total_supply": 4651,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.3087924697822857,
-                                    "volume_24h": 4343,
-                                    "market_cap": 0.5295072382668742,
-                                    "circulating_supply": 3217,
-                                    "total_supply": 1663,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.3087924697822857,
-                                    "volume_24h": 4343,
-                                    "market_cap": 0.5295072382668742,
-                                    "circulating_supply": 3217,
-                                    "total_supply": 1663,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.10728328104463092,
-                                    "volume_24h": 4366,
-                                    "market_cap": 0.33659912767871325,
-                                    "circulating_supply": 4574,
-                                    "total_supply": 5695,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.10728328104463092,
-                                    "volume_24h": 4366,
-                                    "market_cap": 0.33659912767871325,
-                                    "circulating_supply": 4574,
-                                    "total_supply": 5695,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.1574529169953689,
-                                    "volume_24h": 3576,
-                                    "market_cap": 0.8081024573727746,
-                                    "circulating_supply": 2691,
-                                    "total_supply": 795,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.1574529169953689,
-                                    "volume_24h": 3576,
-                                    "market_cap": 0.8081024573727746,
-                                    "circulating_supply": 2691,
-                                    "total_supply": 795,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.9000881984920399,
-                                    "volume_24h": 388,
-                                    "market_cap": 0.9651314134632836,
-                                    "circulating_supply": 9285,
-                                    "total_supply": 9883,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.9000881984920399,
-                                    "volume_24h": 388,
-                                    "market_cap": 0.9651314134632836,
-                                    "circulating_supply": 9285,
-                                    "total_supply": 9883,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        },
-                        {
-                            "timestamp": "2022-08-05T04:34:08.908Z",
-                            "quote": {
-                                "EUR": {
-                                    "price": 0.06442403830828547,
-                                    "volume_24h": 7201,
-                                    "market_cap": 0.553448217701791,
-                                    "circulating_supply": 9659,
-                                    "total_supply": 8253,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                },
-                                "USD": {
-                                    "price": 0.06442403830828547,
-                                    "volume_24h": 7201,
-                                    "market_cap": 0.553448217701791,
-                                    "circulating_supply": 9659,
-                                    "total_supply": 8253,
-                                    "timestamp": "2022-08-05T04:34:08.908Z"
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-        }""");
-        */
+                """
+        );
     this.error = new ObjectMapper().readTree
             (
                 """
                     {}
                 """
             );
-        /*
-        new ApiClient()
-            .parseResponse(
-                """
-        {
-            "status": {
-                "timestamp": "2022-08-05T04:53:20.395Z",
-                "error_code": 400,
-                "error_message": "\\"symbol\\" should only include comma-separated alphanumeric cryptocurrency symbols",
-                "elapsed": 0,
-                "credit_count": 0
-            }
-        }""");
+    this.errorHistorical =  new ObjectMapper().readTree
+        (
+            """
+                [
+                {"error":"Could not find coin with the given id"}
+                ]"""
+        );
 
-         */
     //this.correctLatestR = new Response(200, this.correctLatest);
     this.correctLatestR = new Response(200, this.correctLatest);
-    this.correctHistoricalR = new Response(200, this.correctHistorical);
+    this.eurCorrectLatestR = new Response(200, new ObjectMapper().readTree
+        (
+            """                
+        [
+        {
+        "id": "bitcoin",
+        "symbol": "btc",
+        "name": "Bitcoin",
+        "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "current_price": 23743,
+        "market_cap": 454425634565,
+        "market_cap_rank": 1,
+        "fully_diluted_valuation": 499027892083,
+        "total_volume": 26265626807,
+        "high_24h": 23871,
+        "low_24h": 23472,
+        "price_change_24h": 56.21,
+        "price_change_percentage_24h": 0.2373,
+        "market_cap_change_24h": 2633721972,
+        "market_cap_change_percentage_24h": 0.58295,
+        "circulating_supply": 19123056,
+        "total_supply": 21000000,
+        "max_supply": 21000000,
+        "ath": 59717,
+        "ath_change_percentage": -60.2068,
+        "ath_date": "2021-11-10T14:24:11.849Z",
+        "atl": 51.3,
+        "atl_change_percentage": 46223.53632,
+        "atl_date": "2013-07-05T00:00:00.000Z",
+        "roi": null,
+        "last_updated": "2022-08-16T12:30:47.089Z",
+        "price_change_percentage_1h_in_currency": -0.17336691781953756,
+        "price_change_percentage_24h_in_currency": 0.2372961045085263,
+        "price_change_percentage_30d_in_currency": 12.93327058009745,
+        "price_change_percentage_7d_in_currency": 1.6241398689361093
+        },
+    {
+      "id": "ethereum",
+        "symbol": "eth",
+        "name": "Ethereum",
+        "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880",
+        "current_price": 1883.85,
+        "market_cap": 226767083004,
+        "market_cap_rank": 2,
+        "fully_diluted_valuation": null,
+        "total_volume": 14910785211,
+        "high_24h": 1895.27,
+        "low_24h": 1834.9,
+        "price_change_24h": 18.08,
+        "price_change_percentage_24h": 0.96911,
+        "market_cap_change_24h": 3463235778,
+        "market_cap_change_percentage_24h": 1.55091,
+        "circulating_supply": 120120596.627605,
+        "total_supply": 120118363.877605,
+        "max_supply": null,
+        "ath": 4228.93,
+        "ath_change_percentage": -55.3592,
+        "ath_date": "2021-12-01T08:38:24.623Z",
+        "atl": 0.381455,
+        "atl_change_percentage": 494801.45609,
+        "atl_date": "2015-10-20T00:00:00.000Z",
+        "roi": {
+          "times": 105.05683483496117,
+          "currency": "btc",
+          "percentage": 10505.683483496116
+           },
+        "last_updated": "2022-08-16T12:30:40.596Z",
+        "price_change_percentage_1h_in_currency": 0.16227397921463863,
+        "price_change_percentage_24h_in_currency": 0.9691123214009522,
+        "price_change_percentage_30d_in_currency": 40.145975126844554,
+        "price_change_percentage_7d_in_currency": 8.181822786553358
+    }
+    ]
+        """
+        )
+    );
+    this.btcCorrectHistoricalR = new Response(200, this.correctHistoricalBTC);
+    this.ethCorrectHistoricalR = new Response(200, this.correctHistoricalETH);
     this.errorR = new Response(400, this.error);
+    this.errorHistoricalR = new Response(400, this.errorHistorical);
   }
 }

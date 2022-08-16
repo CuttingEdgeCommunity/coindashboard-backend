@@ -61,15 +61,23 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
     final int maxcoinsamount = 250;
     CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult();
     coinMarketDataResult.setProvider(this.providerEnum);
+    ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
     Response response;
     for (String currency : vsCurrencies) {
-      ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
-      try
-      {
+      try {
         //response = this.client.getCoinsMarkets(coins, currency, "market_cap_desc", maxcoinsamount+"", "", "false", "1h,24h,7d,30d");
-        response = this.client.getCoinsMarkets(coins, currency, "", maxcoinsamount + "", "", "", "1h,24h,7d,30d");
+        response = this.client.getCoinsMarkets(coins, currency, "", maxcoinsamount + "", "", "",
+            "1h,24h,7d,30d");
         if (response.getResponseCode() == 200) {
-          coinMarketDataDtos = parser.CurrentParser(response, currency);
+          ArrayList<CoinMarketDataDto> coinMarketDataDtos1Curr = parser.CurrentParser(response, currency);
+          if (coinMarketDataDtos.size() == 0) {
+            coinMarketDataDtos = coinMarketDataDtos1Curr;
+          } else {
+            for (int i = 0; i < response.getResponseBody().size(); i++) {
+              coinMarketDataDtos.get(i).getQuoteMap()
+                  .put(currency, coinMarketDataDtos1Curr.get(i).getQuoteMap().get(currency));
+            }
+          }
         } else {
           coinMarketDataResult.setStatus(ResultStatus.FAILURE);
           coinMarketDataResult.setErrorMessage("");
@@ -78,46 +86,51 @@ public class CoinGeckoCommunicator implements ApiCommunicator {
         coinMarketDataResult.setStatus(ResultStatus.FAILURE);
         coinMarketDataResult.setErrorMessage(e.getMessage());
       }
-      coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
-      if (coinMarketDataDtos.size() > 0) {
-        coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
-      } else {
-        coinMarketDataResult.setStatus(ResultStatus.FAILURE);
-      }
     }
+    coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
+    if (coinMarketDataDtos.size() > 0) {
+        coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
+    } else {
+      coinMarketDataResult.setStatus(ResultStatus.FAILURE);
+      }
     return coinMarketDataResult;
   }
 
   @Override
   public CoinMarketDataResult getHistoricalListing(List<String> coins, List<String> vsCurrencies, Long timestamp) {
     CoinMarketDataResult coinMarketDataResult = new CoinMarketDataResult();
+    coinMarketDataResult.setProvider(this.providerEnum);
+    ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
+    Response response;
     for (String coin : coins) {
-      for (String currency : vsCurrencies) {
-        coinMarketDataResult.setProvider(this.providerEnum);
-        Response response;
-        ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
+      for (int c = 0; c < vsCurrencies.size(); c++) {
         try {
-          response = this.client.getMarketChart(CoinId(coin),currency,days(timestamp));
-          CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, coin, currency);
-          coinMarketDataDtos.add(coinMarketDataDto);
-
+          response = this.client.getMarketChart(CoinId(coin), vsCurrencies.get(c), days(timestamp));
+          if (response.getResponseCode() == 200) {
+            CoinMarketDataDto coinMarketDataDto1Curr = parser.HistoricalParser(response, coin,
+                vsCurrencies.get(c));
+            if (c == 0) {
+              coinMarketDataDtos.add(coinMarketDataDto1Curr);
+            } else {
+              coinMarketDataDtos.get(coinMarketDataDtos.size() - 1).getQuoteMap()
+                  .put(vsCurrencies.get(c),
+                      coinMarketDataDto1Curr.getQuoteMap().get(vsCurrencies.get(c)));
+            }
+          } else {
+            coinMarketDataResult.setStatus(ResultStatus.FAILURE);
+            coinMarketDataResult.setErrorMessage("Could not find coin with the given id");
+          }
         } catch (IOException e) {
           coinMarketDataResult.setStatus(ResultStatus.FAILURE);
           coinMarketDataResult.setErrorMessage(e.getMessage());
         }
-        //ArrayList<CoinMarketDataDto> coinMarketDataDtos = new ArrayList<>();
-        //CoinGeckoResponseParser parser = new CoinGeckoResponseParser();
-        //assert response != null;
-        //CoinMarketDataDto coinMarketDataDto = parser.HistoricalParser(response, coin, currency);
-        //coinMarketDataDtos.add(coinMarketDataDto);
-
-        if (coinMarketDataDtos.size() > 0) {
-          coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
-          coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
-        } else {
-          coinMarketDataResult.setStatus(ResultStatus.FAILURE);
-        }
       }
+    }
+    if (coinMarketDataDtos.size() > 0) {
+        coinMarketDataResult.setStatus(ResultStatus.SUCCESS);
+        coinMarketDataResult.setCoinMarketDataDTOS(coinMarketDataDtos);
+    } else {
+      coinMarketDataResult.setStatus(ResultStatus.FAILURE);
     }
     return coinMarketDataResult;
   }

@@ -87,7 +87,6 @@ public class CoinGeckoResponseParser {
 
   CoinMarketDataDto HistoricalParser(Response response, String name, String vs_currency) {
     CoinMarketDataDto coinMarketDataDto;
-//  List<DeltaDto> deltas = new ArrayList<>();
     List<PriceDto> prices = new ArrayList<>();
     Map<String, QuoteDto> quoteMaps = new LinkedHashMap<>();
     for (int i = 0; i < response.getResponseBody().get("prices").size(); i++) {
@@ -97,13 +96,6 @@ public class CoinGeckoResponseParser {
               response.getResponseBody().get("prices").get(i).get(0).asLong()));
     }
     quoteMaps.put(vs_currency, new QuoteDto(prices));
-//            deltas,
-//            response
-//                .getResponseBody()
-//                .get("prices")
-//                .get(response.getResponseBody().get("prices").size() - 1)
-//                .get(0)
-//                .asLong()));
     coinMarketDataDto = new CoinMarketDataDto(name,quoteMaps);
     return coinMarketDataDto;
   }
