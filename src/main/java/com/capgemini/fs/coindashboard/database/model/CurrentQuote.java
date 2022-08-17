@@ -6,14 +6,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("CurrentQuote")
 public class CurrentQuote {
 
-  private long price;
+  private double price;
   private List<Delta> deltas;
-  private long market_cap;
-  private long daily_volume;
+  private double market_cap;
+  private double daily_volume;
   private List<Price> chart;
 
   public CurrentQuote(
-      long price, List<Delta> deltas, long market_cap, long daily_volume, List<Price> chart) {
+      double price, List<Delta> deltas, double market_cap, double daily_volume, List<Price> chart) {
     this.price = price;
     this.deltas = deltas;
     this.market_cap = market_cap;

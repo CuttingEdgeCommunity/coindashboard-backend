@@ -41,11 +41,17 @@ public class Passers {
     for (DeltaDto deltaDto : quoteDto.getDeltas()) {
       deltas.add(fromDeltaDtoToDelta(deltaDto));
     }
-    for (PriceDto priceDto : quoteDto.getPrices()) {
+    for (PriceDto priceDto : quoteDto.getPriceHistory()) {
       chart.add(fromPriceDtoToPrice(priceDto));
     }
 
-    return CurrentQuoteBuilder.aCurrentQuote().withDeltas(deltas).withChart(chart).build();
+    return CurrentQuoteBuilder.aCurrentQuote()
+        .withDeltas(deltas)
+        .withChart(chart)
+        .withMarket_cap(quoteDto.getMarketCap())
+        .withPrice(quoteDto.getCurrentPrice())
+        .withDaily_volume(quoteDto.getVolumeOneDay())
+        .build();
   }
 
   public static Coin fromCoinMarketDataDtoToCoin(CoinMarketDataDto coinMarketDataDto) {

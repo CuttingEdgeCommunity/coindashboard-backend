@@ -4,10 +4,10 @@ import java.util.List;
 
 public final class CurrentQuoteBuilder {
 
-  private long price;
+  private double price;
   private List<Delta> deltas;
-  private long market_cap;
-  private long daily_volume;
+  private double market_cap;
+  private double daily_volume;
   private List<Price> chart;
 
   private CurrentQuoteBuilder() {}
@@ -16,7 +16,7 @@ public final class CurrentQuoteBuilder {
     return new CurrentQuoteBuilder();
   }
 
-  public CurrentQuoteBuilder withPrice(long price) {
+  public CurrentQuoteBuilder withPrice(double price) {
     this.price = price;
     return this;
   }
@@ -26,12 +26,12 @@ public final class CurrentQuoteBuilder {
     return this;
   }
 
-  public CurrentQuoteBuilder withMarket_cap(long market_cap) {
+  public CurrentQuoteBuilder withMarket_cap(double market_cap) {
     this.market_cap = market_cap;
     return this;
   }
 
-  public CurrentQuoteBuilder withDaily_volume(long daily_volume) {
+  public CurrentQuoteBuilder withDaily_volume(double daily_volume) {
     this.daily_volume = daily_volume;
     return this;
   }
