@@ -33,6 +33,5 @@ public class QuoteDto {
     this.priceHistory = priceHistory;
   }
 
-  public QuoteDto() {
-  }
+  public QuoteDto() {}
 }

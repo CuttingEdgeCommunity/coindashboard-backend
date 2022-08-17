@@ -79,8 +79,7 @@ public class CoinMarketCapCurrentListingBuilder implements CoinMarketDataResultB
     var result = new ArrayList<CoinMarketDataDto>();
     ObjectMapper mapper = new ObjectMapper();
     Map<String, JsonNode> responseBodyConverted =
-        mapper.convertValue(data, new TypeReference<>() {
-        });
+        mapper.convertValue(data, new TypeReference<>() {});
     for (Map.Entry<String, JsonNode> coin : responseBodyConverted.entrySet()) {
       result.add(buildSingleCoinMarketDataDto(coin.getKey(), coin.getValue()));
     }
@@ -102,8 +101,7 @@ public class CoinMarketCapCurrentListingBuilder implements CoinMarketDataResultB
     ObjectMapper mapper = new ObjectMapper();
     Map<String, QuoteDto> quoteDtos = new LinkedHashMap<>();
     Map<String, ObjectNode> quotesConverted =
-        mapper.convertValue(data.get("quote"), new TypeReference<>() {
-        });
+        mapper.convertValue(data.get("quote"), new TypeReference<>() {});
     for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
       result.put(quote.getKey(), this.buildSingleQuote(quote.getValue()));
     }

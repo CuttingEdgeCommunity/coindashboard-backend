@@ -20,6 +20,6 @@ public class CoinMarketDataDto {
     this.name = name;
     this.quoteMap = quoteMap;
   }
-  public CoinMarketDataDto() {
-  }
+
+  public CoinMarketDataDto() {}
 }

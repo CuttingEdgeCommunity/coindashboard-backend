@@ -152,12 +152,10 @@ class CoinMarketCapResponseParser {
       String symbol = coin.getValue().get("symbol").asText();
       Map<String, QuoteDto> quoteDtos = new LinkedHashMap<>();
       List<ObjectNode> quotesConverted =
-          mapper.convertValue(coin.getValue().get("quotes"), new TypeReference<>() {
-          });
+          mapper.convertValue(coin.getValue().get("quotes"), new TypeReference<>() {});
       for (ObjectNode quote : quotesConverted) {
         Map<String, ObjectNode> quoteConverted =
-            mapper.convertValue(quote.get("quote"), new TypeReference<>() {
-            });
+            mapper.convertValue(quote.get("quote"), new TypeReference<>() {});
         for (Map.Entry<String, ObjectNode> singleQuote : quoteConverted.entrySet()) {
           var price = singleQuote.getValue().get("price").asDouble();
           var timestamp =

@@ -4,16 +4,19 @@ import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 
 public class CoinGeckoTestBaseClass {
 
   public JsonNode correctLatest, correctHistoricalBTC, correctHistoricalETH, error, errorHistorical;
-
-  public Response correctLatestR, btcCorrectHistoricalR, ethCorrectHistoricalR, errorR, errorHistoricalR, eurCorrectLatestR;
+  public Response correctLatestR,
+      btcCorrectHistoricalR,
+      ethCorrectHistoricalR,
+      errorR,
+      errorHistoricalR,
+      eurCorrectLatestR;
   public List<String> coins, coinserr, vsCurr;
   public String order = "", per_page = "250", page = "", sparkline = "";
   public String deltas = "1h,24h,7d,30d";
@@ -42,9 +45,10 @@ public class CoinGeckoTestBaseClass {
             add("eur");
           }
         };
-    this.correctLatest = new ObjectMapper().readTree
-        (
-            """
+    this.correctLatest =
+        new ObjectMapper()
+            .readTree(
+                """
                 [
                 {
                 "id":"bitcoin",
@@ -114,11 +118,11 @@ public class CoinGeckoTestBaseClass {
                 "price_change_percentage_7d_in_currency":17.636437464699064
                 }
                 ]
-            """
-        );
+            """);
 
-    this.correctHistoricalBTC = new ObjectMapper().readTree
-            (
+    this.correctHistoricalBTC =
+        new ObjectMapper()
+            .readTree(
                 """
                     {
                             "prices": [
@@ -1204,10 +1208,10 @@ public class CoinGeckoTestBaseClass {
                                 ]
                             ]
                             }
-            """
-            );
-    this.correctHistoricalETH = new ObjectMapper().readTree
-        (
+            """);
+    this.correctHistoricalETH =
+        new ObjectMapper()
+            .readTree(
                 """
                 {
                             "prices": [
@@ -2365,27 +2369,26 @@ public class CoinGeckoTestBaseClass {
                                 ]
                             ]
                         }
-                """
-        );
-    this.error = new ObjectMapper().readTree
-            (
-                """
+                """);
+    this.error = new ObjectMapper().readTree("""
                     {}
+                """);
+    this.errorHistorical =
+        new ObjectMapper()
+            .readTree(
                 """
-            );
-    this.errorHistorical =  new ObjectMapper().readTree
-        (
-            """
                 [
                 {"error":"Could not find coin with the given id"}
-                ]"""
-        );
+                ]""");
 
-    //this.correctLatestR = new Response(200, this.correctLatest);
+    // this.correctLatestR = new Response(200, this.correctLatest);
     this.correctLatestR = new Response(200, this.correctLatest);
-    this.eurCorrectLatestR = new Response(200, new ObjectMapper().readTree
-        (
-            """                
+    this.eurCorrectLatestR =
+        new Response(
+            200,
+            new ObjectMapper()
+                .readTree(
+                    """
         [
         {
         "id": "bitcoin",
@@ -2456,9 +2459,7 @@ public class CoinGeckoTestBaseClass {
         "price_change_percentage_7d_in_currency": 8.181822786553358
     }
     ]
-        """
-        )
-    );
+        """));
     this.btcCorrectHistoricalR = new Response(200, this.correctHistoricalBTC);
     this.ethCorrectHistoricalR = new Response(200, this.correctHistoricalETH);
     this.errorR = new Response(400, this.error);

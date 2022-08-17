@@ -75,7 +75,9 @@ public class CoinGeckoResponseParser {
       deltas.add(
           new DeltaDto(
               IntervalEnum.THIRTY_DAY, pctChange, current_price * (pctChange / (100 + pctChange))));
-      quoteMaps.put(currency, new QuoteDto(current_price, marketCap, volumeOneDay, prices, deltas, timestamp));
+      quoteMaps.put(
+          currency,
+          new QuoteDto(current_price, marketCap, volumeOneDay, prices, deltas, timestamp));
       coinMarketDataDtos.add(
           new CoinMarketDataDto(
               response.getResponseBody().get(i).get("name").asText(),
@@ -96,7 +98,7 @@ public class CoinGeckoResponseParser {
               response.getResponseBody().get("prices").get(i).get(0).asLong()));
     }
     quoteMaps.put(vs_currency, new QuoteDto(prices));
-    coinMarketDataDto = new CoinMarketDataDto(name,quoteMaps);
+    coinMarketDataDto = new CoinMarketDataDto(name, quoteMaps);
     return coinMarketDataDto;
   }
 }

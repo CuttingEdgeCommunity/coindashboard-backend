@@ -2,14 +2,8 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.CoinGeckoClient;
-//import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.CoinGeckoTestBaseClass;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import java.io.IOException;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,15 +26,11 @@ class CoinGeckoClientTest extends CoinGeckoTestBaseClass {
     String correctLatestUri =
         "https://api.coingecko.com/api/v3/coins/markets?ids=bitcoin%2Cethereum&vs_currency=usd&per_page=250&deltas=1h%2C24h%2C7d%2C30d";
     String correctHistoricalUri =
-        String.format(
-            "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1",
-            this.timestamp);
+        "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1";
     String errorLatestUri =
         "https://api.coingecko.com/api/v3/coins/markets?ids=eth%2C+btc&vs_currency=usd&per_page=250&deltas=1h%2C24h%2C7d%2C30d";
     String errorHistoricalUri =
-        String.format(
-            "https://api.coingecko.com/api/v3/coins/eth/market_chart?vs_currency=usd&days=1",
-            this.timestamp);
+        "https://api.coingecko.com/api/v3/coins/eth/market_chart?vs_currency=usd&days=1";
 
     Mockito.when(apiClient.invokeGet(correctLatestUri)).thenReturn(this.correctLatestR);
     Mockito.when(apiClient.invokeGet(correctHistoricalUri)).thenReturn(this.btcCorrectHistoricalR);
@@ -50,14 +40,32 @@ class CoinGeckoClientTest extends CoinGeckoTestBaseClass {
 
   @Test
   void getCoinsMarkets() throws IOException {
-    assertEquals(200, coinGeckoClient.getCoinsMarkets(this.coins, this.vsCurr.get(0), order, per_page,page, sparkline,deltas).getResponseCode());
-    assertEquals(400, coinGeckoClient.getCoinsMarkets(this.coinserr, this.vsCurr.get(0),order, per_page,page, sparkline,deltas).getResponseCode());
+    assertEquals(
+        200,
+        coinGeckoClient
+            .getCoinsMarkets(
+                this.coins, this.vsCurr.get(0), order, per_page, page, sparkline, deltas)
+            .getResponseCode());
+    assertEquals(
+        400,
+        coinGeckoClient
+            .getCoinsMarkets(
+                this.coinserr, this.vsCurr.get(0), order, per_page, page, sparkline, deltas)
+            .getResponseCode());
   }
 
   @Test
   void getMarketChart() throws IOException {
-    assertEquals(200, coinGeckoClient.getMarketChart(this.coins.get(0), this.vsCurr.get(0), "1").getResponseCode());
-    assertEquals(400, coinGeckoClient.getMarketChart(this.coinserr.get(0), this.vsCurr.get(0), "1").getResponseCode());
+    assertEquals(
+        200,
+        coinGeckoClient
+            .getMarketChart(this.coins.get(0), this.vsCurr.get(0), "1")
+            .getResponseCode());
+    assertEquals(
+        400,
+        coinGeckoClient
+            .getMarketChart(this.coinserr.get(0), this.vsCurr.get(0), "1")
+            .getResponseCode());
   }
 
   @TestConfiguration
@@ -68,5 +76,4 @@ class CoinGeckoClientTest extends CoinGeckoTestBaseClass {
       return new CoinGeckoClient();
     }
   }
-
 }
