@@ -1,15 +1,19 @@
 package com.capgemini.fs.coindashboard.database.queries;
 
+import com.capgemini.fs.coindashboard.controller.ControllerConfig;
+import com.capgemini.fs.coindashboard.database.queries.Utils.Passers;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Queries implements UpdateQueries, GetQueries, CreateQueries {
-
+  private static final Logger log = LogManager.getLogger(ControllerConfig.class);
   @Autowired private MongoTemplate mongoTemplate;
 
   @Override
@@ -39,6 +43,12 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
 
   @Override
   public boolean CreateCoinDocument(CoinMarketDataDto coinMarketDataDto) {
+    try {
+      mongoTemplate.save(Passers.fromCoinMarketDataDtoToCoin(coinMarketDataDto));
+      return true;
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
     return false;
   }
 }

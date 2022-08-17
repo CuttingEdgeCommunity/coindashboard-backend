@@ -6,4 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Link {
   private String title;
   private String url;
+
+  public Link(String title, String url) {
+    this.title = title;
+    this.url = url;
+  }
 }

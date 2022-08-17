@@ -6,4 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Quote {
   private String vs_currency;
   private CurrentQuote currentQuote;
+
+  public Quote(String vs_currency, CurrentQuote currentQuote) {
+    this.vs_currency = vs_currency;
+    this.currentQuote = currentQuote;
+  }
 }

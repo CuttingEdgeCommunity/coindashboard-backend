@@ -1,17 +1,21 @@
 package com.capgemini.fs.coindashboard.database.model;
 
 import java.util.List;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
 @Document("Coin")
 public class Coin {
+
   @Id private String id;
 
   @Indexed(name = "coinName")
   private String name;
 
+  private String symbol;
   private String image_url;
   private long genesis_date;
   private boolean is_token;
@@ -19,4 +23,27 @@ public class Coin {
   private List<Link> links;
   private String description;
   private List<Quote> quotes;
+
+  public Coin(
+      String id,
+      String name,
+      String symbol,
+      String image_url,
+      long genesis_date,
+      boolean is_token,
+      String contract_address,
+      List<Link> links,
+      String description,
+      List<Quote> quotes) {
+    this.id = id;
+    this.name = name;
+    this.symbol = symbol;
+    this.image_url = image_url;
+    this.genesis_date = genesis_date;
+    this.is_token = is_token;
+    this.contract_address = contract_address;
+    this.links = links;
+    this.description = description;
+    this.quotes = quotes;
+  }
 }

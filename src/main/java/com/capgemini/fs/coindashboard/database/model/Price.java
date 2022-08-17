@@ -6,4 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Price {
   private double price;
   private long timestamp;
+
+  public Price(double price, long timestamp) {
+    this.price = price;
+    this.timestamp = timestamp;
+  }
 }

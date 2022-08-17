@@ -11,4 +11,13 @@ public class CurrentQuote {
   private long market_cap;
   private long daily_volume;
   private List<Price> chart;
+
+  public CurrentQuote(
+      long price, List<Delta> deltas, long market_cap, long daily_volume, List<Price> chart) {
+    this.price = price;
+    this.deltas = deltas;
+    this.market_cap = market_cap;
+    this.daily_volume = daily_volume;
+    this.chart = chart;
+  }
 }
