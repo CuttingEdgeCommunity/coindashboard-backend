@@ -17,9 +17,15 @@ public class MongoInit implements CommandLineRunner {
   @Autowired private ApiHolder apiHolder;
 
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
     log.info("Starting initialization...");
-    CoinMarketDataResult coinMarketDataResult = apiHolder.getCoinMarketData("btc");
+    CoinMarketDataResult coinMarketDataResult;
+    try {
+      coinMarketDataResult = apiHolder.getCoinMarketData("btc");
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return;
+    }
     if (coinMarketDataResult != null) {
       createQueries.CreateCoinDocument(coinMarketDataResult.getCoinMarketDataDTOS().get(0));
     } else {
