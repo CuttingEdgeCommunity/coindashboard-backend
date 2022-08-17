@@ -4,6 +4,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
 import com.capgemini.fs.coindashboard.dtos.common.Result;
 import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CoinMarketDataResult extends Result {
 
-  private ArrayList<CoinMarketDataDto> coinMarketDataDTOS;
+  private List<CoinMarketDataDto> coinMarketDataDTOS;
 
   public CoinMarketDataResult(
       ApiProviderEnum provider,

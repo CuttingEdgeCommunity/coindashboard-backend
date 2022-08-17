@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
@@ -57,15 +58,16 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
   void parseCoinsQuoteHistoricalResult() throws ParseException {
     var resultCorrect = parser.parseCoinsQuoteHistoricalResult(correctHistorical.get("data"));
     assertEquals(
-        0.716910918341749,
-        resultCorrect.get(0).getQuoteMap().get("USD").getPrices().get(0).getPrice());
+        0.565101283929111,
+        resultCorrect.get(0).getQuoteMap().get("USD").getPriceHistory().get(0).getPrice());
   }
 
   @Test
   void calculateNominalDelta() {
-    DecimalFormat df = new DecimalFormat("###.####");
-    assertEquals("2,9126", df.format(parser.calculateNominalDelta(100, 3)));
-    assertEquals("-3,0928", df.format(parser.calculateNominalDelta(100, -3)));
+    DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.ENGLISH);
+    df.applyPattern("###.####");
+    assertEquals("2.9126", df.format(parser.calculateNominalDelta(100, 3)));
+    assertEquals("-3.0928", df.format(parser.calculateNominalDelta(100, -3)));
     assertEquals("0", df.format(parser.calculateNominalDelta(100, 0)));
   }
 }

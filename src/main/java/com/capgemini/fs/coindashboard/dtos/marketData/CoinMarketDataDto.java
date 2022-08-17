@@ -15,4 +15,11 @@ public class CoinMarketDataDto {
     this.symbol = symbol;
     this.quoteMap = quoteMap;
   }
+
+  public CoinMarketDataDto(String name, Map<String, QuoteDto> quoteMap) {
+    this.name = name;
+    this.quoteMap = quoteMap;
+  }
+
+  public CoinMarketDataDto() {}
 }
