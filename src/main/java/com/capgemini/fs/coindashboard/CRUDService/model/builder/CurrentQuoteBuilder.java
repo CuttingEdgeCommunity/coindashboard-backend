@@ -39,12 +39,7 @@ public final class CurrentQuoteBuilder {
     return this;
   }
 
-  public CurrentQuoteBuilder withChart(List<Price> chart) {
-    this.chart = chart;
-    return this;
-  }
-
   public CurrentQuote build() {
-    return new CurrentQuote(price, deltas, market_cap, daily_volume, chart);
+    return new CurrentQuote(price, deltas, market_cap, daily_volume);
   }
 }

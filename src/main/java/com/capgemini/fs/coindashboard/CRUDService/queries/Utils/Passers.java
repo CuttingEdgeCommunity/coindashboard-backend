@@ -37,17 +37,12 @@ public class Passers {
 
   public static CurrentQuote fromQuoteDtoToCurrentQuote(QuoteDto quoteDto) {
     List<Delta> deltas = new ArrayList<>();
-    List<Price> chart = new ArrayList<>();
     for (DeltaDto deltaDto : quoteDto.getDeltas()) {
       deltas.add(fromDeltaDtoToDelta(deltaDto));
-    }
-    for (PriceDto priceDto : quoteDto.getPriceHistory()) {
-      chart.add(fromPriceDtoToPrice(priceDto));
     }
 
     return CurrentQuoteBuilder.aCurrentQuote()
         .withDeltas(deltas)
-        .withChart(chart)
         .withMarket_cap(quoteDto.getMarketCap())
         .withPrice(quoteDto.getCurrentPrice())
         .withDaily_volume(quoteDto.getVolumeOneDay())
@@ -57,10 +52,15 @@ public class Passers {
   public static Coin fromCoinMarketDataDtoToCoin(CoinMarketDataDto coinMarketDataDto) {
     List<Quote> quotes = new ArrayList<>();
     for (Entry<String, QuoteDto> quote : coinMarketDataDto.getQuoteMap().entrySet()) {
+      List<Price> chart = new ArrayList<>();
+      for (PriceDto priceDto : quote.getValue().getPriceHistory()) {
+        chart.add(fromPriceDtoToPrice(priceDto));
+      }
       quotes.add(
           QuoteBuilder.aQuote()
               .withVs_currency(quote.getKey())
               .withCurrentQuote(fromQuoteDtoToCurrentQuote(quote.getValue()))
+              .withChart(chart)
               .build());
     }
 

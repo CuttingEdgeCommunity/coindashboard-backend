@@ -55,7 +55,7 @@ class CoinGeckoClient {
             }
             if (deltas != null) {
               if (!deltas.isBlank()) {
-                put("deltas", deltas);
+                put("price_change_percentage", deltas);
               }
             }
           }

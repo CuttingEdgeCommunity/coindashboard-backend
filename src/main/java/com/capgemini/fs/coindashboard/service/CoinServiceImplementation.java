@@ -1,6 +1,7 @@
 package com.capgemini.fs.coindashboard.service;
 
 import com.capgemini.fs.coindashboard.service.caching.annotation.CustomCoinCachingAnnotation;
+import com.capgemini.fs.coindashboard.service.mockSprint4.MockSprint4;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +14,7 @@ public class CoinServiceImplementation implements CoinService {
   @Override
   @CustomCoinCachingAnnotation
   public Optional<String> getCoinMarketData(String name, String vs_currency) {
-    return Optional.empty();
+    return Optional.of(MockSprint4.getMockData());
   }
 
   @Override
