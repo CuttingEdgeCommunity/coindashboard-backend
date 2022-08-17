@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.database.queries;
+package com.capgemini.fs.coindashboard.CRUDService.queries;
 
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
 

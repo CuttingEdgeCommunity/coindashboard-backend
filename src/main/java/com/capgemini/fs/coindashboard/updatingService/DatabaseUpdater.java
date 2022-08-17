@@ -1,7 +1,7 @@
-package com.capgemini.fs.coindashboard.database;
+package com.capgemini.fs.coindashboard.updatingService;
 
+import com.capgemini.fs.coindashboard.CRUDService.queries.UpdateQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
-import com.capgemini.fs.coindashboard.database.queries.UpdateQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;

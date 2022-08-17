@@ -1,4 +1,6 @@
-package com.capgemini.fs.coindashboard.database.model;
+package com.capgemini.fs.coindashboard.CRUDService.model.builder;
+
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 
 public final class PriceBuilder {
 

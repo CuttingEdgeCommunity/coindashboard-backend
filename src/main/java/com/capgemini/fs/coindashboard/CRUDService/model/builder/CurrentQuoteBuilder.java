@@ -1,5 +1,8 @@
-package com.capgemini.fs.coindashboard.database.model;
+package com.capgemini.fs.coindashboard.CRUDService.model.builder;
 
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import java.util.List;
 
 public final class CurrentQuoteBuilder {

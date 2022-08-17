@@ -1,7 +1,7 @@
-package com.capgemini.fs.coindashboard.database.queries;
+package com.capgemini.fs.coindashboard.CRUDService.queries;
 
+import com.capgemini.fs.coindashboard.CRUDService.queries.Utils.Passers;
 import com.capgemini.fs.coindashboard.controller.ControllerConfig;
-import com.capgemini.fs.coindashboard.database.queries.Utils.Passers;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import java.util.List;

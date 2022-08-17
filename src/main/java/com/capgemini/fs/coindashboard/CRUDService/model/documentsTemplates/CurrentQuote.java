@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.database.model;
+package com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates;
 
 import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;

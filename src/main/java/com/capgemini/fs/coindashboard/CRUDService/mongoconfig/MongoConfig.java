@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.database.mongoconfig;
+package com.capgemini.fs.coindashboard.CRUDService.mongoconfig;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;

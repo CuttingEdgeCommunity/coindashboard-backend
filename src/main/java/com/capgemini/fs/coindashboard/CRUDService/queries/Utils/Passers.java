@@ -1,15 +1,15 @@
-package com.capgemini.fs.coindashboard.database.queries.Utils;
+package com.capgemini.fs.coindashboard.CRUDService.queries.Utils;
 
-import com.capgemini.fs.coindashboard.database.model.Coin;
-import com.capgemini.fs.coindashboard.database.model.CoinBuilder;
-import com.capgemini.fs.coindashboard.database.model.CurrentQuote;
-import com.capgemini.fs.coindashboard.database.model.CurrentQuoteBuilder;
-import com.capgemini.fs.coindashboard.database.model.Delta;
-import com.capgemini.fs.coindashboard.database.model.DeltaBuilder;
-import com.capgemini.fs.coindashboard.database.model.Price;
-import com.capgemini.fs.coindashboard.database.model.PriceBuilder;
-import com.capgemini.fs.coindashboard.database.model.Quote;
-import com.capgemini.fs.coindashboard.database.model.QuoteBuilder;
+import com.capgemini.fs.coindashboard.CRUDService.model.builder.CoinBuilder;
+import com.capgemini.fs.coindashboard.CRUDService.model.builder.CurrentQuoteBuilder;
+import com.capgemini.fs.coindashboard.CRUDService.model.builder.DeltaBuilder;
+import com.capgemini.fs.coindashboard.CRUDService.model.builder.PriceBuilder;
+import com.capgemini.fs.coindashboard.CRUDService.model.builder.QuoteBuilder;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.DeltaDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.PriceDto;

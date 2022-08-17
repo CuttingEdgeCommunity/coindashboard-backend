@@ -1,5 +1,8 @@
-package com.capgemini.fs.coindashboard.database.model;
+package com.capgemini.fs.coindashboard.CRUDService.model.builder;
 
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Link;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 import java.util.List;
 
 public final class CoinBuilder {
