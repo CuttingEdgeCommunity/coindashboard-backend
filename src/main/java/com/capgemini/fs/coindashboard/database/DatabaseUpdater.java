@@ -32,7 +32,7 @@ public class DatabaseUpdater {
   }
 
   @Async
-  @Scheduled(cron = "*/5 * * * *")
+  @Scheduled(cron = "* */5 * * * *")
   public void chartUpdate() {
     if (this.enabled) {
       this.updateQueries.UpdateEveryCoinPriceChart();
