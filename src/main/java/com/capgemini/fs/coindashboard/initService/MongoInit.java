@@ -28,6 +28,7 @@ public class MongoInit implements CommandLineRunner {
     }
     if (coinMarketDataResult != null) {
       createQueries.CreateCoinDocument(coinMarketDataResult.getCoinMarketDataDTOS().get(0));
+      log.info("Successfully added initial btc data");
     } else {
       log.info("Data not loaded from the APIHolder");
     }
