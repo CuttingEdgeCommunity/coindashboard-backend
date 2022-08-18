@@ -24,11 +24,11 @@ class CoinGeckoClientTest extends CoinGeckoTestBaseClass {
   @BeforeEach
   public void setUp() throws IOException {
     String correctLatestUri =
-        "https://api.coingecko.com/api/v3/coins/markets?ids=bitcoin%2Cethereum&vs_currency=usd&per_page=250&deltas=1h%2C24h%2C7d%2C30d";
+        "https://api.coingecko.com/api/v3/coins/markets?ids=bitcoin%2Cethereum&vs_currency=usd&per_page=250&price_change_percentage=1h%2C24h%2C7d%2C30d";
     String correctHistoricalUri =
         "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1";
     String errorLatestUri =
-        "https://api.coingecko.com/api/v3/coins/markets?ids=eth%2C+btc&vs_currency=usd&per_page=250&deltas=1h%2C24h%2C7d%2C30d";
+        "https://api.coingecko.com/api/v3/coins/markets?ids=eth%2C+btc&vs_currency=usd&per_page=250&price_change_percentage=1h%2C24h%2C7d%2C30d";
     String errorHistoricalUri =
         "https://api.coingecko.com/api/v3/coins/eth/market_chart?vs_currency=usd&days=1";
 

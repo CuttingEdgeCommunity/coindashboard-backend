@@ -78,12 +78,9 @@ class CoinGeckoCommunicatorTest extends CoinGeckoTestBaseClass {
   }
 
   @Test
-  // @Disabled
   void getCurrentListing() {
     var correct = coinGeckoCommunicator.getCurrentListing(this.coins, this.vsCurr);
-    // Collections.singletonList(this.vsCurr.get(0)));
     var error = coinGeckoCommunicator.getCurrentListing(this.coinserr, this.vsCurr);
-    // Collections.singletonList(this.vsCurr.get(0)));
     assertEquals(ApiProviderEnum.COIN_GECKO, correct.getProvider(), "Ok1");
     assertEquals(ApiProviderEnum.COIN_GECKO, error.getProvider(), "Ok2");
     assertEquals(ResultStatus.SUCCESS, correct.getStatus(), "Ok3");
