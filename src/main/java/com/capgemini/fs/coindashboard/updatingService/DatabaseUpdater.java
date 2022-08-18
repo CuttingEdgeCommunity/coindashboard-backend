@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DatabaseUpdater {
 
-  private boolean enabled = false;
+  private boolean enabled = true;
 
   @Autowired private UpdateQueries updateQueries;
   @Autowired private ApiHolder apiHolder;
@@ -20,13 +20,13 @@ public class DatabaseUpdater {
   }
 
   @Async
-  @Scheduled(fixedDelay = 1500)
+  @Scheduled(fixedDelay = 14700)
   public void singleCoinUpdate() {
     if (this.enabled) {
       var coinMarketData = this.apiHolder.getCoinMarketData("btc");
       if (coinMarketData != null) {
         this.updateQueries.UpdateCoinCurrentQuote(
-            "bitcoin",
+            "Bitcoin",
             coinMarketData.getCoinMarketDataDTOS().get(0).getQuoteMap().get("usd"),
             "usd");
       }

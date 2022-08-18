@@ -3,6 +3,7 @@ package com.capgemini.fs.coindashboard;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(
     scanBasePackages = {
@@ -13,6 +14,7 @@ import org.springframework.cache.annotation.EnableCaching;
       "com.capgemini.fs.coindashboard.apiCommunicator",
       "com.capgemini.fs.coindashboard.updatingService"
     })
+@EnableScheduling
 @EnableCaching
 public class CoinDashboardApplication {
 
