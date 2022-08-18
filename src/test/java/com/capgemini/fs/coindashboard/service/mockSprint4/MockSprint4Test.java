@@ -73,6 +73,6 @@ public class MockSprint4Test {
               ]
             }]""";
     String content = Files.readString(file);
-    JSONAssert.assertEquals(expected.trim(),content.trim(),true);
+    JSONAssert.assertEquals(expected.trim(), content.trim(), true);
   }
 }
