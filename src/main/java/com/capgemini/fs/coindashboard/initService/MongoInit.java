@@ -6,20 +6,22 @@ import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import javax.annotation.PostConstruct;
 
 @Component
 // class for initialization of a mongoDB with historical data of coins
-public class MongoInit implements CommandLineRunner {
+public class MongoInit implements InitializingBean {
   private static final Logger log = LogManager.getLogger(MongoInit.class);
   @Autowired private CreateQueries createQueries;
   @Autowired private GetQueries getQueries;
   @Autowired private ApiHolder apiHolder;
 
   @Override
-  public void run(String... args) {
+  public void afterPropertiesSet() {
     log.info("Starting initialization...");
     CoinMarketDataResult coinMarketDataResult;
     try {
