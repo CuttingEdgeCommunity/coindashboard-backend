@@ -107,7 +107,7 @@ class CoinMarketCapResponseParser {
             };
 
         quoteDtos.put(
-            quote.getKey(),
+            quote.getKey().toLowerCase(),
             new QuoteDto(
                 currentPrice, marketCap, volumeOneDay, new ArrayList<>(), deltas, timestamp));
       }
