@@ -17,8 +17,8 @@ public class Coin {
 
   private String symbol;
   private String image_url;
-  private long genesis_date;
-  private boolean is_token;
+  private Long genesis_date;
+  private Boolean is_token;
   private String contract_address;
   private List<Link> links;
   private String description;
@@ -29,8 +29,8 @@ public class Coin {
       String name,
       String symbol,
       String image_url,
-      long genesis_date,
-      boolean is_token,
+      Long genesis_date,
+      Boolean is_token,
       String contract_address,
       List<Link> links,
       String description,

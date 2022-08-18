@@ -24,7 +24,7 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
 
   @Override
   public String getAllCoins() {
-    return gson.toJson(mongoTemplate.findAll(Coin.class, "Coins"));
+    return gson.toJson(mongoTemplate.findAll(Coin.class, "Coin"));
   }
 
   @Override
@@ -33,22 +33,15 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
     query.with(PageRequest.of(page, take));
     query.fields()
         .include("name")
-        .include("symbol")
-        .include("image_url")
-        .include("current_quote");
+        .include("symbol");
+        //.include("image_url")
+        //.include("currentQuote");
 
-    return gson.toJson(mongoTemplate.find(query, Coin.class, "Coins"));
+    return gson.toJson(mongoTemplate.find(query, Coin.class, "Coin"));
   }
 
   @Override
   public boolean UpdateCoinCurrentQuote(String coinName, QuoteDto newQuote) {
-    Query query = new Query();
-    query.addCriteria(Criteria.where("coinName").is(coinName));
-
-    Update update = new Update();
-    update.set("Quote", newQuote);
-
-    mongoTemplate.updateMulti(query, update, Coin.class);
     return false;
   }
 
