@@ -8,9 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import javax.annotation.PostConstruct;
 
 @Component
 // class for initialization of a mongoDB with historical data of coins
@@ -31,8 +29,12 @@ public class MongoInit implements InitializingBean {
       return;
     }
     if (coinMarketDataResult != null) {
-      createQueries.CreateCoinDocument(coinMarketDataResult.getCoinMarketDataDTOS().get(0));
-      log.info("Successfully added initial btc data");
+      try {
+        createQueries.CreateCoinDocument(coinMarketDataResult.getCoinMarketDataDTOS().get(0));
+        log.info("Successfully added initial btc data");
+      } catch (Exception e) {
+        log.error(e.getMessage());
+      }
     } else {
       log.info("Data not loaded from the APIHolder");
     }
