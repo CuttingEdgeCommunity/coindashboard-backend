@@ -2,16 +2,18 @@ package com.capgemini.fs.coindashboard.CRUDService.queries;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.CRUDService.queries.Utils.Passers;
-import com.capgemini.fs.coindashboard.controller.ControllerConfig;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import com.google.gson.Gson;
 import com.mongodb.client.result.UpdateResult;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Queries implements UpdateQueries, GetQueries, CreateQueries {
-  private static final Logger log = LogManager.getLogger(ControllerConfig.class);
+  private static final Logger log = LogManager.getLogger(Queries.class);
   private static final Gson gson = new Gson();
   @Autowired private MongoTemplate mongoTemplate;
 
@@ -29,17 +31,39 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   }
 
   @Override
-  public String getCoins(int take, int page) {
-    Query query = new Query();
-    query.with(PageRequest.of(page, take));
-    query
-        .fields()
-        .include("name")
-        .include("symbol")
-        // .include("image_url")
-        .include("quotes.usd.currentQuote");
+  public String getCoinMarketData(
+      String name, String vs_currency) { // TODO: check if vs_currency exists in the data base
+    MatchOperation matchStage = Aggregation.match(new Criteria("name").is(name));
+    ProjectionOperation projectStage =
+        Aggregation.project("name", "symbol", "currentQuote")
+            .and("quotes." + vs_currency + ".currentQuote")
+            .as("CurrentQuote")
+            .andExclude("_id");
+    Aggregation aggregation =
+        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(1));
+    List<Object> result =
+        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults();
+    if (result.isEmpty()) {
+      log.error("coin" + name + " does not exist");
+      return null;
+    }
+    log.info("passing coinMarketData from DB");
+    return gson.toJson(result);
+  }
 
-    return gson.toJson(mongoTemplate.find(query, Coin.class, "Coin"));
+  @Override
+  public String getCoins(int take, int page) {
+    MatchOperation matchStage = Aggregation.match(new Criteria("name").is("Bitcoin"));
+    ProjectionOperation projectStage =
+        Aggregation.project("name", "symbol", "currentQuote")
+            .and("quotes.usd.currentQuote")
+            .as("CurrentQuote")
+            .andExclude("_id");
+    Aggregation aggregation =
+        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(1));
+
+    return gson.toJson(
+        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults());
   }
 
   @Override

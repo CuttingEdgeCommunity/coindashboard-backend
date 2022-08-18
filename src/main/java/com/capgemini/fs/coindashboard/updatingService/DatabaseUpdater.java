@@ -20,7 +20,7 @@ public class DatabaseUpdater {
   }
 
   @Async
-  @Scheduled(fixedDelay = 1470)
+  @Scheduled(fixedDelay = 3070)
   public void singleCoinUpdate() {
     if (this.enabled) {
       var coinMarketData = this.apiHolder.getCoinMarketData("btc");

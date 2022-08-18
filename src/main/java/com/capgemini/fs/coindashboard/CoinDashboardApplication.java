@@ -12,7 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
       "com.capgemini.fs.coindashboard.initService",
       "com.capgemini.fs.coindashboard.CRUDService",
       "com.capgemini.fs.coindashboard.apiCommunicator",
-      "com.capgemini.fs.coindashboard.updatingService"
+      "com.capgemini.fs.coindashboard.updatingService",
+      "com.capgemini.fs.coindashboard.cacheService"
     })
 @EnableScheduling
 @EnableCaching

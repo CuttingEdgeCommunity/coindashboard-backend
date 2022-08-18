@@ -2,10 +2,10 @@ package com.capgemini.fs.coindashboard.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+import com.capgemini.fs.coindashboard.cacheService.CacheService;
 import com.capgemini.fs.coindashboard.controller.exceptionHandler.CoinNotFoundException;
 import com.capgemini.fs.coindashboard.controller.exceptionHandler.ServerIsNotRespondingException;
 import com.capgemini.fs.coindashboard.controller.utils.ValidTimestamp;
-import com.capgemini.fs.coindashboard.service.CoinService;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -26,10 +26,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/api")
 public class CoinController {
   @Autowired(required = false)
-  private final CoinService coinService;
+  private final CacheService cacheService;
 
-  public CoinController(CoinService coinService) {
-    this.coinService = coinService;
+  public CoinController(CacheService cacheService) {
+    this.cacheService = cacheService;
   }
 
   @GetMapping("/coins")
@@ -43,7 +43,7 @@ public class CoinController {
           @Min(value = 0, message = "Page has to be bigger or equal to 0")
           int page) {
     String coinInfo =
-        coinService.getCoinInfo(take, page).orElseThrow(ServerIsNotRespondingException::new);
+        cacheService.getCoinInfo(take, page).orElseThrow(ServerIsNotRespondingException::new);
     String location =
         ServletUriComponentsBuilder.fromCurrentRequest().path("coins").build().toUriString();
     return ResponseEntity.status(CREATED).header(HttpHeaders.LOCATION, location).body(coinInfo);
@@ -60,7 +60,7 @@ public class CoinController {
           @Size(max = 10, message = "vs_currency cannot be longer than 10 characters")
           String vs_currency) {
     String coinMarketData =
-        coinService
+        cacheService
             .getCoinMarketData(name, vs_currency) //
             .orElseThrow(() -> new CoinNotFoundException(name));
     String location =
@@ -80,7 +80,7 @@ public class CoinController {
           @Size(max = 50, message = "name cannot be longer than 50 characters")
           String name) {
     String coinDetails =
-        coinService.getCoinDetails(name).orElseThrow(() -> new CoinNotFoundException(name));
+        cacheService.getCoinDetails(name).orElseThrow(() -> new CoinNotFoundException(name));
     String location =
         ServletUriComponentsBuilder.fromCurrentRequest().path("coins/{name}").build().toUriString();
     return ResponseEntity.status(CREATED).header(HttpHeaders.LOCATION, location).body(coinDetails);
@@ -95,7 +95,7 @@ public class CoinController {
       return ResponseEntity.badRequest().body("chart_to cannot be before chart_from");
     }
     String chart =
-        coinService
+        cacheService
             .getChart(name, chart_from, chart_to)
             .orElseThrow(() -> new CoinNotFoundException(name));
     String location =
