@@ -73,7 +73,7 @@ class CoinMarketCapResponseParser {
       {
         coin = new SimpleEntry<>(coin.getKey(), coin.getValue().get(0));
       }
-      String name = coin.getKey();
+      String name = coin.getValue().get("name").asText();
       String symbol = coin.getValue().get("symbol").asText();
 
       Map<String, QuoteDto> quoteDtos = new LinkedHashMap<>();
@@ -107,7 +107,7 @@ class CoinMarketCapResponseParser {
             };
 
         quoteDtos.put(
-            quote.getKey(),
+            quote.getKey().toLowerCase(),
             new QuoteDto(
                 currentPrice, marketCap, volumeOneDay, new ArrayList<>(), deltas, timestamp));
       }

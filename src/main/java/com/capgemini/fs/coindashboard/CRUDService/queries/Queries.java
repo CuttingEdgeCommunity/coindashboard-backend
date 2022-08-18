@@ -32,9 +32,12 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   public String getCoins(int take, int page) {
     Query query = new Query();
     query.with(PageRequest.of(page, take));
-    query.fields().include("name").include("symbol")
-    // .include("image_url")
-    .include("quotes.usd.currentQuote");
+    query
+        .fields()
+        .include("name")
+        .include("symbol")
+        // .include("image_url")
+        .include("quotes.usd.currentQuote");
 
     return gson.toJson(mongoTemplate.find(query, Coin.class, "Coin"));
   }
@@ -49,7 +52,7 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
           "quotes." + vs_currency.toLowerCase() + ".currentQuote",
           Passers.fromQuoteDtoToCurrentQuote(newQuote));
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
-      if (updateResult.wasAcknowledged()){
+      if (updateResult.wasAcknowledged()) {
         log.info("Update performed");
         return true;
       }

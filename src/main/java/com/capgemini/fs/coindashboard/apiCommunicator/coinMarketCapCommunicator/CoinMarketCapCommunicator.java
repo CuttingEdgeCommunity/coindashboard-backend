@@ -26,10 +26,12 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
   }
 
   @Override
-  public CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies) {
+  public CoinMarketDataResult getHistoricalListing(
+      List<String> coins, List<String> vsCurrencies, Long timestamp) {
     try {
-      Response response = this.client.getCoinQuotes(coins, vsCurrencies);
-      var ret = parser.parseQuoteLatestResult(response.getResponseBody());
+      Response response = this.client.getHistoricalCoinQuotes(coins, vsCurrencies, timestamp);
+
+      var ret = parser.parseQuoteHistoricalResult(response.getResponseBody());
       ret.setProvider(this.providerEnum);
       ret.setStatus(
           ret.getCoinMarketDataDTOS() != null
@@ -44,12 +46,10 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
   }
 
   @Override
-  public CoinMarketDataResult getHistoricalListing(
-      List<String> coins, List<String> vsCurrencies, Long timestamp) {
+  public CoinMarketDataResult getCurrentListing(List<String> coins, List<String> vsCurrencies) {
     try {
-      Response response = this.client.getHistoricalCoinQuotes(coins, vsCurrencies, timestamp);
-
-      var ret = parser.parseQuoteHistoricalResult(response.getResponseBody());
+      Response response = this.client.getCoinQuotes(coins, vsCurrencies);
+      var ret = parser.parseQuoteLatestResult(response.getResponseBody());
       ret.setProvider(this.providerEnum);
       ret.setStatus(
           ret.getCoinMarketDataDTOS() != null
