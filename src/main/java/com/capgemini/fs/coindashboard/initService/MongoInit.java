@@ -1,6 +1,7 @@
 package com.capgemini.fs.coindashboard.initService;
 
 import com.capgemini.fs.coindashboard.CRUDService.queries.CreateQueries;
+import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class MongoInit implements CommandLineRunner {
   private static final Logger log = LogManager.getLogger(MongoInit.class);
   @Autowired private CreateQueries createQueries;
+  @Autowired private GetQueries getQueries;
   @Autowired private ApiHolder apiHolder;
 
   @Override
@@ -32,5 +34,9 @@ public class MongoInit implements CommandLineRunner {
     } else {
       log.info("Data not loaded from the APIHolder");
     }
+
+    log.info(getQueries.getAllCoins());
+
+    log.info(getQueries.getCoins(1, 0));
   }
 }
