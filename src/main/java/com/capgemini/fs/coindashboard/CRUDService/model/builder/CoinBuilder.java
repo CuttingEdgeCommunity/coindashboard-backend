@@ -4,6 +4,7 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Link;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 import java.util.List;
+import java.util.Map;
 
 public final class CoinBuilder {
 
@@ -16,7 +17,7 @@ public final class CoinBuilder {
   private String contract_address;
   private List<Link> links;
   private String description;
-  private List<Quote> quotes;
+  private Map<String, Quote> quotes;
 
   private CoinBuilder() {}
 
@@ -69,7 +70,7 @@ public final class CoinBuilder {
     return this;
   }
 
-  public CoinBuilder withQuotes(List<Quote> quotes) {
+  public CoinBuilder withQuotes(Map<String, Quote> quotes) {
     this.quotes = quotes;
     return this;
   }

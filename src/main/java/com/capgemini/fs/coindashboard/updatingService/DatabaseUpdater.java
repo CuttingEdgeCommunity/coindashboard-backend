@@ -26,7 +26,9 @@ public class DatabaseUpdater {
       var coinMarketData = this.apiHolder.getCoinMarketData("btc");
       if (coinMarketData != null) {
         this.updateQueries.UpdateCoinCurrentQuote(
-            "bitcoin", coinMarketData.getCoinMarketDataDTOS().get(0).getQuoteMap().get("usd"));
+            "bitcoin",
+            coinMarketData.getCoinMarketDataDTOS().get(0).getQuoteMap().get("usd"),
+            "usd");
       }
     }
   }

@@ -1,9 +1,11 @@
 package com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates;
 
 import java.util.List;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("Quote")
+@Data
 public class Quote {
   private String vs_currency;
   private CurrentQuote currentQuote;

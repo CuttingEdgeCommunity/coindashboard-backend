@@ -1,6 +1,7 @@
 package com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates;
 
 import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -22,7 +23,7 @@ public class Coin {
   private String contract_address;
   private List<Link> links;
   private String description;
-  private List<Quote> quotes;
+  private Map<String, Quote> quotes;
 
   public Coin(
       String id,
@@ -34,7 +35,7 @@ public class Coin {
       String contract_address,
       List<Link> links,
       String description,
-      List<Quote> quotes) {
+      Map<String, Quote> quotes) {
     this.id = id;
     this.name = name;
     this.symbol = symbol;

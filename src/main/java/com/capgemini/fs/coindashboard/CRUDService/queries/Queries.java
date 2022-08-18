@@ -6,6 +6,7 @@ import com.capgemini.fs.coindashboard.controller.ControllerConfig;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import com.google.gson.Gson;
+import com.mongodb.client.result.UpdateResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +32,27 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   public String getCoins(int take, int page) {
     Query query = new Query();
     query.with(PageRequest.of(page, take));
-    query.fields()
-        .include("name")
-        .include("symbol");
-        //.include("image_url")
-        //.include("currentQuote");
+    query.fields().include("name").include("symbol");
+    // .include("image_url")
+    // .include("currentQuote");
 
     return gson.toJson(mongoTemplate.find(query, Coin.class, "Coin"));
   }
 
   @Override
-  public boolean UpdateCoinCurrentQuote(String coinName, QuoteDto newQuote) {
+  public boolean UpdateCoinCurrentQuote(String coinName, QuoteDto newQuote, String vs_currency) {
+    try {
+      Query query = new Query();
+      query.addCriteria(Criteria.where("name").is(coinName));
+      Update update = new Update();
+      update.set(
+          "quotes." + vs_currency.toLowerCase() + ".currentQuote",
+          Passers.fromQuoteDtoToCurrentQuote(newQuote));
+      UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
+      return updateResult.wasAcknowledged();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
     return false;
   }
 

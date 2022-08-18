@@ -1,6 +1,5 @@
 package com.capgemini.fs.coindashboard.CRUDService.queries;
 
-
 public interface GetQueries {
 
   String getAllCoins();

@@ -15,7 +15,9 @@ import com.capgemini.fs.coindashboard.dtos.marketData.DeltaDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.PriceDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class Passers {
@@ -50,17 +52,18 @@ public class Passers {
   }
 
   public static Coin fromCoinMarketDataDtoToCoin(CoinMarketDataDto coinMarketDataDto) {
-    List<Quote> quotes = new ArrayList<>();
+    Map<String, Quote> quotes = new HashMap<>();
     for (Entry<String, QuoteDto> quote : coinMarketDataDto.getQuoteMap().entrySet()) {
       List<Price> chart = new ArrayList<>();
       for (PriceDto priceDto : quote.getValue().getPriceHistory()) {
         chart.add(fromPriceDtoToPrice(priceDto));
       }
-      quotes.add(
+      quotes.put(
+          quote.getKey(),
           QuoteBuilder.aQuote()
-              .withVs_currency(quote.getKey())
               .withCurrentQuote(fromQuoteDtoToCurrentQuote(quote.getValue()))
               .withChart(chart)
+              .withVs_currency(quote.getKey())
               .build());
     }
 
