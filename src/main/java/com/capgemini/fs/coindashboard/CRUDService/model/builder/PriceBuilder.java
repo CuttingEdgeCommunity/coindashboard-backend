@@ -4,8 +4,8 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price
 
 public final class PriceBuilder {
 
-  private double price;
-  private long timestamp;
+  private Double price;
+  private Long timestamp;
 
   private PriceBuilder() {}
 
@@ -13,12 +13,12 @@ public final class PriceBuilder {
     return new PriceBuilder();
   }
 
-  public PriceBuilder withPrice(double price) {
+  public PriceBuilder withPrice(Double price) {
     this.price = price;
     return this;
   }
 
-  public PriceBuilder withTimestamp(long timestamp) {
+  public PriceBuilder withTimestamp(Long timestamp) {
     this.timestamp = timestamp;
     return this;
   }

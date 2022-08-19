@@ -5,8 +5,8 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta
 public final class DeltaBuilder {
 
   private String interval;
-  private double pct;
-  private double nominal;
+  private Double pct;
+  private Double nominal;
 
   private DeltaBuilder() {}
 
@@ -19,12 +19,12 @@ public final class DeltaBuilder {
     return this;
   }
 
-  public DeltaBuilder withPct(double pct) {
+  public DeltaBuilder withPct(Double pct) {
     this.pct = pct;
     return this;
   }
 
-  public DeltaBuilder withNominal(double nominal) {
+  public DeltaBuilder withNominal(Double nominal) {
     this.nominal = nominal;
     return this;
   }

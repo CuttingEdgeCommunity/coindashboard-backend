@@ -12,8 +12,8 @@ public final class CoinBuilder {
   private String name;
   private String symbol;
   private String image_url;
-  private long genesis_date;
-  private boolean is_token;
+  private Long genesis_date;
+  private Boolean is_token;
   private String contract_address;
   private List<Link> links;
   private String description;
@@ -45,12 +45,12 @@ public final class CoinBuilder {
     return this;
   }
 
-  public CoinBuilder withGenesis_date(long genesis_date) {
+  public CoinBuilder withGenesis_date(Long genesis_date) {
     this.genesis_date = genesis_date;
     return this;
   }
 
-  public CoinBuilder withIs_token(boolean is_token) {
+  public CoinBuilder withIs_token(Boolean is_token) {
     this.is_token = is_token;
     return this;
   }
