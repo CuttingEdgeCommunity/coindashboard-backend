@@ -5,19 +5,25 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
 public class MongoConfig {
+  @Autowired private MongoEnv mongoEnv;
 
   @Bean
   public MongoClient mongo() {
     MongoCredential mongoCredential =
-        MongoCredential.createCredential("root", "coindashboard", "mongo".toCharArray());
+        MongoCredential.createCredential(
+            mongoEnv.getUsername(), mongoEnv.getDatabase(), mongoEnv.getPassword().toCharArray());
     ConnectionString connectionString =
-        new ConnectionString("mongodb://localhost:27017/coindashboard");
+        new ConnectionString(
+            String.format(
+                "mongodb://%s:%s/%s",
+                mongoEnv.getHost(), mongoEnv.getPort(), mongoEnv.getPassword()));
     MongoClientSettings mongoClientSettings =
         MongoClientSettings.builder()
             .applyConnectionString(connectionString)
@@ -29,6 +35,6 @@ public class MongoConfig {
 
   @Bean
   public MongoTemplate mongoTemplate() {
-    return new MongoTemplate(mongo(), "coindashboard");
+    return new MongoTemplate(mongo(), mongoEnv.getDatabase());
   }
 }

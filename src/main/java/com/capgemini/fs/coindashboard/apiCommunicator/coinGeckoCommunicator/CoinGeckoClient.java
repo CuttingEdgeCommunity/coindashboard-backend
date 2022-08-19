@@ -8,15 +8,17 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 class CoinGeckoClient {
 
   private static final Logger log = LogManager.getLogger(CoinGeckoClient.class);
-  private final String path = "https://api.coingecko.com/api/";
-  private final String version = "v3";
-  private final String url = path + version; // TODO: move to env
+
+  @Value("${coingecko.path}")
+  private String url;
+
   @Autowired private ApiClient client;
 
   public Response getCoinsMarkets(
