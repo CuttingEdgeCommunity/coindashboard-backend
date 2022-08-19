@@ -3,12 +3,14 @@ package com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
 @Document("Coin")
+@Data
+@NoArgsConstructor
 public class Coin {
 
   @Id private String id;
