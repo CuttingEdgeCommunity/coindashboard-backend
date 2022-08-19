@@ -170,7 +170,7 @@ class CoinMarketCapResponseParser {
                 .add(0, new PriceDto(price, timestamp));
           } else {
             quoteDtos.put(
-                singleQuote.getKey(),
+                singleQuote.getKey().toLowerCase(),
                 new QuoteDto(
                     new LinkedList<>() {
                       {

@@ -39,7 +39,7 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
     var resultCorrect = parser.parseCoinsQuoteLatestResult(correctLatest.get("data"));
     assertEquals(
         0.4378632733017602,
-        resultCorrect.get(0).getQuoteMap().get("USD").getDeltas().get(0).getPercentChange());
+        resultCorrect.get(0).getQuoteMap().get("usd").getDeltas().get(0).getPercentChange());
   }
 
   @Test
@@ -58,8 +58,8 @@ class CoinMarketCapResponseParserTest extends CoinMarketCapTestBaseClass {
   void parseCoinsQuoteHistoricalResult() throws ParseException {
     var resultCorrect = parser.parseCoinsQuoteHistoricalResult(correctHistorical.get("data"));
     assertEquals(
-        0.565101283929111,
-        resultCorrect.get(0).getQuoteMap().get("USD").getPriceHistory().get(0).getPrice());
+        0.8852041336573697,
+        resultCorrect.get(0).getQuoteMap().get("usd").getPriceHistory().get(0).getPrice());
   }
 
   @Test
