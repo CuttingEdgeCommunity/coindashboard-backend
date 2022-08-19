@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.test.context.TestPropertySource;
+
 @EnableConfigurationProperties
 @TestPropertySource(locations = "classpath:application.properties")
 public class CoinMarketCapTestBaseClass {

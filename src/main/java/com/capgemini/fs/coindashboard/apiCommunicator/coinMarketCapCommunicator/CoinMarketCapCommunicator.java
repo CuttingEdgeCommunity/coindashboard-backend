@@ -36,8 +36,12 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
       ret.setStatus(
           ret.getCoinMarketDataDTOS() != null
               && ret.getCoinMarketDataDTOS().size() != coins.size());
+      log.info(
+          "Loaded historical listing for coins: "
+              + String.join(",", coins)
+              + " with status: "
+              + ret.getStatus());
       return ret;
-
     } catch (IOException e) {
       log.error(e.getMessage());
       return new CoinMarketDataResult(
@@ -54,8 +58,12 @@ public class CoinMarketCapCommunicator implements ApiCommunicator {
       ret.setStatus(
           ret.getCoinMarketDataDTOS() != null
               && ret.getCoinMarketDataDTOS().size() != coins.size());
+      log.info(
+          "Loaded current listing for coins: "
+              + String.join(",", coins)
+              + " with status: "
+              + ret.getStatus());
       return ret;
-
     } catch (IOException e) {
       log.error(e.getMessage());
       return new CoinMarketDataResult(
