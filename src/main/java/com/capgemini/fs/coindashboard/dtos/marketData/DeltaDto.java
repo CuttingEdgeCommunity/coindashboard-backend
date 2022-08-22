@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import lombok.Data;
 

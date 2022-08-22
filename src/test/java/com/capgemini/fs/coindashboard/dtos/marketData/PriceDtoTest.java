@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

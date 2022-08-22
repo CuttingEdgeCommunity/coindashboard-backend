@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.common;
+package com.capgemini.fs.coindashboard.dtos.common;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
 import java.util.Objects;
@@ -11,8 +11,7 @@ public class Result {
   private ResultStatus status;
   private String errorMessage;
 
-  public Result() {
-  }
+  public Result() {}
 
   public Result(ApiProviderEnum provider, ResultStatus status, String errorMessage) {
     this.provider = provider;
@@ -25,8 +24,7 @@ public class Result {
   }
 
   public void setStatus(boolean isPartialSuccess) {
-    if (!Objects.equals(this.getErrorMessage(), "") &&
-        this.getErrorMessage() != null) {
+    if (!Objects.equals(this.getErrorMessage(), "") && this.getErrorMessage() != null) {
       this.setStatus(ResultStatus.FAILURE);
     } else if (isPartialSuccess) {
       this.setStatus(ResultStatus.PARTIAL_SUCCESS);

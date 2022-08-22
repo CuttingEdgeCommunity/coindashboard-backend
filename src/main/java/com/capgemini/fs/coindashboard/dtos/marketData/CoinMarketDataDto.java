@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import java.util.Map;
 import lombok.Data;
@@ -15,4 +15,11 @@ public class CoinMarketDataDto {
     this.symbol = symbol;
     this.quoteMap = quoteMap;
   }
+
+  public CoinMarketDataDto(String name, Map<String, QuoteDto> quoteMap) {
+    this.name = name;
+    this.quoteMap = quoteMap;
+  }
+
+  public CoinMarketDataDto() {}
 }

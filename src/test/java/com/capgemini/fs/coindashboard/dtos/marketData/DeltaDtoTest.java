@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.marketData;
+package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -25,7 +25,7 @@ class DeltaDtoTest {
 
   @Test
   void testToString() {
-    assertEquals("DeltaDto(interval=ONE_HOUR, percentChange=123.0, nominalChange=321.0)",
-        deltaA.toString());
+    assertEquals(
+        "DeltaDto(interval=ONE_HOUR, percentChange=123.0, nominalChange=321.0)", deltaA.toString());
   }
 }
