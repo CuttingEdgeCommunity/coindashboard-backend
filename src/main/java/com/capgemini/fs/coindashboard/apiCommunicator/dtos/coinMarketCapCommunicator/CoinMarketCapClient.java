@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
@@ -10,16 +10,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-class CoinMarketCapClient {
-
-  private static final Logger log = LogManager.getLogger(CoinMarketCapClient.class);
+@Log4j2
+public class CoinMarketCapClient {
 
   @Value("${coinmarketcap.path}")
   private String url;

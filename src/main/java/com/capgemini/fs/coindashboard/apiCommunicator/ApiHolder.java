@@ -24,6 +24,7 @@ public class ApiHolder {
   }
 
   public ApiCommunicator getApiCommunicator(ApiProviderEnum apiProviderEnum) {
+
     return this.apiCommunicators.get(apiProviderEnum);
   }
 

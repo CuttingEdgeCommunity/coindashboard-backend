@@ -2,15 +2,15 @@ package com.capgemini.fs.coindashboard.cacheService;
 
 import com.capgemini.fs.coindashboard.CRUDService.queries.Queries;
 import java.util.Optional;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @Component
 public class CacheServiceImplementation implements CacheService {
-  private static final Logger LOG = LogManager.getLogger(CacheServiceImplementation.class);
+
   @Autowired Queries queries;
 
   @Override

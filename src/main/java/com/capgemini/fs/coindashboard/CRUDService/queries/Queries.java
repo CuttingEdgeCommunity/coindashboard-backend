@@ -7,8 +7,7 @@ import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import com.google.gson.Gson;
 import com.mongodb.client.result.UpdateResult;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -20,8 +19,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 @Component
+@Log4j2
 public class Queries implements UpdateQueries, GetQueries, CreateQueries {
-  private static final Logger log = LogManager.getLogger(Queries.class);
   private static final Gson gson = new Gson();
   @Autowired private MongoTemplate mongoTemplate;
 

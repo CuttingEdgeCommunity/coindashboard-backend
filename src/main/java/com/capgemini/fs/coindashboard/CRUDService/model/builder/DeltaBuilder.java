@@ -1,14 +1,14 @@
 package com.capgemini.fs.coindashboard.CRUDService.model.builder;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public final class DeltaBuilder {
 
   private String interval;
   private Double pct;
   private Double nominal;
-
-  private DeltaBuilder() {}
 
   public static DeltaBuilder aDelta() {
     return new DeltaBuilder();

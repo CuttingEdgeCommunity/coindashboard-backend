@@ -3,6 +3,9 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapClient;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapCommunicator;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapResponseParser;
 import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;

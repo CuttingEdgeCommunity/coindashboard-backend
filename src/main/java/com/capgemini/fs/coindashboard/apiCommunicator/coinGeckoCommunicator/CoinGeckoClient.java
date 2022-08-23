@@ -4,17 +4,16 @@ import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import java.io.IOException;
-import java.util.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.LinkedHashMap;
+import java.util.List;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Log4j2
 class CoinGeckoClient {
-
-  private static final Logger log = LogManager.getLogger(CoinGeckoClient.class);
 
   @Value("${coingecko.path}")
   private String url;
