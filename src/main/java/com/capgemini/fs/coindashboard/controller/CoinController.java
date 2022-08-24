@@ -1,6 +1,6 @@
 package com.capgemini.fs.coindashboard.controller;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 import com.capgemini.fs.coindashboard.cacheService.CacheService;
 import com.capgemini.fs.coindashboard.controller.exceptionHandler.CoinNotFoundException;
@@ -39,18 +39,18 @@ public class CoinController {
   @GetMapping("/coins")
   // future validation required
   ResponseEntity<String> all(
-      @RequestParam(defaultValue = "0", required = false)
+      @RequestParam(defaultValue = "10", required = false)
           @Min(value = 0, message = "Take has to be bigger or equal to 0")
           @Max(value = 300, message = "Take cannot be more than 300")
           int take,
-      @RequestParam(defaultValue = "1", required = false)
+      @RequestParam(defaultValue = "0", required = false)
           @Min(value = 0, message = "Page has to be bigger or equal to 0")
           int page) {
     String coinInfo =
         cacheService.getCoinInfo(take, page).orElseThrow(ServerIsNotRespondingException::new);
     String location =
         ServletUriComponentsBuilder.fromCurrentRequest().path("coins").build().toUriString();
-    return ResponseEntity.status(CREATED).header(HttpHeaders.LOCATION, location).body(coinInfo);
+    return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinInfo);
   }
 
   @GetMapping("/coins/{name}/marketdata")
@@ -72,9 +72,7 @@ public class CoinController {
             .path("coins/{name}/marketdata")
             .build()
             .toUriString();
-    return ResponseEntity.status(CREATED)
-        .header(HttpHeaders.LOCATION, location)
-        .body(coinMarketData);
+    return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinMarketData);
   }
 
   @GetMapping("/coins/{name}")
@@ -87,15 +85,16 @@ public class CoinController {
         cacheService.getCoinDetails(name).orElseThrow(() -> new CoinNotFoundException(name));
     String location =
         ServletUriComponentsBuilder.fromCurrentRequest().path("coins/{name}").build().toUriString();
-    return ResponseEntity.status(CREATED).header(HttpHeaders.LOCATION, location).body(coinDetails);
+    return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinDetails);
   }
 
   @GetMapping("coins/{name}/chart")
   ResponseEntity<String> chart(
-      @PathVariable @NotBlank @Size(max = 50) String name,
+      @PathVariable @NotBlank @Size(max = 50, message = "name cannot be longer than 50 characters")
+          String name,
       @RequestParam(defaultValue = "0", required = false) @ValidTimestamp long chart_from,
       @RequestParam(defaultValue = "0", required = false) @ValidTimestamp long chart_to) {
-    if (!(chart_from < chart_to)) {
+    if ((chart_from > chart_to)) {
       return ResponseEntity.badRequest().body("chart_to cannot be before chart_from");
     }
     String chart =
@@ -107,7 +106,7 @@ public class CoinController {
             .path("coins/{name}/chart")
             .build()
             .toUriString();
-    return ResponseEntity.status(CREATED).header(HttpHeaders.LOCATION, location).body(chart);
+    return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(chart);
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
