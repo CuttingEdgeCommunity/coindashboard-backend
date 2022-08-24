@@ -1,9 +1,13 @@
 package com.capgemini.fs.coindashboard.dtos.marketData;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuoteDto {
 
   private double currentPrice;
@@ -13,25 +17,8 @@ public class QuoteDto {
   private List<DeltaDto> deltas;
   private long lastUpdateTimestampMillis;
 
-  public QuoteDto(
-      double currentPrice,
-      long marketCap,
-      long volumeOneDay,
-      List<PriceDto> priceHistory,
-      List<DeltaDto> deltas,
-      long lastUpdateTimestampMillis) {
-    this.currentPrice = currentPrice;
-    this.marketCap = marketCap;
-    this.volumeOneDay = volumeOneDay;
-    this.priceHistory = priceHistory;
-    this.deltas = deltas;
-    this.lastUpdateTimestampMillis = lastUpdateTimestampMillis;
-  }
-
   public QuoteDto(List<PriceDto> priceHistory) {
     this();
     this.priceHistory = priceHistory;
   }
-
-  public QuoteDto() {}
 }

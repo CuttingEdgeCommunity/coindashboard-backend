@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.TimeFormatter;
 import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
@@ -20,14 +20,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 @Component
-class CoinMarketCapResponseParser {
-
-  private static final Logger log = LogManager.getLogger(CoinMarketCapResponseParser.class);
+@Log4j2
+public class CoinMarketCapResponseParser {
 
   public String parseStatus(JsonNode status) {
     if (status.get("error_code").asInt() != 0) {

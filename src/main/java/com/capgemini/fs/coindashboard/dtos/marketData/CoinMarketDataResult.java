@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class CoinMarketDataResult extends Result {
-
   private List<CoinMarketDataDto> coinMarketDataDTOS;
 
   public CoinMarketDataResult(

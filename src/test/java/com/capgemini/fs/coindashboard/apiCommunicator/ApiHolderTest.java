@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.CoinGeckoCommunicator;
-import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapCommunicator;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapCommunicator;
 import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
 import java.util.ArrayList;

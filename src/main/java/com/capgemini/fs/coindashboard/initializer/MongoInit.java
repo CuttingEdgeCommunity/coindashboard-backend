@@ -4,16 +4,15 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.CreateQueries;
 import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Log4j2
 // class for initialization of a mongoDB with historical data of coins
 public class MongoInit implements InitializingBean {
-  private static final Logger log = LogManager.getLogger(MongoInit.class);
   @Autowired private CreateQueries createQueries;
   @Autowired private GetQueries getQueries;
   @Autowired private ApiHolder apiHolder;

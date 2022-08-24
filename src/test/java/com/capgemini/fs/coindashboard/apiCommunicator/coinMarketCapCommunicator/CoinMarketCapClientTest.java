@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import java.io.IOException;
 import java.util.ArrayList;

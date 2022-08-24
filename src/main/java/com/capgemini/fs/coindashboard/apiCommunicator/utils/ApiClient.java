@@ -7,13 +7,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 @Component
+@Log4j2
 public class ApiClient {
-  private static final Logger log = LogManager.getLogger(ApiClient.class);
 
   public Response invokeGet(String uri) throws IOException {
     var connection = RequestBuilder.buildURLConnectionGET(uri);

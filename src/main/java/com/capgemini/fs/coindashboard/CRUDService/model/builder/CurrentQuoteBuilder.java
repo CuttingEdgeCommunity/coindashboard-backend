@@ -4,7 +4,9 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Curre
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import java.util.List;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public final class CurrentQuoteBuilder {
 
   private Double price;
@@ -12,8 +14,6 @@ public final class CurrentQuoteBuilder {
   private Double market_cap;
   private Double daily_volume;
   private List<Price> chart;
-
-  private CurrentQuoteBuilder() {}
 
   public static CurrentQuoteBuilder aCurrentQuote() {
     return new CurrentQuoteBuilder();

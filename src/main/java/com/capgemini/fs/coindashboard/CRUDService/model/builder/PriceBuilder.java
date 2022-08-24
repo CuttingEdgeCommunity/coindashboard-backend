@@ -1,13 +1,13 @@
 package com.capgemini.fs.coindashboard.CRUDService.model.builder;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public final class PriceBuilder {
 
   private Double price;
   private Long timestamp;
-
-  private PriceBuilder() {}
 
   public static PriceBuilder aPrice() {
     return new PriceBuilder();

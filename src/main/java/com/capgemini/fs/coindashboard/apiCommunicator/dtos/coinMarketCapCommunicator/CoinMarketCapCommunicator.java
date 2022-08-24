@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiCommunicator;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;
@@ -7,15 +7,14 @@ import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
 import java.io.IOException;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Log4j2
 public class CoinMarketCapCommunicator implements ApiCommunicator {
 
-  private static final Logger log = LogManager.getLogger(CoinMarketCapCommunicator.class);
   private final ApiProviderEnum providerEnum = ApiProviderEnum.COIN_MARKET_CAP;
   @Autowired private CoinMarketCapClient client;
   @Autowired private CoinMarketCapResponseParser parser;

@@ -5,7 +5,9 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Link;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 import java.util.List;
 import java.util.Map;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public final class CoinBuilder {
 
   private String id;
@@ -18,8 +20,6 @@ public final class CoinBuilder {
   private List<Link> links;
   private String description;
   private Map<String, Quote> quotes;
-
-  private CoinBuilder() {}
 
   public static CoinBuilder aCoin() {
     return new CoinBuilder();

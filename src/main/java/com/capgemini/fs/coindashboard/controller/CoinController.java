@@ -11,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @Validated
 @RequestMapping("/api")
+@AllArgsConstructor
 public class CoinController {
   @Autowired(required = false)
   private final CacheService cacheService;
-
-  public CoinController(CacheService cacheService) {
-    this.cacheService = cacheService;
-  }
 
   @GetMapping("/coins")
   // future validation required

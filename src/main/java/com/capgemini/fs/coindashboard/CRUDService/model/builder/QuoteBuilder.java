@@ -4,14 +4,14 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Curre
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 import java.util.List;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public final class QuoteBuilder {
 
   private String vs_currency;
   private CurrentQuote currentQuote;
   private List<Price> chart;
-
-  private QuoteBuilder() {}
 
   public static QuoteBuilder aQuote() {
     return new QuoteBuilder();

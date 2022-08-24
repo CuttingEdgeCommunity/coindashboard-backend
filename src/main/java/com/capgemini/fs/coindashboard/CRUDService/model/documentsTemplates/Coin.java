@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates;
 
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("Coin")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Coin {
 
   @Id private String id;
@@ -26,27 +28,4 @@ public class Coin {
   private List<Link> links;
   private String description;
   private Map<String, Quote> quotes;
-
-  public Coin(
-      String id,
-      String name,
-      String symbol,
-      String image_url,
-      Long genesis_date,
-      Boolean is_token,
-      String contract_address,
-      List<Link> links,
-      String description,
-      Map<String, Quote> quotes) {
-    this.id = id;
-    this.name = name;
-    this.symbol = symbol;
-    this.image_url = image_url;
-    this.genesis_date = genesis_date;
-    this.is_token = is_token;
-    this.contract_address = contract_address;
-    this.links = links;
-    this.description = description;
-    this.quotes = quotes;
-  }
 }

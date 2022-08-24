@@ -2,22 +2,20 @@ package com.capgemini.fs.coindashboard.updatingService;
 
 import com.capgemini.fs.coindashboard.CRUDService.queries.UpdateQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Setter
 public class DatabaseUpdater {
 
   private boolean enabled = true;
 
   @Autowired private UpdateQueries updateQueries;
   @Autowired private ApiHolder apiHolder;
-
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
 
   @Async
   @Scheduled(fixedDelay = 3070)
