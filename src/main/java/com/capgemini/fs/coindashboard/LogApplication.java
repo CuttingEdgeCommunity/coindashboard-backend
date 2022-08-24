@@ -7,22 +7,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @SpringBootApplication
 @RestController
 public class LogApplication {
   private static final Logger LOG = LoggerFactory.getLogger(LogApplication.class);
 
-  public static void main( String[] args )
-  {
-    //System.out.println("Hello World!");
+  public static void main( String[] args ) {
     SpringApplication.run(LogApplication.class, args);
     LOG.debug("This is a debug statement");
     LOG.warn("This is Warn Log");
     LOG.error("This is Error Log", new NullPointerException());
-    //LOG.fatal("This is Fatal Log");
     LOG.trace("This is trace Log");
-
   }
 
   @GetMapping(value="/hello")
