@@ -44,6 +44,7 @@ public class Passers {
     }
 
     return CurrentQuoteBuilder.aCurrentQuote()
+        .withLast_update(quoteDto.getLastUpdateTimestampMillis())
         .withDeltas(deltas)
         .withMarket_cap(quoteDto.getMarketCap())
         .withPrice(quoteDto.getCurrentPrice())

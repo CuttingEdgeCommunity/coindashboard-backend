@@ -20,6 +20,8 @@ public class Coin {
   @Indexed(name = "coinName")
   private String name;
 
+  @Indexed private Integer market_cap_rank;
+
   private String symbol;
   private String image_url;
   private Long genesis_date;
