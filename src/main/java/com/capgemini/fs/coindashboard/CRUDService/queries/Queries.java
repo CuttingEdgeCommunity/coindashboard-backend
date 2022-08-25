@@ -6,6 +6,7 @@ import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
 import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
 import com.google.gson.Gson;
 import com.mongodb.client.result.UpdateResult;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,7 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
 
   @Override
   public boolean UpdateCoinPriceChart(String coinName) {
+
     return false;
   }
 
@@ -98,7 +100,22 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   @Override
   public boolean CreateCoinDocument(CoinMarketDataDto coinMarketDataDto) {
     try {
-      mongoTemplate.save(Passers.fromCoinMarketDataDtoToCoin(coinMarketDataDto));
+      mongoTemplate.save(Passers.fromCoinMarketDataDtoToCoin(coinMarketDataDto), "Coin");
+      return true;
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+    return false;
+  }
+
+  @Override
+  public boolean CreateCoinDocuments(List<CoinMarketDataDto> coinMarketDataDtos) {
+    List<Coin> coins = new ArrayList<>();
+    for (CoinMarketDataDto coinMarketDataDto : coinMarketDataDtos) {
+      coins.add(Passers.fromCoinMarketDataDtoToCoin(coinMarketDataDto));
+    }
+    try {
+      mongoTemplate.save(coins, "Coin");
       return true;
     } catch (Exception e) {
       log.error(e.getMessage());
