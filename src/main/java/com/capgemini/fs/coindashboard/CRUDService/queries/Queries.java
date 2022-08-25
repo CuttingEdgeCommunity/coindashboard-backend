@@ -53,17 +53,22 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
 
   @Override
   public String getCoins(int take, int page) {
-    MatchOperation matchStage = Aggregation.match(new Criteria("name").is("Bitcoin"));
+    MatchOperation matchStage = Aggregation.match(new Criteria("market_cap_rank").gt(take*page).lte(take*(page+1)));
     ProjectionOperation projectStage =
-        Aggregation.project("name", "symbol", "currentQuote")
+        Aggregation.project("name", "symbol","image_url", "currentQuote")
             .and("quotes.usd.currentQuote")
             .as("CurrentQuote")
             .andExclude("_id");
     Aggregation aggregation =
-        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(1));
-
-    return gson.toJson(
-        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults());
+        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(take));
+    List<Object> result =
+        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults();
+    if (result.isEmpty()) {
+      log.error("coin matching criteria does not exist");
+      return null;
+    }
+    log.info("passing coinMarketData from DB");
+    return gson.toJson(result);
   }
 
   @Override
