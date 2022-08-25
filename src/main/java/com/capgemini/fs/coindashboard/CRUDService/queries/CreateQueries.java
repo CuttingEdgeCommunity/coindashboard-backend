@@ -1,8 +1,8 @@
 package com.capgemini.fs.coindashboard.CRUDService.queries;
 
-import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 
 public interface CreateQueries {
 
-  boolean CreateCoinDocument(CoinMarketDataDto coinMarketDataDto);
+  boolean CreateCoinDocument(Coin coin);
 }

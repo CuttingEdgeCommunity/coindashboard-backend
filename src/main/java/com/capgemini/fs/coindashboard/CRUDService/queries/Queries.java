@@ -1,9 +1,7 @@
 package com.capgemini.fs.coindashboard.CRUDService.queries;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
-import com.capgemini.fs.coindashboard.CRUDService.queries.Utils.Passers;
-import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
-import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
 import com.google.gson.Gson;
 import com.mongodb.client.result.UpdateResult;
 import java.util.List;
@@ -66,14 +64,14 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   }
 
   @Override
-  public boolean UpdateCoinCurrentQuote(String coinName, QuoteDto newQuote, String vs_currency) {
+  public boolean UpdateCoinCurrentQuote(String coinName, CurrentQuote newQuote, String vs_currency) {
     try {
       Query query = new Query();
       query.addCriteria(Criteria.where("name").is(coinName));
       Update update = new Update();
       update.set(
           "quotes." + vs_currency.toLowerCase() + ".currentQuote",
-          Passers.fromQuoteDtoToCurrentQuote(newQuote));
+          newQuote);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
         log.info("Update performed");
@@ -96,9 +94,9 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   }
 
   @Override
-  public boolean CreateCoinDocument(CoinMarketDataDto coinMarketDataDto) {
+  public boolean CreateCoinDocument(Coin coin) {
     try {
-      mongoTemplate.save(Passers.fromCoinMarketDataDtoToCoin(coinMarketDataDto));
+      mongoTemplate.save(coin);
       return true;
     } catch (Exception e) {
       log.error(e.getMessage());

@@ -13,6 +13,7 @@ public final class CoinBuilder {
   private String id;
   private String name;
   private String symbol;
+  private Integer marketCapRank;
   private String image_url;
   private Long genesis_date;
   private Boolean is_token;
@@ -39,7 +40,10 @@ public final class CoinBuilder {
     this.symbol = symbol;
     return this;
   }
-
+  public CoinBuilder withMarketCapRank(Integer rank) {
+    this.marketCapRank = rank;
+    return this;
+  }
   public CoinBuilder withImage_url(String image_url) {
     this.image_url = image_url;
     return this;
@@ -80,6 +84,7 @@ public final class CoinBuilder {
         id,
         name,
         symbol,
+        marketCapRank,
         image_url,
         genesis_date,
         is_token,

@@ -1,10 +1,11 @@
 package com.capgemini.fs.coindashboard.CRUDService.queries;
 
-import com.capgemini.fs.coindashboard.dtos.marketData.QuoteDto;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 
 public interface UpdateQueries {
 
-  boolean UpdateCoinCurrentQuote(String coinName, QuoteDto newQuote, String vs_currency);
+  boolean UpdateCoinCurrentQuote(String coinName, CurrentQuote newQuote, String vs_currency);
 
   boolean UpdateCoinPriceChart(String coinName);
 

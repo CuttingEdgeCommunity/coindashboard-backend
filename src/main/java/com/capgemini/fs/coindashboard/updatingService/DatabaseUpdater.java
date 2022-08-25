@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 @Component
 @Setter
@@ -21,11 +22,11 @@ public class DatabaseUpdater {
   @Scheduled(fixedDelay = 3070)
   public void singleCoinUpdate() {
     if (this.enabled) {
-      var coinMarketData = this.apiHolder.getCoinMarketData("btc");
-      if (coinMarketData != null) {
+      var result = this.apiHolder.getCoinMarketData(List.of("btc"), List.of("usd"));
+      if (result != null) {
         this.updateQueries.UpdateCoinCurrentQuote(
             "Bitcoin",
-            coinMarketData.getCoinMarketDataDTOS().get(0).getQuoteMap().get("usd"),
+            result.getCoins().get(0).getQuotes().get("usd").getCurrentQuote(),
             "usd");
       }
     }

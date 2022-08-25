@@ -19,8 +19,9 @@ public class Coin {
 
   @Indexed(name = "coinName")
   private String name;
-
   private String symbol;
+  @Indexed(name = "rank")
+  private Integer marketCapRank;
   private String image_url;
   private Long genesis_date;
   private Boolean is_token;
