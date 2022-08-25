@@ -14,6 +14,7 @@ public final class CurrentQuoteBuilder {
   private Double market_cap;
   private Double daily_volume;
   private List<Price> chart;
+  private Long last_update;
 
   public static CurrentQuoteBuilder aCurrentQuote() {
     return new CurrentQuoteBuilder();
@@ -39,7 +40,12 @@ public final class CurrentQuoteBuilder {
     return this;
   }
 
+  public CurrentQuoteBuilder withLast_update(Long last_update) {
+    this.last_update = last_update;
+    return this;
+  }
+
   public CurrentQuote build() {
-    return new CurrentQuote(price, deltas, market_cap, daily_volume);
+    return new CurrentQuote(price, deltas, market_cap, daily_volume, last_update);
   }
 }

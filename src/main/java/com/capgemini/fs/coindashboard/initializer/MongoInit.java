@@ -37,9 +37,5 @@ public class MongoInit implements InitializingBean {
     } else {
       log.info("Data not loaded from the APIHolder");
     }
-
-    log.info(getQueries.getAllCoins());
-
-    log.info(getQueries.getCoins(1, 0));
   }
 }
