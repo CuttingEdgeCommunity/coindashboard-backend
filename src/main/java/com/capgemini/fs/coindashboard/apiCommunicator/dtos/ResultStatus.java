@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.dtos.common;
+package com.capgemini.fs.coindashboard.apiCommunicator.dtos;
 
 public enum ResultStatus {
   SUCCESS,

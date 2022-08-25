@@ -1,7 +1,9 @@
 package com.capgemini.fs.coindashboard.apiCommunicator;
 
-import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
-import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.IApiCommunicatorFacade;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,50 +15,50 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApiHolder {
 
-  private final Map<ApiProviderEnum, ApiCommunicator> apiCommunicators;
+  private final Map<ApiProviderEnum, IApiCommunicatorFacade> apiCommunicators;
 
   @Autowired
-  public ApiHolder(Set<ApiCommunicator> apiCommunicatorSet) {
+  public ApiHolder(Set<IApiCommunicatorFacade> ApiCommunicatorFacadeSet) {
     // Strategies are sorted by apiProviderEnumOrder
     this.apiCommunicators = new TreeMap<>();
-    apiCommunicatorSet.forEach(
+    ApiCommunicatorFacadeSet.forEach(
         strategy -> this.apiCommunicators.put(strategy.getApiProvider(), strategy));
   }
 
-  public ApiCommunicator getApiCommunicator(ApiProviderEnum apiProviderEnum) {
+  public IApiCommunicatorFacade getApiCommunicator(ApiProviderEnum apiProviderEnum) {
 
     return this.apiCommunicators.get(apiProviderEnum);
   }
 
-  public CoinMarketDataResult getCoinMarketData(
-      String coinName) { // TODO: handle crypto names (ie. btc = bitcoin = 1 inCMC)
+  public Result getCoinMarketData(
+      List<String> coins, List<String> vsCurrencies) {
 
-    return this.apiCommunicators.entrySet().stream()
+    return this.apiCommunicators.values().stream()
         .map(
-            api ->
-                api.getValue()
-                    .getCurrentListing(
-                        new ArrayList<>(
-                            List.of(
-                                api.getKey() == ApiProviderEnum.COIN_GECKO ? "bitcoin" : coinName)),
-                        new ArrayList<>(List.of("usd"))))
+            iApiCommunicatorFacade -> iApiCommunicatorFacade
+                .getCurrentListing(coins, vsCurrencies))
         .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
         .findFirst()
         .orElse(null);
     //    return results;
   }
 
-  public CoinMarketDataResult getHistoricalCoinMarketData(String coinName, long timestamp) {
-    return this.apiCommunicators.entrySet().stream()
+  public Result getHistoricalCoinMarketData(List<String> coins, List<String> vsCurrencies, long timestampFrom, long timestampTo) {
+    return this.apiCommunicators.values().stream()
         .map(
-            api ->
-                api.getValue()
-                    .getHistoricalListing(
-                        new ArrayList<>(
-                            List.of(
-                                api.getKey() == ApiProviderEnum.COIN_GECKO ? "bitcoin" : coinName)),
-                        new ArrayList<>(List.of("usd")),
-                        timestamp))
+            iApiCommunicatorFacade -> iApiCommunicatorFacade
+                .getHistoricalListing(
+                    coins, vsCurrencies,
+                    timestampFrom, timestampTo))
+        .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
+        .findFirst()
+        .orElse(null);
+  }
+  public Result getTopCoins(int take, List<String> vsCurrencies) {
+    return this.apiCommunicators.values().stream()
+        .map(
+            iApiCommunicatorFacade -> iApiCommunicatorFacade
+                .getTopCoins(take, vsCurrencies))
         .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
         .findFirst()
         .orElse(null);
