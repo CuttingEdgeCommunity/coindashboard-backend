@@ -1,8 +1,5 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapClient;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapCommunicator;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapResponseParser;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.ApiClient;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

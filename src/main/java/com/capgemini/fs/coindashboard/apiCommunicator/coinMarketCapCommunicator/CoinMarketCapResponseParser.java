@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.TimeFormatter;
 import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;

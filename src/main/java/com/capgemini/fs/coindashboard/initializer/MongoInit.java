@@ -4,6 +4,7 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.CreateQueries;
 import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataResult;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
+@NoArgsConstructor
 // class for initialization of a mongoDB with historical data of coins
 public class MongoInit implements InitializingBean {
   @Autowired private CreateQueries createQueries;
@@ -37,9 +39,5 @@ public class MongoInit implements InitializingBean {
     } else {
       log.info("Data not loaded from the APIHolder");
     }
-
-    log.info(getQueries.getAllCoins());
-
-    log.info(getQueries.getCoins(1, 0));
   }
 }
