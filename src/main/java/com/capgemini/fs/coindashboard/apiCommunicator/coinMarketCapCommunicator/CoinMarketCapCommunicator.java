@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiCommunicator;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiProviderEnum;

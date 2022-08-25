@@ -3,7 +3,6 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.coinMarketCapCommunicator.CoinMarketCapResponseParser;
 import com.capgemini.fs.coindashboard.dtos.common.ResultStatus;
 import java.text.DecimalFormat;
 import java.text.ParseException;
