@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     scanBasePackages = {
       "com.capgemini.fs.coindashboard.controller",
       "com.capgemini.fs.coindashboard.database",
-      "com.capgemini.fs.coindashboard.initService",
+      "com.capgemini.fs.coindashboard.initializer",
       "com.capgemini.fs.coindashboard.CRUDService",
       "com.capgemini.fs.coindashboard.apiCommunicator",
       "com.capgemini.fs.coindashboard.updatingService",
