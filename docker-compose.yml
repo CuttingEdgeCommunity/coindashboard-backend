@@ -1,8 +1,19 @@
 version: "3.8"
 services:
+  mongo:
+    build: ./mongoDB
+    container_name: mongoDB
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodbdata:/data/db
   coindashboard-backend:
     build: .
     restart: always
     ports:
       - 8080:8080
+    depends_on:
+      - mongo
+volumes:
+  mongodbdata:
 

@@ -17,7 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
       "com.capgemini.fs.coindashboard.cacheService"
     })
 @EnableScheduling
-@OpenAPIDefinition(info = @Info(title = "API Documentation",version = "1.1",description = "Finally working"))
+@OpenAPIDefinition(
+    info = @Info(title = "API Documentation", version = "1.1", description = "Finally working"))
 public class CoinDashboardApplication {
 
   public static void main(String[] args) {
