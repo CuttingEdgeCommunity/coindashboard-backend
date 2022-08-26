@@ -1,11 +1,11 @@
 package com.capgemini.fs.coindashboard.CRUDService.queries;
 
-import com.capgemini.fs.coindashboard.dtos.marketData.CoinMarketDataDto;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import java.util.List;
 
 public interface CreateQueries {
 
-  boolean CreateCoinDocument(CoinMarketDataDto coinMarketDataDto);
+  boolean CreateCoinDocument(Coin coin);
 
-  boolean CreateCoinDocuments(List<CoinMarketDataDto> coinMarketDataDtos);
+  boolean CreateCoinDocuments(List<Coin> coins);
 }
