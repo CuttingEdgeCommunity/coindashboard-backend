@@ -19,23 +19,24 @@ public class DatabaseUpdater {
 
   @Async
   @Scheduled(fixedDelay = 3070)
-  public void singleCoinUpdate() {
-    if (this.enabled) {
-      var coinMarketData = this.apiHolder.getCoinMarketData("btc");
-      if (coinMarketData != null) {
-        this.updateQueries.UpdateCoinCurrentQuote(
-            "Bitcoin",
-            coinMarketData.getCoinMarketDataDTOS().get(0).getQuoteMap().get("usd"),
-            "usd");
-      }
-    }
+  public boolean singleCoinUpdate() {
+    if (!this.enabled) return false;
+
+    var coinMarketData = this.apiHolder.getCoinMarketData("btc");
+    if (coinMarketData == null) return false;
+
+    return this.updateQueries.updateCoinCurrentQuote(
+        "Bitcoin",
+        coinMarketData.getCoinMarketDataDTOS().get(0).getQuoteMap().get("usd"),
+        "usd");
+
   }
 
   @Async
   @Scheduled(cron = "* */5 * * * *")
-  public void chartUpdate() {
-    if (this.enabled) {
-      this.updateQueries.UpdateEveryCoinPriceChart();
-    }
+  public boolean chartUpdate() {
+    if (!this.enabled) return false;
+
+    return this.updateQueries.updateEveryCoinPriceChart();
   }
 }
