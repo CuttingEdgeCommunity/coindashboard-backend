@@ -40,10 +40,12 @@ public final class CoinBuilder {
     this.symbol = symbol;
     return this;
   }
+
   public CoinBuilder withMarketCapRank(Integer rank) {
     this.marketCapRank = rank;
     return this;
   }
+
   public CoinBuilder withImage_url(String image_url) {
     this.image_url = image_url;
     return this;

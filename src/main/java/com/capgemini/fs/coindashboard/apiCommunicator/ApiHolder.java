@@ -1,10 +1,10 @@
 package com.capgemini.fs.coindashboard.apiCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
-import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.IApiCommunicatorFacade;
-import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
-import java.util.ArrayList;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.IApiCommunicatorFacade;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,37 +30,31 @@ public class ApiHolder {
     return this.apiCommunicators.get(apiProviderEnum);
   }
 
+  private Result execute(ApiCommunicatorMethodEnum methodEnum, Object... args) {
+    return this.apiCommunicators.values().stream()
+        .map(iApiCommunicatorFacade -> iApiCommunicatorFacade.executeMethod(methodEnum, args))
+        .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
+        .findFirst()
+        .orElse(null);
+  }
+
   public Result getCoinMarketData(
-      List<String> coins, List<String> vsCurrencies) {
-
-    return this.apiCommunicators.values().stream()
-        .map(
-            iApiCommunicatorFacade -> iApiCommunicatorFacade
-                .getCurrentListing(coins, vsCurrencies))
-        .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
-        .findFirst()
-        .orElse(null);
-    //    return results;
+      List<String> coins, List<String> vsCurrencies, boolean include7dSparkline) {
+    return this.execute(
+        ApiCommunicatorMethodEnum.CURRENT_LISTING, coins, vsCurrencies, include7dSparkline);
   }
 
-  public Result getHistoricalCoinMarketData(List<String> coins, List<String> vsCurrencies, long timestampFrom, long timestampTo) {
-    return this.apiCommunicators.values().stream()
-        .map(
-            iApiCommunicatorFacade -> iApiCommunicatorFacade
-                .getHistoricalListing(
-                    coins, vsCurrencies,
-                    timestampFrom, timestampTo))
-        .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
-        .findFirst()
-        .orElse(null);
+  public Result getHistoricalCoinMarketData(
+      List<String> coins, List<String> vsCurrencies, long timestampFrom, long timestampTo) {
+    return this.execute(
+        ApiCommunicatorMethodEnum.HISTORICAL_LISTING,
+        coins,
+        vsCurrencies,
+        timestampFrom,
+        timestampTo);
   }
+
   public Result getTopCoins(int take, List<String> vsCurrencies) {
-    return this.apiCommunicators.values().stream()
-        .map(
-            iApiCommunicatorFacade -> iApiCommunicatorFacade
-                .getTopCoins(take, vsCurrencies))
-        .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
-        .findFirst()
-        .orElse(null);
+    return this.execute(ApiCommunicatorMethodEnum.TOP_COINS, take, vsCurrencies);
   }
 }

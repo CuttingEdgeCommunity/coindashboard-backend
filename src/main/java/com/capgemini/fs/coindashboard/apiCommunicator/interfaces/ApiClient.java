@@ -1,5 +1,8 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.utils;
+package com.capgemini.fs.coindashboard.apiCommunicator.interfaces;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.InputStreamParser;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class ApiClient {
+public abstract class ApiClient {
 
   public Response invokeGet(String uri) throws IOException {
     var connection = RequestBuilder.buildURLConnectionGET(uri);

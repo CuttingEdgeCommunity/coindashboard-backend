@@ -64,14 +64,13 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   }
 
   @Override
-  public boolean UpdateCoinCurrentQuote(String coinName, CurrentQuote newQuote, String vs_currency) {
+  public boolean UpdateCoinCurrentQuote(
+      String coinName, CurrentQuote newQuote, String vs_currency) {
     try {
       Query query = new Query();
       query.addCriteria(Criteria.where("name").is(coinName));
       Update update = new Update();
-      update.set(
-          "quotes." + vs_currency.toLowerCase() + ".currentQuote",
-          newQuote);
+      update.set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
         log.info("Update performed");

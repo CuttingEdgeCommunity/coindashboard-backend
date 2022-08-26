@@ -2,12 +2,12 @@ package com.capgemini.fs.coindashboard.updatingService;
 
 import com.capgemini.fs.coindashboard.CRUDService.queries.UpdateQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
+import java.util.List;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
 @Component
 @Setter
@@ -22,12 +22,10 @@ public class DatabaseUpdater {
   @Scheduled(fixedDelay = 3070)
   public void singleCoinUpdate() {
     if (this.enabled) {
-      var result = this.apiHolder.getCoinMarketData(List.of("btc"), List.of("usd"));
+      var result = this.apiHolder.getCoinMarketData(List.of("btc"), List.of("usd"), false);
       if (result != null) {
         this.updateQueries.UpdateCoinCurrentQuote(
-            "Bitcoin",
-            result.getCoins().get(0).getQuotes().get("usd").getCurrentQuote(),
-            "usd");
+            "Bitcoin", result.getCoins().get(0).getQuotes().get("usd").getCurrentQuote(), "usd");
       }
     }
   }
