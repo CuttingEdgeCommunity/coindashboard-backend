@@ -13,7 +13,7 @@ services:
     build: .
     restart: always
     ports:
-      - "8080:8080"
+      - 8080:8080
     environment:
       - COINDASHBOARD_RUNTIME_ENVIRONMENT=DOCKER
     depends_on:
@@ -37,3 +37,4 @@ services:
 
 volumes:
   mongodbdata:
+
