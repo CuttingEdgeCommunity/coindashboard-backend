@@ -66,7 +66,7 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   }
 
   @Override
-  public boolean UpdateCoinCurrentQuote(String coinName, QuoteDto newQuote, String vs_currency) {
+  public boolean updateCoinCurrentQuote(String coinName, QuoteDto newQuote, String vs_currency) {
     try {
       Query query = new Query();
       query.addCriteria(Criteria.where("name").is(coinName));
@@ -86,12 +86,12 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
   }
 
   @Override
-  public boolean UpdateCoinPriceChart(String coinName) {
+  public boolean updateCoinPriceChart(String coinName) {
     return false;
   }
 
   @Override
-  public boolean UpdateEveryCoinPriceChart() {
+  public boolean updateEveryCoinPriceChart() {
     return false;
   }
 
