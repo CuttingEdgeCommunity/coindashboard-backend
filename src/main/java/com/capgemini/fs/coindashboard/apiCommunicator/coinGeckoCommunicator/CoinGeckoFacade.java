@@ -1,10 +1,11 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
-import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorFacadeTemplate;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.facade.ApiCommunicatorFacadeTemplate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,22 +31,19 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
   }
 
   @Override
-  public void init() {}
-
-  @Override
-  public Result getTopCoins(Integer take, List<String> vsCurrencies) {
-    return null;
+  public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies) {
+    return Optional.empty();
   }
 
   @Override
-  public Result getCurrentListing(
+  public Optional<Result> getCurrentListing(
       List<String> coins, List<String> vsCurrencies, boolean include7dSparkline) {
-    return null;
+    return Optional.empty();
   }
 
   @Override
-  public Result getHistoricalListing(
+  public Optional<Result> getHistoricalListing(
       List<String> coins, List<String> vsCurrencies, Long timestampFrom, Long timestampTo) {
-    return null;
+    return Optional.empty();
   }
 }

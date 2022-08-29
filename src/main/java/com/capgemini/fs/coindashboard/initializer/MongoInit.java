@@ -23,20 +23,19 @@ public class MongoInit implements InitializingBean {
     log.info("Starting initialization...");
     Result coinMarketDataResult;
     try {
-      coinMarketDataResult = apiHolder.getCoinMarketData(List.of("btc"), List.of("usd"), false);
+      coinMarketDataResult =
+          apiHolder.getCurrentListing(List.of("btc"), List.of("usd"), false).orElse(null);
     } catch (Exception e) {
       log.error(e.getMessage());
       return;
     }
-    if (coinMarketDataResult != null) {
-      try {
+    try {
+      if (coinMarketDataResult != null) {
         createQueries.CreateCoinDocument(coinMarketDataResult.getCoins().get(0));
-        log.info("Successfully added initial btc data");
-      } catch (Exception e) {
-        log.error(e.getMessage());
       }
-    } else {
-      log.info("Data not loaded from the APIHolder");
+      log.info("Successfully added initial btc data");
+    } catch (Exception e) {
+      log.error(e.getMessage());
     }
   }
 }

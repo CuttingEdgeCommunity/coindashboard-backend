@@ -22,11 +22,13 @@ public class DatabaseUpdater {
   @Scheduled(fixedDelay = 3070)
   public void singleCoinUpdate() {
     if (this.enabled) {
-      var result = this.apiHolder.getCoinMarketData(List.of("btc"), List.of("usd"), false);
-      if (result != null) {
-        this.updateQueries.UpdateCoinCurrentQuote(
-            "Bitcoin", result.getCoins().get(0).getQuotes().get("usd").getCurrentQuote(), "usd");
-      }
+      var result = this.apiHolder.getCurrentListing(List.of("btc"), List.of("usd"), false);
+      result.ifPresent(
+          value ->
+              this.updateQueries.UpdateCoinCurrentQuote(
+                  "Bitcoin",
+                  value.getCoins().get(0).getQuotes().get("usd").getCurrentQuote(),
+                  "usd"));
     }
   }
 
