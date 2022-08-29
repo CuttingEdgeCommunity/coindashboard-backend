@@ -56,14 +56,21 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
   @Override
   public Optional<Result> getCurrentListing(
       List<String> coins, List<String> vsCurrencies, boolean include7dSparkline) {
-    List<String> translated =
-        this.coinTranslator.translate(coins, ApiCommunicatorMethodEnum.CURRENT_LISTING);
-    // translate symbols to whatever we need
-    // use client to communicate with api
-    // use resultbuilderdirector to build the result
-    // return result
-
-    return Optional.empty();
+    try {
+      Response response =
+          ((CoinMarketCapApiClient) this.apiClient)
+              .getCurrentListing(coins, vsCurrencies, include7dSparkline);
+      this.resultBuilderDirector.constructCoinMarketDataResult(
+          this.resultBuilders.get(ApiCommunicatorMethodEnum.CURRENT_LISTING),
+          response,
+          coins,
+          vsCurrencies,
+          include7dSparkline);
+      return Optional.of(
+          this.resultBuilders.get(ApiCommunicatorMethodEnum.CURRENT_LISTING).getResult());
+    } catch (Exception e) {
+      return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));
+    }
   }
 
   @Override

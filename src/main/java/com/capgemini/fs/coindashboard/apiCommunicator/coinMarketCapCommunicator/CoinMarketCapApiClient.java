@@ -36,4 +36,15 @@ final class CoinMarketCapApiClient extends ApiClient {
         RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/listings/latest", queryParams);
     return this.invokeGet(requestUrl, this.headers);
   }
+
+  public Response getCurrentListing(
+      List<String> coins, List<String> vsCurrencies, boolean include7dSparkline)
+      throws IOException {
+    Map<String, String> queryParams = new LinkedHashMap<>();
+    queryParams.put("symbol", String.join(",", coins));
+    queryParams.put("convert", String.join(",", vsCurrencies));
+    String requestUrl =
+        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest", queryParams);
+    return this.invokeGet(requestUrl, this.headers);
+  }
 }
