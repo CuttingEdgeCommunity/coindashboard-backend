@@ -35,7 +35,7 @@ public class ApiHolder implements IApiMethods {
   private Optional<Result> execute(ApiCommunicatorMethodEnum methodEnum, Object... args) {
     return this.apiCommunicators.values().stream()
         .map(iApiCommunicatorFacade -> iApiCommunicatorFacade.executeMethod(methodEnum, args))
-        .filter(result -> result.getStatus().equals(ResultStatus.SUCCESS))
+        .filter(result -> result != null && result.getStatus().equals(ResultStatus.SUCCESS))
         .findFirst();
   }
 

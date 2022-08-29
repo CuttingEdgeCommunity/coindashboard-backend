@@ -23,6 +23,10 @@ public abstract class ResultBuilder {
   protected ApiProviderEnum provider;
   protected ApiCommunicatorMethodEnum method;
 
+  protected double calculateNominalDelta(double current, double deltaPct) {
+    return current - (current / (1 + deltaPct / 100));
+  }
+
   protected abstract List<Coin> buildCoinList(JsonNode data);
 
   protected abstract Coin buildSingleCoin(String coinName, JsonNode data);

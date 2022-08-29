@@ -40,6 +40,6 @@ public final class CurrentQuoteBuilder {
   }
 
   public CurrentQuote build() {
-    return new CurrentQuote(price, deltas, market_cap, daily_volume);
+    return new CurrentQuote(price, deltas, market_cap, daily_volume, 0L);
   }
 }

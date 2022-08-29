@@ -5,7 +5,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.IApiMethods;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.IResultBuilder;
-import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.ResultBuilder;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.ResultBuilderDirector;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.CoinTranslator;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ public abstract class ApiCommunicatorFacadeTemplate implements IApiCommunicatorF
   protected CoinTranslator coinTranslator;
   protected Map<ApiCommunicatorMethodEnum, IResultBuilder> resultBuilders;
   protected ApiClient apiClient;
-  @Autowired protected ResultBuilder resultBuilder;
+  @Autowired protected ResultBuilderDirector resultBuilderDirector;
 
   public Result executeMethod(ApiCommunicatorMethodEnum method, Object... args) {
     var result =

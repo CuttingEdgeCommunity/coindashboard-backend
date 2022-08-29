@@ -8,14 +8,20 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Link;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.TimeFormatter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
-public class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapBuilderBaseClass {
+@Component
+class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapBuilderBaseClass {
 
   private final ApiCommunicatorMethodEnum method = ApiCommunicatorMethodEnum.TOP_COINS;
 
@@ -27,11 +33,10 @@ public class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapBuilderBase
   @Override
   protected List<Coin> buildCoinList(JsonNode data) {
     ArrayList<Coin> result = new ArrayList<>();
-    ObjectMapper mapper = new ObjectMapper();
-    Map<String, JsonNode> responseBodyConverted =
-        mapper.convertValue(data, new TypeReference<>() {});
-    for (Map.Entry<String, JsonNode> coin : responseBodyConverted.entrySet()) {
-      result.add(this.buildSingleCoin(coin.getKey(), coin.getValue()));
+    ObjectMapper objMapper = new ObjectMapper();
+    List<JsonNode> responseBodyConverted = objMapper.convertValue(data, new TypeReference<>() {});
+    for (JsonNode coin : responseBodyConverted) {
+      result.add(this.buildSingleCoin(coin.get(this.mapper.NAME).asText(), coin));
     }
     return result;
   }
@@ -40,7 +45,7 @@ public class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapBuilderBase
   protected Coin buildSingleCoin(String coinName, JsonNode data) {
     Coin result = new Coin();
     result.setName(data.get(this.mapper.NAME).asText());
-    result.setSymbol(data.get(this.mapper.SYMBOL).asText());
+    result.setSymbol(data.get(this.mapper.SYMBOL).asText().toLowerCase());
     result.setMarketCapRank(data.get(this.mapper.MARKET_CAP_RANK).asInt());
     result.setQuotes(this.buildQuoteMap(data.get(this.mapper.QUOTE)));
     return result;
@@ -48,17 +53,42 @@ public class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapBuilderBase
 
   @Override
   protected Map<String, Quote> buildQuoteMap(JsonNode data) {
-    return null;
+    Map<String, Quote> result = new HashMap<>();
+
+    ObjectMapper objMapper = new ObjectMapper();
+    Map<String, ObjectNode> quotesConverted =
+        objMapper.convertValue(data, new TypeReference<>() {});
+
+    for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
+      quote.getValue().put(this.mapper.INSERTED_QUOTE_NAME, quote.getKey());
+      result.put(quote.getKey().toLowerCase(), this.buildSingleQuote(quote.getValue()));
+    }
+    return result;
   }
 
   @Override
   protected Quote buildSingleQuote(JsonNode data) {
-    return null;
+    Quote result = new Quote();
+    result.setVs_currency(data.get(this.mapper.INSERTED_QUOTE_NAME).asText());
+    result.setCurrentQuote(this.buildCurrentQuote(data));
+    result.setChart(this.buildPriceList(data));
+    return result;
   }
 
   @Override
   protected CurrentQuote buildCurrentQuote(JsonNode data) {
-    return null;
+    CurrentQuote result = new CurrentQuote();
+    result.setMarket_cap(data.get(this.mapper.MARKET_CAP).asDouble());
+    result.setDeltas(this.buildDeltaList(data));
+    result.setDaily_volume(data.get(this.mapper.DAILY_VOLUME).asDouble());
+    result.setPrice(data.get(this.mapper.CURRENT_PRICE).asDouble());
+    try {
+      result.setLast_update_timestamp(
+          TimeFormatter.convertStringToTimestamp(data.get(this.mapper.LAST_UPDATE_DATE).asText())
+              .getTime());
+    } catch (ParseException ignored) {
+    }
+    return result;
   }
 
   @Override
@@ -68,7 +98,12 @@ public class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapBuilderBase
 
   @Override
   protected List<Delta> buildDeltaList(JsonNode data) {
-    return null;
+    var result = new ArrayList<Delta>();
+    for (IntervalEnum intervalEnum :
+        List.of(IntervalEnum.ONE_HOUR, IntervalEnum.ONE_DAY, IntervalEnum.SEVEN_DAY)) {
+      result.add(this.buildSingleDelta(data, intervalEnum));
+    }
+    return result;
   }
 
   @Override
@@ -78,7 +113,13 @@ public class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapBuilderBase
 
   @Override
   protected Delta buildSingleDelta(JsonNode data, IntervalEnum delta) {
-    return null;
+    Delta result = new Delta();
+    result.setInterval(delta.name());
+    double deltaPct = (data.get(this.mapper.DELTA_MAP.get(delta)).asDouble());
+    result.setPct(deltaPct);
+    result.setNominal(
+        this.calculateNominalDelta(data.get(this.mapper.CURRENT_PRICE).asDouble(), deltaPct));
+    return result;
   }
 
   @Override

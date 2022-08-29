@@ -10,8 +10,10 @@ import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.databind.JsonNode;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
-abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder implements IResultBuilder {
+public abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder
+    implements IResultBuilder {
   @Autowired protected CoinMarketCapFieldNameMapper mapper;
   protected String errorMessage;
 
@@ -51,10 +53,17 @@ abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder implements IR
   @Override
   public void setResultStatus() {
     if (this.errorMessage != null) this.result.setStatus(ResultStatus.FAILURE);
-    String statusError = this.parseStatus(this.response.getResponseBody().get(this.mapper.STATUS));
-    if (statusError != null) {
+    if (response.getResponseCode() != HttpStatus.OK.value()) {
       this.result.setStatus(ResultStatus.FAILURE);
-      this.errorMessage = statusError;
+      this.errorMessage =
+          response.getResponseBody().get(this.mapper.STATUS_NOT_OK_ERROR_MESSAGE).asText();
+    } else {
+      String statusError =
+          this.parseStatus(this.response.getResponseBody().get(this.mapper.STATUS));
+      if (statusError != null) {
+        this.result.setStatus(ResultStatus.FAILURE);
+        this.errorMessage = statusError;
+      } else this.result.setStatus(ResultStatus.SUCCESS);
     }
   }
 
