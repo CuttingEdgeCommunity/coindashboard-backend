@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -47,7 +48,7 @@ public class GetQueriesImplementation implements GetQueries {
   @Override
   public String getCoins(int take, int page) {
     MatchOperation matchStage =
-        Aggregation.match(new Criteria("market_cap_rank").gt(take * page).lte(take * (page + 1)));
+        Aggregation.match(new Criteria("marketCapRank").gt(take * page).lte(take * (page + 1)));
     ProjectionOperation projectStage =
         Aggregation.project("name", "symbol", "image_url", "currentQuote")
             .and("quotes.usd.currentQuote")
@@ -63,5 +64,12 @@ public class GetQueriesImplementation implements GetQueries {
     }
     log.info("passing coinMarketData from DB");
     return gson.toJson(result);
+  }
+
+  @Override
+  public boolean isCoinInDBByName(String name) {
+    Query query = new Query();
+    query.addCriteria(Criteria.where("name").is(name));
+    return mongoTemplate.exists(query, Coin.class);
   }
 }
