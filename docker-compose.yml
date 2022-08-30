@@ -16,6 +16,18 @@ services:
       - COINDASHBOARD_RUNTIME_ENVIRONMENT=DOCKER
     depends_on:
       - mongo
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger_ui_container
+    ports:
+      - "8000:8080"
+    volumes:
+      - ./src/main/java/com/capgemini/fs/coindashboard/APISettings:./src/main/java/com/capgemini/fs/coindashboard/APISettings/openapi.yaml
+    environment:
+      API_URL: ./src/main/java/com/capgemini/fs/coindashboard/APISettings/openapi.yaml
+      URLS: "[{ url: \"/openapi.yaml\", name: \"UserManagement\" },
+                      { url: \"/checkapi.yaml\", name: \"CheckServer\" },
+                  ]"
+
 volumes:
   mongodbdata:
-
