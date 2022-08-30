@@ -3,6 +3,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.CoinTranslator;
 import java.util.List;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,6 +14,9 @@ final class CoinGeckoTranslator extends CoinTranslator {
 
   @Override
   public List<String> translate(List<String> symbols, ApiCommunicatorMethodEnum method) {
-    return null;
+    return switch (method) {
+      case CURRENT_LISTING, HISTORICAL_LISTING -> this.translate(symbols, TranslationEnum.ID);
+      default -> throw new IllegalStateException("Unexpected value: " + method);
+    };
   }
 }
