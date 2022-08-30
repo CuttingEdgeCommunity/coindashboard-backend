@@ -4,7 +4,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import java.util.List;
 import java.util.Optional;
 
-public interface IApiMethods { // TODO: think about this
+public interface IApiMethods {
   Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies);
 
   Optional<Result> getCurrentListing(
@@ -12,4 +12,6 @@ public interface IApiMethods { // TODO: think about this
 
   Optional<Result> getHistoricalListing(
       List<String> coins, List<String> vsCurrencies, Long timestampFrom, Long timestampTo);
+
+  Optional<Result> getCoinInfo(List<String> coins);
 }

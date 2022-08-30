@@ -27,22 +27,6 @@ class CoinMarketCapHistoricalListingResultBuilder extends CoinMarketCapMarketDat
   }
 
   @Override
-  protected List<Coin> buildCoinList(JsonNode data) {
-    ArrayList<Coin> result = new ArrayList<>();
-    ObjectMapper objMapper = new ObjectMapper();
-    Map<String, ObjectNode> responseBodyConverted =
-        objMapper.convertValue(data, new TypeReference<>() {});
-    for (Map.Entry<String, ObjectNode> coin : responseBodyConverted.entrySet()) {
-      if (coin.getValue().size() == 0) {
-        continue;
-      }
-      result.add(
-          this.buildSingleCoin(coin.getValue().get(this.mapper.NAME).asText(), coin.getValue()));
-    }
-    return result;
-  }
-
-  @Override
   protected Coin buildSingleCoin(String coinName, JsonNode data) {
     Coin result = super.buildSingleCoin(coinName, data);
     result.setQuotes(this.buildQuoteMap(data.get(this.mapper.QUOTES)));

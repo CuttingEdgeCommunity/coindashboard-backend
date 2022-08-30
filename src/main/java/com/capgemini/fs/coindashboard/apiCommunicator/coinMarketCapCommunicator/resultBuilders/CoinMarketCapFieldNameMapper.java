@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 final class CoinMarketCapFieldNameMapper extends FieldNameMapper {
+
+  public final String PLATFORM = "platform";
   public final String ERROR_CODE = "error_code";
   public final String ERROR_MESSAGE = "error_message";
   public final String NOT_FOUND_MESSAGE = "message";
@@ -24,6 +26,11 @@ final class CoinMarketCapFieldNameMapper extends FieldNameMapper {
   public final String PRICE = "price";
   public final String LAST_UPDATE_DATE = "last_updated";
   public final String TIMESTAMP = "timestamp";
+  public final String DESCRIPTION = "description";
+  public final String GENESIS_DATE = "date_added";
+  public final String IMAGE_URL = "logo";
+  public final String TOKEN_ADDRESS = "token_address";
+  public final String LINKS = "urls";
 
   public final Map<IntervalEnum, String> DELTA_MAP =
       Map.of(

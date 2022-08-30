@@ -46,4 +46,9 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
       List<String> coins, List<String> vsCurrencies, Long timestampFrom, Long timestampTo) {
     return Optional.empty();
   }
+
+  @Override
+  public Optional<Result> getCoinInfo(List<String> coins) {
+    return Optional.empty();
+  }
 }

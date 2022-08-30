@@ -7,7 +7,6 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Link;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.TimeFormatter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,20 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 abstract class CoinMarketCapMarketDataBuilderBaseClass extends CoinMarketCapBuilderBaseClass {
-  @Override
-  protected List<Coin> buildCoinList(JsonNode data) {
-    ArrayList<Coin> result = new ArrayList<>();
-    ObjectMapper objMapper = new ObjectMapper();
-    List<JsonNode> responseBodyConverted = objMapper.convertValue(data, new TypeReference<>() {});
-    for (JsonNode coin : responseBodyConverted) {
-      result.add(this.buildSingleCoin(coin.get(this.mapper.NAME).asText(), coin));
-    }
-    return result;
-  }
 
   @Override
   protected Coin buildSingleCoin(String coinName, JsonNode data) {
@@ -110,25 +97,6 @@ abstract class CoinMarketCapMarketDataBuilderBaseClass extends CoinMarketCapBuil
     result.setNominal(
         this.calculateNominalDelta(data.get(this.mapper.CURRENT_PRICE).asDouble(), deltaPct));
     return result;
-  }
-
-  @Override
-  public void setResultStatus() {
-    super.setResultStatus();
-    if (this.result.getStatus() == ResultStatus.SUCCESS
-        && this.result.getCoins() != null
-        && ((List<?>) this.requestArgs[0]).size() > this.result.getCoins().size()) {
-      this.result.setStatus(ResultStatus.PARTIAL_SUCCESS);
-      String differences =
-          ((List<String>) this.requestArgs[0])
-              .stream()
-                  .filter(
-                      element ->
-                          this.result.getCoins().stream()
-                              .noneMatch(c -> Objects.equals(c.getSymbol(), element)))
-                  .collect(Collectors.joining(","));
-      this.errorMessage = "coins not found: " + differences;
-    }
   }
 
   @Override

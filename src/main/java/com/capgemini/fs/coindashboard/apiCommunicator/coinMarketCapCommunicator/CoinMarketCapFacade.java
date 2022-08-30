@@ -93,4 +93,16 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
       return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));
     }
   }
+
+  @Override
+  public Optional<Result> getCoinInfo(List<String> coins) {
+    try {
+      Response response = ((CoinMarketCapApiClient) this.apiClient).getCoinInfo(coins);
+      this.resultBuilderDirector.constructCoinMarketDataResult(
+          this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO), response, coins);
+      return Optional.of(this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO).getResult());
+    } catch (Exception e) {
+      return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));
+    }
+  }
 }

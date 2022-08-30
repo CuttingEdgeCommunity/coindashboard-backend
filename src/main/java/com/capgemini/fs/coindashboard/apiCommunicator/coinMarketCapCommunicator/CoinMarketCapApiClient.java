@@ -62,4 +62,12 @@ final class CoinMarketCapApiClient extends ApiClient {
         RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/historical", queryParams);
     return this.invokeGet(requestUrl, this.headers);
   }
+
+  public Response getCoinInfo(List<String> coins) throws IOException {
+    Map<String, String> queryParams = new LinkedHashMap<>();
+    queryParams.put("symbol", String.join(",", coins));
+    String requestUrl =
+        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/info", queryParams);
+    return this.invokeGet(requestUrl, this.headers);
+  }
 }

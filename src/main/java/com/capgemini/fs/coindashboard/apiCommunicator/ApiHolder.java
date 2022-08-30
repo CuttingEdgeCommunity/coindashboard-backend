@@ -60,4 +60,9 @@ public class ApiHolder implements IApiMethods {
   public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies) {
     return this.execute(ApiCommunicatorMethodEnum.TOP_COINS, take, page, vsCurrencies);
   }
+
+  @Override
+  public Optional<Result> getCoinInfo(List<String> coins) {
+    return this.execute(ApiCommunicatorMethodEnum.COIN_INFO, coins);
+  }
 }

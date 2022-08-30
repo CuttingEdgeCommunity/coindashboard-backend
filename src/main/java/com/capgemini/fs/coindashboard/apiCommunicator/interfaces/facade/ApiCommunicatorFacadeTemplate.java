@@ -25,6 +25,7 @@ public abstract class ApiCommunicatorFacadeTemplate implements IApiCommunicatorF
               (List<String>) args[0], (List<String>) args[1], (boolean) args[2]);
           case HISTORICAL_LISTING -> this.getHistoricalListing(
               (List<String>) args[0], (List<String>) args[1], (long) args[2], (long) args[3]);
+          case COIN_INFO -> this.getCoinInfo((List<String>) args[0]);
         };
     return result.orElse(null);
   }
