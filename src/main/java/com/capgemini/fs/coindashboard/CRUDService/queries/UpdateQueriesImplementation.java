@@ -17,11 +17,10 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   @Autowired MongoTemplate mongoTemplate;
 
   @Override
-  public boolean UpdateCoinCurrentQuote(
-      String coinName, CurrentQuote newQuote, String vs_currency) {
+  public boolean UpdateCoinCurrentQuote(String symbol, CurrentQuote newQuote, String vs_currency) {
     try {
       Query query = new Query();
-      query.addCriteria(Criteria.where("name").is(coinName));
+      query.addCriteria(Criteria.where("symbol").is(symbol));
       Update update = new Update();
       update.set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
@@ -36,18 +35,18 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   }
 
   @Override
-  public boolean UpdateCoinPriceChart(String coinName) {
+  public boolean UpdateCoinPriceChart(String symbol) {
 
     return false;
   }
 
   @Override
-  public boolean UpdateCoinMarketRankCap(String coinName, Integer marketCapRank) {
+  public boolean UpdateCoinMarketRankCap(String symbol, Integer marketCapRank) {
     try {
       Query query = new Query();
-      query.addCriteria(Criteria.where("name").is(coinName));
+      query.addCriteria(Criteria.where("symbol").is(symbol));
       Update update = new Update();
-      update.set("market_cap_rank", marketCapRank);
+      update.set("marketCapRank", marketCapRank);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
         log.info("Update performed");

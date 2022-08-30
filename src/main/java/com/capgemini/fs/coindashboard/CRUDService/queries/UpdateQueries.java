@@ -4,11 +4,11 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Curre
 
 public interface UpdateQueries {
 
-  boolean UpdateCoinCurrentQuote(String coinName, CurrentQuote newQuote, String vs_currency);
+  boolean UpdateCoinCurrentQuote(String symbol, CurrentQuote newQuote, String vs_currency);
 
-  boolean UpdateCoinPriceChart(String coinName);
+  boolean UpdateCoinPriceChart(String symbol);
 
-  boolean UpdateCoinMarketRankCap(String coinName, Integer marketCapRank);
+  boolean UpdateCoinMarketRankCap(String symbol, Integer marketCapRank);
 
   boolean UpdateEveryCoinPriceChart();
 }

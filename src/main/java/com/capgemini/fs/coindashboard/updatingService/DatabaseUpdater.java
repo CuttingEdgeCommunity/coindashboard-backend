@@ -28,12 +28,22 @@ public class DatabaseUpdater {
 
   @Async
   private void singleCoinUpdate(Coin coin, String vs_currency) {
-    if (!getQueries.isCoinInDBByName(coin.getName())) {
+    if (!getQueries.isCoinInDBBySymbol(coin.getSymbol())) {
+      List<String> symbols = new ArrayList<>();
+      symbols.add(coin.getSymbol());
+      var result = this.apiHolder.getCoinInfo(symbols);
+      Coin coinWithDetails = result.orElseThrow().getCoins().get(0);
+      coin.setContract_address(coinWithDetails.getContract_address());
+      coin.setDescription(coinWithDetails.getDescription());
+      coin.setGenesis_date(coinWithDetails.getGenesis_date());
+      coin.setImage_url(coinWithDetails.getImage_url());
+      coin.setIs_token(coinWithDetails.getIs_token());
+      coin.setLinks(coinWithDetails.getLinks());
       createQueries.CreateCoinDocument(coin);
       log.info("new coin on the list");
     } else {
       updateQueries.UpdateCoinCurrentQuote(
-          coin.getName(), coin.getQuotes().get(vs_currency).getCurrentQuote(), vs_currency);
+          coin.getSymbol(), coin.getQuotes().get(vs_currency).getCurrentQuote(), vs_currency);
     }
   }
 
