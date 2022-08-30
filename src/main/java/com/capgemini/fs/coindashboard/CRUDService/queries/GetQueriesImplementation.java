@@ -1,9 +1,7 @@
 package com.capgemini.fs.coindashboard.CRUDService.queries;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
-import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
 import com.google.gson.Gson;
-import com.mongodb.client.result.UpdateResult;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +10,11 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class Queries implements UpdateQueries, GetQueries, CreateQueries {
+public class GetQueriesImplementation implements GetQueries {
   private static final Gson gson = new Gson();
   @Autowired private MongoTemplate mongoTemplate;
 
@@ -50,56 +46,22 @@ public class Queries implements UpdateQueries, GetQueries, CreateQueries {
 
   @Override
   public String getCoins(int take, int page) {
-    MatchOperation matchStage = Aggregation.match(new Criteria("name").is("Bitcoin"));
+    MatchOperation matchStage =
+        Aggregation.match(new Criteria("market_cap_rank").gt(take * page).lte(take * (page + 1)));
     ProjectionOperation projectStage =
-        Aggregation.project("name", "symbol", "currentQuote")
+        Aggregation.project("name", "symbol", "image_url", "currentQuote")
             .and("quotes.usd.currentQuote")
             .as("CurrentQuote")
             .andExclude("_id");
     Aggregation aggregation =
-        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(1));
-
-    return gson.toJson(
-        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults());
-  }
-
-  @Override
-  public boolean UpdateCoinCurrentQuote(
-      String coinName, CurrentQuote newQuote, String vs_currency) {
-    try {
-      Query query = new Query();
-      query.addCriteria(Criteria.where("name").is(coinName));
-      Update update = new Update();
-      update.set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote);
-      UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
-      if (updateResult.wasAcknowledged()) {
-        log.info("Update performed");
-        return true;
-      }
-    } catch (Exception e) {
-      log.error(e.getMessage());
+        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(take));
+    List<Object> result =
+        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults();
+    if (result.isEmpty()) {
+      log.error("coin matching criteria does not exist");
+      return null;
     }
-    return false;
-  }
-
-  @Override
-  public boolean UpdateCoinPriceChart(String coinName) {
-    return false;
-  }
-
-  @Override
-  public boolean UpdateEveryCoinPriceChart() {
-    return false;
-  }
-
-  @Override
-  public boolean CreateCoinDocument(Coin coin) {
-    try {
-      mongoTemplate.save(coin);
-      return true;
-    } catch (Exception e) {
-      log.error(e.getMessage());
-    }
-    return false;
+    log.info("passing coinMarketData from DB");
+    return gson.toJson(result);
   }
 }

@@ -8,5 +8,7 @@ public interface UpdateQueries {
 
   boolean UpdateCoinPriceChart(String coinName);
 
+  boolean UpdateCoinMarketRankCap(String coinName, Integer marketCapRank);
+
   boolean UpdateEveryCoinPriceChart();
 }
