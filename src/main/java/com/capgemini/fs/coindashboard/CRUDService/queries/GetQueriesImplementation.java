@@ -26,8 +26,8 @@ public class GetQueriesImplementation implements GetQueries {
 
   @Override
   public String getCoinMarketData(
-      String name, String vs_currency) { // TODO: check if vs_currency exists in the data base
-    MatchOperation matchStage = Aggregation.match(new Criteria("name").is(name));
+      String symbol, String vs_currency) { // TODO: check if vs_currency exists in the data base
+    MatchOperation matchStage = Aggregation.match(new Criteria("symbol").is(symbol));
     ProjectionOperation projectStage =
         Aggregation.project("name", "symbol", "currentQuote")
             .and("quotes." + vs_currency + ".currentQuote")
@@ -38,7 +38,7 @@ public class GetQueriesImplementation implements GetQueries {
     List<Object> result =
         mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults();
     if (result.isEmpty()) {
-      log.error("coin" + name + " does not exist");
+      log.error("coin" + symbol + " does not exist");
       return null;
     }
     log.info("passing coinMarketData from DB");
@@ -67,9 +67,9 @@ public class GetQueriesImplementation implements GetQueries {
   }
 
   @Override
-  public boolean isCoinInDBByName(String name) {
+  public boolean isCoinInDBBySymbol(String symbol) {
     Query query = new Query();
-    query.addCriteria(Criteria.where("name").is(name));
+    query.addCriteria(Criteria.where("symbol").is(symbol));
     return mongoTemplate.exists(query, Coin.class);
   }
 }

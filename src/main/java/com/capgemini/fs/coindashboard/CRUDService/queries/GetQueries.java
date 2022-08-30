@@ -8,5 +8,5 @@ public interface GetQueries {
 
   String getCoins(int take, int page);
 
-  boolean isCoinInDBByName(String name);
+  boolean isCoinInDBBySymbol(String name);
 }
