@@ -12,6 +12,7 @@ public final class CoinBuilder {
 
   private String id;
   private String name;
+  private Integer market_cap_rank;
   private String symbol;
   private Integer marketCapRank;
   private String image_url;
@@ -33,6 +34,11 @@ public final class CoinBuilder {
 
   public CoinBuilder withName(String name) {
     this.name = name;
+    return this;
+  }
+
+  public CoinBuilder withMarket_cap_rank(Integer market_cap_rank) {
+    this.market_cap_rank = market_cap_rank;
     return this;
   }
 
@@ -85,6 +91,7 @@ public final class CoinBuilder {
     return new Coin(
         id,
         name,
+        market_cap_rank,
         symbol,
         marketCapRank,
         image_url,

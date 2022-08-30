@@ -7,4 +7,6 @@ public interface GetQueries {
   String getCoinMarketData(String name, String vs_currency);
 
   String getCoins(int take, int page);
+
+  boolean isCoinInDBBySymbol(String name);
 }
