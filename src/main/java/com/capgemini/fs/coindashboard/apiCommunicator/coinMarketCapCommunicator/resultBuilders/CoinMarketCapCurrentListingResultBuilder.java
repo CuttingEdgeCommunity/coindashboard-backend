@@ -1,7 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.resultBuilders;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
-import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,8 +9,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +18,14 @@ class CoinMarketCapCurrentListingResultBuilder extends CoinMarketCapMarketDataBu
   @Override
   public ApiCommunicatorMethodEnum getMethod() {
     return this.method;
+  }
+
+  @Override
+  protected Coin buildSingleCoin(String coinName, JsonNode data) {
+    Coin result = super.buildSingleCoin(coinName, data);
+    result.setMarketCapRank(data.get(this.mapper.MARKET_CAP_RANK).asInt());
+    result.setQuotes(this.buildQuoteMap(data.get(this.mapper.QUOTE)));
+    return result;
   }
 
   @Override
@@ -37,24 +42,5 @@ class CoinMarketCapCurrentListingResultBuilder extends CoinMarketCapMarketDataBu
           this.buildSingleCoin(coin.getValue().get(this.mapper.NAME).asText(), coin.getValue()));
     }
     return result;
-  }
-
-  @Override
-  public void setResultStatus() {
-    super.setResultStatus();
-    if (this.result.getStatus() == ResultStatus.SUCCESS
-        && this.result.getCoins() != null
-        && ((List<?>) this.requestArgs[0]).size() > this.result.getCoins().size()) {
-      this.result.setStatus(ResultStatus.PARTIAL_SUCCESS);
-      String differences =
-          ((List<String>) this.requestArgs[0])
-              .stream()
-                  .filter(
-                      element ->
-                          this.result.getCoins().stream()
-                              .noneMatch(c -> Objects.equals(c.getSymbol(), element)))
-                  .collect(Collectors.joining(","));
-      this.errorMessage = "coins not found: " + differences;
-    }
   }
 }

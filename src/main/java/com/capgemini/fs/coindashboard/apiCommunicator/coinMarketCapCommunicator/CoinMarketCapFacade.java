@@ -76,6 +76,21 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
   @Override
   public Optional<Result> getHistoricalListing(
       List<String> coins, List<String> vsCurrencies, Long timestampFrom, Long timestampTo) {
-    return Optional.empty();
+    try {
+      Response response =
+          ((CoinMarketCapApiClient) this.apiClient)
+              .getHistoricalListing(coins, vsCurrencies, timestampFrom, timestampTo);
+      this.resultBuilderDirector.constructCoinMarketDataResult(
+          this.resultBuilders.get(ApiCommunicatorMethodEnum.HISTORICAL_LISTING),
+          response,
+          coins,
+          vsCurrencies,
+          timestampFrom,
+          timestampTo);
+      return Optional.of(
+          this.resultBuilders.get(ApiCommunicatorMethodEnum.HISTORICAL_LISTING).getResult());
+    } catch (Exception e) {
+      return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));
+    }
   }
 }

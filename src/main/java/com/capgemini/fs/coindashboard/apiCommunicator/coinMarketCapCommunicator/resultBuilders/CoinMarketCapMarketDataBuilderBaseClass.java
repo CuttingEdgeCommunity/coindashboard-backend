@@ -7,6 +7,7 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Link;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.TimeFormatter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 abstract class CoinMarketCapMarketDataBuilderBaseClass extends CoinMarketCapBuilderBaseClass {
   @Override
@@ -35,8 +38,6 @@ abstract class CoinMarketCapMarketDataBuilderBaseClass extends CoinMarketCapBuil
     Coin result = new Coin();
     result.setName(data.get(this.mapper.NAME).asText());
     result.setSymbol(data.get(this.mapper.SYMBOL).asText().toLowerCase());
-    result.setMarketCapRank(data.get(this.mapper.MARKET_CAP_RANK).asInt());
-    result.setQuotes(this.buildQuoteMap(data.get(this.mapper.QUOTE)));
     return result;
   }
 
@@ -49,7 +50,7 @@ abstract class CoinMarketCapMarketDataBuilderBaseClass extends CoinMarketCapBuil
         objMapper.convertValue(data, new TypeReference<>() {});
 
     for (Map.Entry<String, ObjectNode> quote : quotesConverted.entrySet()) {
-      quote.getValue().put(this.mapper.INSERTED_QUOTE_NAME, quote.getKey());
+      quote.getValue().put(this.mapper.INSERTED_QUOTE_NAME, quote.getKey().toLowerCase());
       result.put(quote.getKey().toLowerCase(), this.buildSingleQuote(quote.getValue()));
     }
     return result;
@@ -109,6 +110,25 @@ abstract class CoinMarketCapMarketDataBuilderBaseClass extends CoinMarketCapBuil
     result.setNominal(
         this.calculateNominalDelta(data.get(this.mapper.CURRENT_PRICE).asDouble(), deltaPct));
     return result;
+  }
+
+  @Override
+  public void setResultStatus() {
+    super.setResultStatus();
+    if (this.result.getStatus() == ResultStatus.SUCCESS
+        && this.result.getCoins() != null
+        && ((List<?>) this.requestArgs[0]).size() > this.result.getCoins().size()) {
+      this.result.setStatus(ResultStatus.PARTIAL_SUCCESS);
+      String differences =
+          ((List<String>) this.requestArgs[0])
+              .stream()
+                  .filter(
+                      element ->
+                          this.result.getCoins().stream()
+                              .noneMatch(c -> Objects.equals(c.getSymbol(), element)))
+                  .collect(Collectors.joining(","));
+      this.errorMessage = "coins not found: " + differences;
+    }
   }
 
   @Override

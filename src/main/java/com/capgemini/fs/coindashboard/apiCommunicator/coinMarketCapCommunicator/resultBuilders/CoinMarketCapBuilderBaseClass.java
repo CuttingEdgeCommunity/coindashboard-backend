@@ -53,10 +53,9 @@ public abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder
   @Override
   public void setResultStatus() {
     if (this.errorMessage != null) this.result.setStatus(ResultStatus.FAILURE);
-    if (response.getResponseCode() != HttpStatus.OK.value()) {
+    if (response.getResponseCode() == HttpStatus.NOT_FOUND.value()) {
       this.result.setStatus(ResultStatus.FAILURE);
-      this.errorMessage =
-          response.getResponseBody().get(this.mapper.STATUS_NOT_OK_ERROR_MESSAGE).asText();
+      this.errorMessage = response.getResponseBody().get(this.mapper.NOT_FOUND_MESSAGE).asText();
     } else {
       String statusError =
           this.parseStatus(this.response.getResponseBody().get(this.mapper.STATUS));

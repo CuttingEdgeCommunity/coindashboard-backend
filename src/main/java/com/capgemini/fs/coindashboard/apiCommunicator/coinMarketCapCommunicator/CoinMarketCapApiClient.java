@@ -47,4 +47,19 @@ final class CoinMarketCapApiClient extends ApiClient {
         RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest", queryParams);
     return this.invokeGet(requestUrl, this.headers);
   }
+
+  public Response getHistoricalListing(
+      List<String> coins, List<String> vsCurrencies, long timestampFrom, long timestampTo)
+      throws IOException {
+    Map<String, String> queryParams = new LinkedHashMap<>();
+    queryParams.put("symbol", String.join(",", coins));
+    queryParams.put("convert", String.join(",", vsCurrencies));
+    queryParams.put("time_start", String.valueOf(timestampTo));
+    queryParams.put("time_end", String.valueOf(timestampFrom));
+    queryParams.put("count", String.valueOf(100));
+    queryParams.put("interval", "hourly");
+    String requestUrl =
+        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/historical", queryParams);
+    return this.invokeGet(requestUrl, this.headers);
+  }
 }
