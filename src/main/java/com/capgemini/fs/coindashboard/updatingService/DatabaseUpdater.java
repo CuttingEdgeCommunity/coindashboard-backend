@@ -7,6 +7,7 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.UpdateQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.NoResultException;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class DatabaseUpdater {
       List<String> symbols = new ArrayList<>();
       symbols.add(coin.getSymbol());
       var result = this.apiHolder.getCoinInfo(symbols);
-      Coin coinWithDetails = result.orElseThrow().getCoins().get(0);
+      Coin coinWithDetails = result.orElseThrow(new NoResultException()).getCoins().get(0);
       coin.setContract_address(coinWithDetails.getContract_address());
       coin.setDescription(coinWithDetails.getDescription());
       coin.setGenesis_date(coinWithDetails.getGenesis_date());
@@ -49,23 +50,27 @@ public class DatabaseUpdater {
 
   @Async
   @Scheduled(fixedDelay = 10000)
-  public void currentQuoteUpdates() {
+  public boolean currentQuoteUpdates() {
     if (this.enabled) {
       List<String> vsCurrencies = new ArrayList<>();
       vsCurrencies.add("usd");
       var result = this.apiHolder.getTopCoins(250, 0, vsCurrencies);
-      List<Coin> coins = result.orElseThrow().getCoins();
+      List<Coin> coins = result.orElseThrow(new NoResultException()).getCoins();
       for (Coin coin : coins) {
         singleCoinUpdate(coin, "usd");
       }
+      return true;
     }
+    return false;
   }
 
   @Async
   @Scheduled(cron = "* */5 * * * *")
-  public void chartUpdate() {
+  public boolean chartUpdate() {
     if (this.enabled) {
       this.updateQueries.UpdateEveryCoinPriceChart();
+      return true;
     }
+    return false;
   }
 }
