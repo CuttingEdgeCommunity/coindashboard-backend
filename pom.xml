@@ -96,6 +96,12 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>1.6.10</version>
     </dependency>
+    <dependency>
+      <!--this is used for mocking final classes -->
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
