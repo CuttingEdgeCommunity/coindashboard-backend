@@ -22,12 +22,9 @@ services:
     ports:
       - "8000:8080"
     volumes:
-      - ./src/main/java/com/capgemini/fs/coindashboard/APISettings:./src/main/java/com/capgemini/fs/coindashboard/APISettings/openapi.yaml
+      - ./src/main/java/com/capgemini/fs/coindashboard/APISettings:/src/main/java/com/capgemini/fs/coindashboard/APISettings/
     environment:
       API_URL: ./src/main/java/com/capgemini/fs/coindashboard/APISettings/openapi.yaml
-      URLS: "[{ url: \"/openapi.yaml\", name: \"UserManagement\" },
-                      { url: \"/checkapi.yaml\", name: \"CheckServer\" }, 
-                  ]"
 
 volumes:
   mongodbdata:
