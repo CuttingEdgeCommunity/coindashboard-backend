@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
 
 @Component
-class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBaseClass{
+class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBaseClass {
   private final ApiCommunicatorMethodEnum method = ApiCommunicatorMethodEnum.TOP_COINS;
 
   @Override

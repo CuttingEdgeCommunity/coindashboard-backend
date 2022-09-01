@@ -6,13 +6,13 @@ import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.facade.ApiCommunicatorFacadeTemplate;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.IResultBuilder;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.IResultBuilder;
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +22,10 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
   private final ApiProviderEnum provider = ApiProviderEnum.COIN_GECKO;
 
   @Autowired
-  public CoinGeckoFacade(CoinGeckoTranslator translator, CoinGeckoApiClient client,
-    Set<CoinGeckoBuilderBaseClass> builders) {
+  public CoinGeckoFacade(
+      CoinGeckoTranslator translator,
+      CoinGeckoApiClient client,
+      Set<CoinGeckoBuilderBaseClass> builders) {
     this.coinTranslator = translator;
     this.apiClient = client;
     this.resultBuilders =

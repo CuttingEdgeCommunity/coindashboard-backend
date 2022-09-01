@@ -4,9 +4,9 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicator
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.CoinTranslator;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.PlaceHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum;
-import java.util.List;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Log4j2
 final class CoinMarketCapTranslator extends CoinTranslator {
-  @Autowired
-  CoinMarketCapFieldNameMapper coinMarketCapFieldNameMapper;
+  @Autowired CoinMarketCapFieldNameMapper coinMarketCapFieldNameMapper;
   @Autowired private CoinMarketCapApiClient coinMarketCapApiClient;
 
   @Override
