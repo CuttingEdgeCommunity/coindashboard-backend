@@ -7,6 +7,7 @@ import java.util.Map;
 
 @Component
 final class CoinGeckoFieldNameMapper extends FieldNameMapper {
+  public final String INSERTED_QUOTE_NAME = "inserted_quote_name";
   public final String NAME = "name";
   public final String SYMBOL = "symbol";
   public final String MARKET_CAP_RANK = "market_cap_rank";

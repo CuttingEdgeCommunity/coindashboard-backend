@@ -35,17 +35,19 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
     return this.provider;
   }
 
+  // TODO more than 1 currency
   @Override
   public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies) {
+    String vsCurrency = vsCurrencies.get(0);
     try {
       Response response =
-          ((CoinGeckoApiClient) this.apiClient).getTopCoins(take, page, vsCurrencies);
+          ((CoinGeckoApiClient) this.apiClient).getTopCoins(take, page, vsCurrency);
       this.resultBuilderDirector.constructCoinMarketDataResult(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS),
           response,
           take,
           page,
-          vsCurrencies);
+          vsCurrency);
       return Optional.of(this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS).getResult());
     } catch (Exception e) {
       return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));
