@@ -1,6 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.resultBuilders;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
+import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapFieldNameMapper;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;

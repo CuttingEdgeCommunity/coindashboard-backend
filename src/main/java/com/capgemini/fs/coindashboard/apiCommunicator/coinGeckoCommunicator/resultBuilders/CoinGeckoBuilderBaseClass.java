@@ -1,5 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.CoinGeckoFieldNameMapper;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;

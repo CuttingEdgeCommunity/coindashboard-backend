@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.IntervalEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.FieldNameMapper;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-final class CoinGeckoFieldNameMapper extends FieldNameMapper {
+public final class CoinGeckoFieldNameMapper extends FieldNameMapper {
   public final String NAME = "name";
   public final String SYMBOL = "symbol";
   public final String MARKET_CAP_RANK = "market_cap_rank";
@@ -15,6 +15,7 @@ final class CoinGeckoFieldNameMapper extends FieldNameMapper {
   public final String DAILY_VOLUME = "total_volume";
   public final String CURRENT_PRICE = "current_price";
   public final String LAST_UPDATE_DATE = "last_updated";
+  public final String ID = "id";
 
   public final Map<IntervalEnum, String> DELTA_MAP =
       Map.of(

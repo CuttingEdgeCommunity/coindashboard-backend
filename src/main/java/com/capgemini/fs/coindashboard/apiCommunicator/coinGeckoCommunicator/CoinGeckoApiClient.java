@@ -25,4 +25,8 @@ final class CoinGeckoApiClient extends ApiClient {
         RequestBuilder.buildRequestURI(this.url + "/coins/markets", queryParams);
     return this.invokeGet(requestUrl);
   }
+  public Response getCoinsNames() throws IOException {
+    String requestUrl = RequestBuilder.buildRequestURI(this.url + "/coins/list");
+    return this.invokeGet(requestUrl);
+  }
 }
