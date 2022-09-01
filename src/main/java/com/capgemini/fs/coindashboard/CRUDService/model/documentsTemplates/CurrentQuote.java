@@ -16,5 +16,5 @@ public class CurrentQuote {
   private List<Delta> deltas;
   private Double market_cap;
   private Double daily_volume;
-  private Long last_update;
+  private Long last_update_timestamp;
 }
