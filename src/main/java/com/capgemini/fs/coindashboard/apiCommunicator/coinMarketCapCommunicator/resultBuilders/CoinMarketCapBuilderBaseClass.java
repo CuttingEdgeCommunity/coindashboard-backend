@@ -1,6 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.resultBuilders;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
+import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapFieldNameMapper;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
@@ -74,7 +75,6 @@ public abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder
       } else this.result.setStatus(ResultStatus.SUCCESS);
     }
     if (this.result.getStatus() == ResultStatus.SUCCESS
-        && this.result.getCoins() != null
         && ((List<?>) this.requestArgs[0]).size() > this.result.getCoins().size()) {
       this.result.setStatus(ResultStatus.PARTIAL_SUCCESS);
       String differences =

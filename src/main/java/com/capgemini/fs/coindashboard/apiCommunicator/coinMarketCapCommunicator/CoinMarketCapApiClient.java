@@ -1,7 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiClient;
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-final class CoinMarketCapApiClient extends ApiClient {
+public final class CoinMarketCapApiClient extends ApiClient {
   @Value("${coinmarketcap.path}")
   private String url;
 
@@ -33,7 +32,8 @@ final class CoinMarketCapApiClient extends ApiClient {
     queryParams.put("limit", String.valueOf(take));
     queryParams.put("convert", String.join(",", vsCurrencies));
     String requestUrl =
-        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/listings/latest", queryParams);
+        httpRequestBuilder.buildRequestURI(
+            this.url + "/cryptocurrency/listings/latest", queryParams);
     return this.invokeGet(requestUrl, this.headers);
   }
 
@@ -44,7 +44,7 @@ final class CoinMarketCapApiClient extends ApiClient {
     queryParams.put("symbol", String.join(",", coins));
     queryParams.put("convert", String.join(",", vsCurrencies));
     String requestUrl =
-        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest", queryParams);
+        httpRequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/latest", queryParams);
     return this.invokeGet(requestUrl, this.headers);
   }
 
@@ -59,7 +59,8 @@ final class CoinMarketCapApiClient extends ApiClient {
     queryParams.put("count", String.valueOf(100));
     queryParams.put("interval", "hourly");
     String requestUrl =
-        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/quotes/historical", queryParams);
+        httpRequestBuilder.buildRequestURI(
+            this.url + "/cryptocurrency/quotes/historical", queryParams);
     return this.invokeGet(requestUrl, this.headers);
   }
 
@@ -67,7 +68,7 @@ final class CoinMarketCapApiClient extends ApiClient {
     Map<String, String> queryParams = new LinkedHashMap<>();
     queryParams.put("symbol", String.join(",", coins));
     String requestUrl =
-        RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/info", queryParams);
+        httpRequestBuilder.buildRequestURI(this.url + "/cryptocurrency/info", queryParams);
     return this.invokeGet(requestUrl, this.headers);
   }
 }

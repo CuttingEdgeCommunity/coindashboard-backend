@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.resultBuilders;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.IntervalEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.FieldNameMapper;
@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
-final class CoinMarketCapFieldNameMapper extends FieldNameMapper {
+public final class CoinMarketCapFieldNameMapper extends FieldNameMapper {
 
   public final String PLATFORM = "platform";
   public final String ERROR_CODE = "error_code";

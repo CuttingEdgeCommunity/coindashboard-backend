@@ -30,7 +30,6 @@ public class ApiHolder implements IApiMethods {
   }
 
   public IApiCommunicatorFacade getApiCommunicator(ApiProviderEnum apiProviderEnum) {
-
     return this.apiCommunicators.get(apiProviderEnum);
   }
 

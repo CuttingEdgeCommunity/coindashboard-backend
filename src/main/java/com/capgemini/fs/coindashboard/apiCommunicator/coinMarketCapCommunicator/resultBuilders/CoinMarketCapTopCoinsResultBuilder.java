@@ -35,6 +35,9 @@ class CoinMarketCapTopCoinsResultBuilder extends CoinMarketCapMarketDataBuilderB
     ObjectMapper objMapper = new ObjectMapper();
     List<JsonNode> responseBodyConverted = objMapper.convertValue(data, new TypeReference<>() {});
     for (JsonNode coin : responseBodyConverted) {
+      if (coin == null || coin.size() == 0) {
+        continue;
+      }
       result.add(this.buildSingleCoin(coin.get(this.mapper.NAME).asText(), coin));
     }
     return result;

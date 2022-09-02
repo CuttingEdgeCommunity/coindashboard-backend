@@ -16,6 +16,7 @@ public class InputStreamParser {
       while ((line = reader.readLine()) != null) {
         sb.append(line).append("\n");
       }
+      sb.setLength(sb.length() - 1);
     } catch (IOException e) {
       e.printStackTrace();
     } finally {

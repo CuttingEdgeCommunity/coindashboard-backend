@@ -1,7 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.interfaces;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.HttpRequestBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.InputStreamParser;
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.RequestBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,24 +11,25 @@ import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
 @Log4j2
 public abstract class ApiClient {
+  @Autowired protected HttpRequestBuilder httpRequestBuilder;
 
   public Response invokeGet(String uri) throws IOException {
-    var connection = RequestBuilder.buildURLConnectionGET(uri);
+    log.info("Connecting to: " + uri);
+    var connection = httpRequestBuilder.buildURLConnectionGET(uri);
     return getResponse(connection);
   }
 
   public Response invokeGet(String uri, Map<String, List<String>> headers) throws IOException {
     log.info("Connecting to: " + uri);
-    var connection = RequestBuilder.buildURLConnectionGET(uri, headers);
+    var connection = httpRequestBuilder.buildURLConnectionGET(uri, headers);
     return getResponse(connection);
   }
 
-  private Response getResponse(HttpURLConnection connection) throws IOException {
+  public Response getResponse(HttpURLConnection connection) throws IOException {
     int status = connection.getResponseCode();
     log.info("connection: " + connection.getURL() + " return code: " + status);
     String body;
@@ -40,10 +41,14 @@ public abstract class ApiClient {
     return buildResponse(status, body);
   }
 
-  private Response buildResponse(int status, String body) throws JsonProcessingException {
+  public Response buildResponse(int status, String body) {
     Response response = new Response();
     response.setResponseCode(status);
-    response.setResponseBody(parseResponse(body));
+    try {
+      response.setResponseBody(parseResponse(body));
+    } catch (JsonProcessingException e) {
+      log.error(e.getMessage());
+    }
     return response;
   }
 
