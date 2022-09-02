@@ -8,14 +8,12 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.I
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.ResultBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.databind.JsonNode;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import javax.annotation.PostConstruct;
 
-public abstract class CoinGeckoBuilderBaseClass extends ResultBuilder
-  implements IResultBuilder {
-  @Autowired
-  protected CoinGeckoFieldNameMapper mapper;
+public abstract class CoinGeckoBuilderBaseClass extends ResultBuilder implements IResultBuilder {
+  @Autowired protected CoinGeckoFieldNameMapper mapper;
   protected String errorMessage;
 
   @PostConstruct
@@ -56,8 +54,7 @@ public abstract class CoinGeckoBuilderBaseClass extends ResultBuilder
     if (this.errorMessage != null) this.result.setStatus(ResultStatus.FAILURE);
     if (response.getResponseCode() != HttpStatus.OK.value()) {
       this.result.setStatus(ResultStatus.FAILURE);
-      this.errorMessage =
-          response.getResponseBody().get(this.mapper.ERROR).asText();
+      this.errorMessage = response.getResponseBody().get(this.mapper.ERROR).asText();
     } else this.result.setStatus(ResultStatus.SUCCESS);
   }
 

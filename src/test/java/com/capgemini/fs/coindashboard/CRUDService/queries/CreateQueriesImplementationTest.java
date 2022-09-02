@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -37,22 +35,5 @@ class CreateQueriesImplementationTest {
     Mockito.when(mongoTemplate.save(coin, "Coin")).thenReturn(coin);
 
     assertTrue(createQueries.CreateCoinDocument(coin));
-  }
-
-  @Test
-  public void CreateDocumentsWhenPassedNull() {
-    Mockito.when(mongoTemplate.save(null, "Coin")).thenThrow(new IllegalArgumentException());
-    assertFalse(createQueries.CreateCoinDocuments(null));
-  }
-
-  @Test
-  public void CreateDocumentsWhenPassedNewCoin() {
-
-    Coin coin = new Coin();
-    List<Coin> coins = new ArrayList<>();
-    coins.add(coin);
-    Mockito.when(mongoTemplate.save(coins, "Coin")).thenReturn(coins);
-
-    assertTrue(createQueries.CreateCoinDocuments(coins));
   }
 }

@@ -25,13 +25,12 @@ public class CreateQueriesImplementation implements CreateQueries {
   }
 
   @Override
-  public boolean CreateCoinDocuments(List<Coin> coins) {
+  public void CreateCoinDocuments(List<Coin> coins) {
     try {
-      mongoTemplate.save(coins, "Coin");
-      return true;
-    } catch (Exception e) {
-      log.error(e.getMessage());
+      mongoTemplate.insertAll(coins);
+      log.info("insert performed...");
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
     }
-    return false;
   }
 }

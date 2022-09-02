@@ -15,14 +15,14 @@ public class CacheServiceImplementation implements CacheService {
 
   @Override
   @Cacheable(cacheNames = "getCoinMarketData")
-  public Optional<String> getCoinMarketData(String name, String vs_currency) {
-    return Optional.of(getQueries.getCoinMarketData(name, vs_currency));
+  public Optional<String> getCoinMarketData(String symbol, String vs_currency) {
+    return Optional.of(getQueries.getCoinMarketData(symbol, vs_currency));
   }
 
   @Override
   @Cacheable(cacheNames = "getCoinInfo")
   public Optional<String> getCoinInfo(int take, int page) {
-    throw new UnsupportedOperationException("Method not yet implemented.");
+    return Optional.of(getQueries.getCoins(take, page));
   }
 
   @Override

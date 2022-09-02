@@ -7,14 +7,12 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Collections;
-
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
 @Component
-class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketDataBuilderBaseClass{
+class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketDataBuilderBaseClass {
   private final ApiCommunicatorMethodEnum method = ApiCommunicatorMethodEnum.HISTORICAL_LISTING;
 
   @Override

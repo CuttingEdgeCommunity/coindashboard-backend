@@ -5,12 +5,12 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicator
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
-class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBaseClass{
+class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBaseClass {
   private final ApiCommunicatorMethodEnum method = ApiCommunicatorMethodEnum.TOP_COINS;
 
   @Override

@@ -49,7 +49,7 @@ class CoinControllerMarketDataTest {
     this.mockMvc
         .perform(get("/api/coins/123456789012345678901234567890123456789012345678901/marketdata"))
         .andExpect(status().isBadRequest())
-        .andExpect(content().string(containsString("name cannot be longer than 50 characters")));
+        .andExpect(content().string(containsString("symbol cannot be longer than 50 characters")));
   }
 
   @Test
@@ -60,7 +60,7 @@ class CoinControllerMarketDataTest {
             get("/api/coins/123456789012345678901234567890123456789012345678901/marketdata")
                 .param("vs_currency", "pln"))
         .andExpect(status().isBadRequest())
-        .andExpect(content().string(containsString("name cannot be longer than 50 characters")));
+        .andExpect(content().string(containsString("symbol cannot be longer than 50 characters")));
   }
 
   @Test

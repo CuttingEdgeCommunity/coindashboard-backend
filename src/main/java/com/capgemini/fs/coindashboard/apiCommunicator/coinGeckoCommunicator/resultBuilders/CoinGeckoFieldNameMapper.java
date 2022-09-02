@@ -2,8 +2,8 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.res
 
 import com.capgemini.fs.coindashboard.CRUDService.model.IntervalEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.FieldNameMapper;
-import org.springframework.stereotype.Component;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
 @Component
 final class CoinGeckoFieldNameMapper extends FieldNameMapper {
