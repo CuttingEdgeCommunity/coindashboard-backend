@@ -5,6 +5,7 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +22,24 @@ public class MongoInit implements InitializingBean {
   @Override
   public void afterPropertiesSet() {
     log.info("Starting initialization...");
-    Result coinMarketDataResult;
-    try {
-      coinMarketDataResult =
-          apiHolder.getCurrentListing(List.of("btc"), List.of("usd"), false).orElse(null);
-    } catch (Exception e) {
-      log.error(e.getMessage());
-      return;
-    }
-    try {
-      if (coinMarketDataResult != null) {
-        createQueries.CreateCoinDocument(coinMarketDataResult.getCoins().get(0));
+    final byte PAGES = 4;
+    for (byte i = 0; PAGES > i; i++) {
+      Optional<Result> coinMarketDataResult;
+      try {
+        coinMarketDataResult =
+            Optional.of(apiHolder.getTopCoins(250, i, List.of("usd"))).orElse(null);
+        log.info("Requested 250 coins from API");
+      } catch (Exception e) {
+        log.error(e.getMessage());
+        return;
       }
-      log.info("Successfully added initial btc data");
-    } catch (Exception e) {
-      log.error(e.getMessage());
+      try {
+        coinMarketDataResult.ifPresent(
+            result -> createQueries.CreateCoinDocuments(result.getCoins()));
+        log.info("Successfully added initial 250 topCoins data from {} page", i);
+      } catch (Exception e) {
+        log.error(e.getMessage());
+      }
     }
   }
 }

@@ -39,4 +39,20 @@ public class Coin {
   private List<Link> links;
   private String description;
   private Map<String, Quote> quotes;
+
+  public Coin(
+      String id,
+      String name,
+      Integer market_cap_rank,
+      String symbol,
+      Integer marketCapRank,
+      String image_url,
+      Long genesis_date,
+      Boolean is_token,
+      String contract_address,
+      List<Link> links,
+      String description,
+      Map<String, Quote> quotes) {}
+
+  public void setMarketCapRank(int asInt) {}
 }
