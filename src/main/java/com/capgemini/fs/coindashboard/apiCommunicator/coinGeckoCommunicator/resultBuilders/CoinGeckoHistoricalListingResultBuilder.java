@@ -6,7 +6,8 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.fasterxml.jackson.databind.JsonNode;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -22,17 +23,32 @@ class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketDataBuilder
 
   @Override
   protected List<Coin> buildCoinList(JsonNode data) {
-    return Collections.emptyList();
+    return List.of(this.buildSingleCoin((String) requestArgs[1], data));
   }
 
   @Override
   protected Coin buildSingleCoin(String coinName, JsonNode data) {
-    return null;
+    Coin result = new Coin();
+    result.setName(coinName);
+    result.setQuotes(this.buildQuoteMap(data));
+    return result;
   }
 
   @Override
   protected Map<String, Quote> buildQuoteMap(JsonNode data) {
-    return Collections.emptyMap();
+    Map<String, Quote> result = new HashMap<>();
+    result.put((String) requestArgs[1], buildSingleQuote(data));
+
+    return result;
+  }
+
+  @Override
+  protected Quote buildSingleQuote(JsonNode data) {
+    Quote result = new Quote();
+    result.setVs_currency((String) requestArgs[1]);
+    result.setCurrentQuote(this.buildCurrentQuote(data));
+    result.setChart(this.buildPriceList(data.get(this.mapper.PRICES)));
+    return result;
   }
 
   @Override
@@ -42,11 +58,18 @@ class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketDataBuilder
 
   @Override
   protected List<Price> buildPriceList(JsonNode data) {
-    return Collections.emptyList();
+    ArrayList<Price> result = new ArrayList<>();
+    for (JsonNode jsonNode : data) {
+      result.add(this.buildSinglePrice(jsonNode));
+    }
+    return result;
   }
 
   @Override
   protected Price buildSinglePrice(JsonNode data) {
-    return null;
+    Price result = new Price();
+    result.setPrice(data.get(1).asDouble());
+    result.setTimestamp(data.get(0).asLong());
+    return result;
   }
 }

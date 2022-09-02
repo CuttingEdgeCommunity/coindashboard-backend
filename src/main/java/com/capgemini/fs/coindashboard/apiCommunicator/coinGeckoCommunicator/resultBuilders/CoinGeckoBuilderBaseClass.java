@@ -1,5 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders;
 
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
@@ -7,7 +8,13 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.FieldNameMapper
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.IResultBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.ResultBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +63,22 @@ public abstract class CoinGeckoBuilderBaseClass extends ResultBuilder implements
       this.result.setStatus(ResultStatus.FAILURE);
       this.errorMessage = response.getResponseBody().get(this.mapper.ERROR).asText();
     } else this.result.setStatus(ResultStatus.SUCCESS);
+  }
+
+  @Override
+  protected List<Coin> buildCoinList(JsonNode data) {
+    ArrayList<Coin> result = new ArrayList<>();
+    ObjectMapper objMapper = new ObjectMapper();
+    Map<String, ObjectNode> responseBodyConverted =
+        objMapper.convertValue(data, new TypeReference<>() {});
+    for (Map.Entry<String, ObjectNode> coin : responseBodyConverted.entrySet()) {
+      if (coin.getValue() == null || coin.getValue().size() == 0) {
+        continue;
+      }
+      result.add(
+          this.buildSingleCoin(coin.getValue().get(this.mapper.NAME).asText(), coin.getValue()));
+    }
+    return result;
   }
 
   @Override
