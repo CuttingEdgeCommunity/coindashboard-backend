@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.test.context.TestPropertySource;
@@ -15,6 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 public class CoinMarketCapTestBaseClass {
   public JsonNode correctGetNames;
   public Map<String, PlaceHolder> correctTranslationMap = new HashMap<>();
+  public List<String> correctNames, correctIds, inputsymbols;
   public Response correctGetNamesR;
 
   void setupCorrectGetNames() throws JsonProcessingException {
@@ -24,6 +26,17 @@ public class CoinMarketCapTestBaseClass {
         "gloxcwf04vo", new PlaceHolder("i3vsqatexar", "2956", "gloxcwf04vo"));
     this.correctTranslationMap.put(
         "lqg5gyt9g8g", new PlaceHolder("dsnl073mh5e", "218", "lqg5gyt9g8g"));
+    this.inputsymbols = List.of("6qizk8ybgf6", "gloxcwf04vo", "lqg5gyt9g8g");
+    this.correctNames =
+        List.of(
+            this.correctTranslationMap.get("6qizk8ybgf6").getName(),
+            this.correctTranslationMap.get("gloxcwf04vo").getName(),
+            this.correctTranslationMap.get("lqg5gyt9g8g").getName());
+    this.correctIds =
+        List.of(
+            this.correctTranslationMap.get("6qizk8ybgf6").getId(),
+            this.correctTranslationMap.get("gloxcwf04vo").getId(),
+            this.correctTranslationMap.get("lqg5gyt9g8g").getId());
     this.correctGetNames =
         new ObjectMapper()
             .readTree(

@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 
-@Getter
 public abstract class CoinTranslator {
 
   // maps symbol to PlaceHolder
@@ -24,7 +22,7 @@ public abstract class CoinTranslator {
     this.translationMap.put(symbol, placeHolder);
   }
 
-  protected List<String> translate(List<String> symbols, TranslationEnum wanted) {
+  public List<String> translate(List<String> symbols, TranslationEnum wanted) {
     var result = new ArrayList<String>();
     for (String symbol : symbols) {
       String translation;

@@ -1,10 +1,15 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
 
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.ID;
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 // import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -25,17 +30,41 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties
 @TestPropertySource(locations = "classpath:application.properties")
 class CoinMarketCapTranslatorTest extends CoinMarketCapTestBaseClass {
+  @Autowired private CoinMarketCapFieldNameMapper coinMarketCapFieldNameMapper;
   @Autowired private CoinMarketCapTranslator coinMarketCapTranslator;
   @MockBean private CoinMarketCapApiClient coinMarketCapApiClient;
 
-  @Test
-  void initialize() throws IOException {
+  @BeforeEach
+  void setup() throws JsonProcessingException {
     this.setupCorrectGetNames();
-    Mockito.when(coinMarketCapApiClient.getCoinsNames()).thenReturn(this.correctGetNamesR);
-    coinMarketCapTranslator.initialize(coinMarketCapApiClient.getCoinsNames());
-    assertEquals(this.correctTranslationMap, coinMarketCapTranslator.getTranslationMap());
   }
 
   @Test
-  void translate() {}
+  void initialize() throws IOException {
+    Mockito.when(coinMarketCapApiClient.getCoinsNames()).thenReturn(this.correctGetNamesR);
+    coinMarketCapTranslator.initialize(coinMarketCapApiClient.getCoinsNames());
+    assertEquals(this.correctNames, coinMarketCapTranslator.translate(inputsymbols, NAME));
+    assertEquals(this.correctIds, coinMarketCapTranslator.translate(inputsymbols, ID));
+  }
+
+  @Test
+  void translate() {
+    assertEquals(
+        this.inputsymbols,
+        coinMarketCapTranslator.translate(inputsymbols, ApiCommunicatorMethodEnum.CURRENT_LISTING));
+    assertEquals(
+        this.inputsymbols,
+        coinMarketCapTranslator.translate(
+            inputsymbols, ApiCommunicatorMethodEnum.HISTORICAL_LISTING));
+    assertEquals(
+        "Unexpected value: " + ApiCommunicatorMethodEnum.TOP_COINS,
+        assertThrows(
+                IllegalStateException.class,
+                () -> {
+                  coinMarketCapTranslator.translate(
+                      this.inputsymbols, ApiCommunicatorMethodEnum.TOP_COINS);
+                },
+                "Unexpected value: " + ApiCommunicatorMethodEnum.TOP_COINS)
+            .getMessage());
+  }
 }

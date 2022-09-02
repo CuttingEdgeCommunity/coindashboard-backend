@@ -1,8 +1,14 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.ID;
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -22,14 +28,38 @@ class CoinGeckoTranslatorTest extends CoinGeckoTestBaseClass {
   @Autowired CoinGeckoTranslator coinGeckoTranslator;
   @MockBean CoinGeckoApiClient coinGeckoApiClient;
 
-  @Test
-  void initialize() throws IOException {
+  @BeforeEach
+  void setup() throws JsonProcessingException {
     this.setupCorrectGetNames();
-    Mockito.when(coinGeckoApiClient.getCoinsNames()).thenReturn(this.correctGetNamesR);
-    coinGeckoTranslator.initialize(coinGeckoApiClient.getCoinsNames());
-    assertEquals(this.correctTranslationMap, coinGeckoTranslator.getTranslationMap());
   }
 
   @Test
-  void translate() {}
+  void initialize() throws IOException {
+    Mockito.when(coinGeckoApiClient.getCoinsNames()).thenReturn(this.correctGetNamesR);
+    coinGeckoTranslator.initialize(coinGeckoApiClient.getCoinsNames());
+    assertEquals(this.correctNames, coinGeckoTranslator.translate(this.inputsymbols, NAME));
+    assertEquals(this.correctIds, coinGeckoTranslator.translate(this.inputsymbols, ID));
+  }
+
+  @Test
+  void translate() {
+    assertEquals(
+        this.correctIds,
+        coinGeckoTranslator.translate(
+            this.inputsymbols, ApiCommunicatorMethodEnum.CURRENT_LISTING));
+    assertEquals(
+        this.correctIds,
+        coinGeckoTranslator.translate(
+            this.inputsymbols, ApiCommunicatorMethodEnum.HISTORICAL_LISTING));
+    assertEquals(
+        "Unexpected value: " + ApiCommunicatorMethodEnum.TOP_COINS,
+        assertThrows(
+                IllegalStateException.class,
+                () -> {
+                  coinGeckoTranslator.translate(
+                      this.inputsymbols, ApiCommunicatorMethodEnum.TOP_COINS);
+                },
+                "Unexpected value: " + ApiCommunicatorMethodEnum.TOP_COINS)
+            .getMessage());
+  }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.test.context.TestPropertySource;
@@ -15,6 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 public class CoinGeckoTestBaseClass {
   public JsonNode correctGetNames;
   public Map<String, PlaceHolder> correctTranslationMap = new HashMap<>();
+  public List<String> correctNames, correctIds, inputsymbols;
   public Response correctGetNamesR;
 
   void setupCorrectGetNames() throws JsonProcessingException {
@@ -26,6 +28,22 @@ public class CoinGeckoTestBaseClass {
         new PlaceHolder("0.5X Long Altcoin Index", "0-5x-long-altcoin-index-token", "althalf"));
     this.correctTranslationMap.put("btc", new PlaceHolder("Bitcoin", "bitcoin", "btc"));
     this.correctTranslationMap.put("eth", new PlaceHolder("Ethereum", "ethereum", "eth"));
+    this.inputsymbols = List.of("zoc", "algohalf", "althalf", "btc", "eth");
+    this.correctNames =
+        List.of(
+            this.correctTranslationMap.get("zoc").getName(),
+            this.correctTranslationMap.get("algohalf").getName(),
+            this.correctTranslationMap.get("althalf").getName(),
+            this.correctTranslationMap.get("btc").getName(),
+            this.correctTranslationMap.get("eth").getName());
+    this.correctIds =
+        List.of(
+            this.correctTranslationMap.get("zoc").getId(),
+            this.correctTranslationMap.get("algohalf").getId(),
+            this.correctTranslationMap.get("althalf").getId(),
+            this.correctTranslationMap.get("btc").getId(),
+            this.correctTranslationMap.get("eth").getId());
+
     this.correctGetNames =
         new ObjectMapper()
             .readTree(
