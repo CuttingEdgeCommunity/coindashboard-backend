@@ -9,6 +9,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.R
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.CoinTranslator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ApiCommunicatorFacadeTemplate implements IApiCommunicatorFacade, IApiMethods {
@@ -16,6 +17,9 @@ public abstract class ApiCommunicatorFacadeTemplate implements IApiCommunicatorF
   protected Map<ApiCommunicatorMethodEnum, IResultBuilder> resultBuilders;
   protected ApiClient apiClient;
   @Autowired protected ResultBuilderDirector resultBuilderDirector;
+
+  @PostConstruct
+  public void init() {}
 
   public Result executeMethod(ApiCommunicatorMethodEnum method, Object... args) {
     var result =

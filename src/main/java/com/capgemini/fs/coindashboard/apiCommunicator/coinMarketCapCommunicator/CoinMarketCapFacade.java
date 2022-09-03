@@ -8,15 +8,18 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.facade.ApiCommunicatorFacadeTemplate;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.IResultBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Log4j2
 public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
   private final ApiProviderEnum provider = ApiProviderEnum.COIN_MARKET_CAP;
 
@@ -29,6 +32,15 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
     this.coinTranslator = translator;
     this.resultBuilders =
         builders.stream().collect(Collectors.toMap(IResultBuilder::getMethod, Function.identity()));
+  }
+
+  @Override
+  public void init() {
+    try {
+      this.coinTranslator.initialize(((CoinMarketCapApiClient) this.apiClient).getCoinsNames());
+    } catch (IOException e) {
+      log.info("Error with translator initialization...");
+    }
   }
 
   @Override
