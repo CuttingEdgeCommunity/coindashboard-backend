@@ -22,9 +22,8 @@ services:
     ports:
       - "8000:8080"
     volumes:
-      - ./src/main/java/com/capgemini/fs/coindashboard/APISettings:/src/main/java/com/capgemini/fs/coindashboard/APISettings/
+      - ./src/main/java/com/capgemini/fs/coindashboard/APISettings:/usr/share/nginx/html/APISettings
     environment:
-      API_URL: ./src/main/java/com/capgemini/fs/coindashboard/APISettings/openapi.yaml
-
+        API_URL: /APISettings/openapi.yaml
 volumes:
   mongodbdata:
