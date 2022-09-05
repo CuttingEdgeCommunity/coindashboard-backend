@@ -23,7 +23,7 @@ class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketDataBuilder
 
   @Override
   protected List<Coin> buildCoinList(JsonNode data) {
-    return List.of(this.buildSingleCoin((String) requestArgs[1], data));
+    return List.of(this.buildSingleCoin((String) requestArgs[0], data));
   }
 
   @Override

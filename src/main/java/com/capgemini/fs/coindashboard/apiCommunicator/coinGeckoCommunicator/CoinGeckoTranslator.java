@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-final class CoinGeckoTranslator extends CoinTranslator {
+public final class CoinGeckoTranslator extends CoinTranslator {
 
   @Override
   public void initialize(Object data) {}
