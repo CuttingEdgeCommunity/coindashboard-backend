@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class TimeFormatter {
+  public static Timestamp convertStringToTimestamp(String strDate) throws ParseException {
+    return TimeFormatter.convertStringToTimestamp(strDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+  }
 
   public static Timestamp convertStringToTimestamp(String strDate, String format)
       throws ParseException {

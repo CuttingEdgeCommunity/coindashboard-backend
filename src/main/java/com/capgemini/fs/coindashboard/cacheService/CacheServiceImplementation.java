@@ -1,6 +1,6 @@
 package com.capgemini.fs.coindashboard.cacheService;
 
-import com.capgemini.fs.coindashboard.CRUDService.queries.Queries;
+import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class CacheServiceImplementation implements CacheService {
 
-  @Autowired Queries queries;
+  @Autowired GetQueries getQueries;
 
   @Override
   @Cacheable(cacheNames = "getCoinMarketData")
-  public Optional<String> getCoinMarketData(String name, String vs_currency) {
-    return Optional.of(queries.getCoinMarketData(name, vs_currency));
+  public Optional<String> getCoinMarketData(String symbol, String vs_currency) {
+    return Optional.of(getQueries.getCoinMarketData(symbol, vs_currency));
   }
 
   @Override
   @Cacheable(cacheNames = "getCoinInfo")
   public Optional<String> getCoinInfo(int take, int page) {
-    throw new UnsupportedOperationException("Method not yet implemented.");
+    return Optional.of(getQueries.getCoins(take, page));
   }
 
   @Override

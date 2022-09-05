@@ -1,0 +1,106 @@
+{    "data": {
+        "ERR":{},
+        "BTC": {
+            "id": 2994,
+            "name": "2dcwft8p29h",
+            "symbol": "BTC",
+            "is_active": 3940,
+            "is_fiat": null,
+            "quotes": [
+                {
+                    "timestamp": "2022-09-02T11:42:11.436Z",
+                    "quote": {
+                        "EUR": {
+                            "price": 0.27843601809961993,
+                            "volume_24h": 723,
+                            "market_cap": 0.26324499707302773,
+                            "circulating_supply": 7026,
+                            "total_supply": 1431,
+                            "timestamp": "2022-09-02T11:42:11.436Z"
+                        },
+                        "USD": {
+                            "price": 0.27843601809961993,
+                            "volume_24h": 723,
+                            "market_cap": 0.26324499707302773,
+                            "circulating_supply": 7026,
+                            "total_supply": 1431,
+                            "timestamp": "2022-09-02T11:42:11.436Z"
+                        }
+                    }
+                },
+                {
+                    "timestamp": "2022-09-02T11:42:11.436Z",
+                    "quote": {
+                        "EUR": {
+                            "price": 0.8872275706929125,
+                            "volume_24h": 277,
+                            "market_cap": 0.7880840513627039,
+                            "circulating_supply": 4568,
+                            "total_supply": 5029,
+                            "timestamp": "2022-09-02T11:42:11.436Z"
+                        },
+                        "USD": {
+                            "price": 0.8872275706929125,
+                            "volume_24h": 277,
+                            "market_cap": 0.7880840513627039,
+                            "circulating_supply": 4568,
+                            "total_supply": 5029,
+                            "timestamp": "2022-09-02T11:42:11.436Z"
+                        }
+                    }
+                },
+                {
+                    "timestamp": "2022-09-02T11:42:11.436Z",
+                    "quote": {
+                        "EUR": {
+                            "price": 0.4269687650365923,
+                            "volume_24h": 6288,
+                            "market_cap": 0.8476823664763447,
+                            "circulating_supply": 1986,
+                            "total_supply": 274,
+                            "timestamp": "2022-09-02T11:42:11.436Z"
+                        },
+                        "USD": {
+                            "price": 0.4269687650365923,
+                            "volume_24h": 6288,
+                            "market_cap": 0.8476823664763447,
+                            "circulating_supply": 1986,
+                            "total_supply": 274,
+                            "timestamp": "2022-09-02T11:42:11.436Z"
+                        }
+                    }
+                }
+            ]
+        },
+        "ETH": {
+            "id": 9947,
+            "name": "1tkt8y54tb7",
+            "symbol": "ETH",
+            "is_active": 7205,
+            "is_fiat": null,
+            "quotes": [
+                {
+                    "timestamp": "2022-09-02T11:42:11.437Z",
+                    "quote": {
+                        "EUR": {
+                            "price": 0.7640258247142506,
+                            "volume_24h": 2936,
+                            "market_cap": 0.07044644407941769,
+                            "circulating_supply": 5000,
+                            "total_supply": 4124,
+                            "timestamp": "2022-09-02T11:42:11.437Z"
+                        },
+                        "USD": {
+                            "price": 0.7640258247142506,
+                            "volume_24h": 2936,
+                            "market_cap": 0.07044644407941769,
+                            "circulating_supply": 5000,
+                            "total_supply": 4124,
+                            "timestamp": "2022-09-02T11:42:11.437Z"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

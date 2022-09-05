@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CacheService {
 
-  Optional<String> getCoinMarketData(String name, String vs_currency);
+  Optional<String> getCoinMarketData(String symbol, String vs_currency);
 
   Optional<String> getCoinInfo(int take, int page);
 
