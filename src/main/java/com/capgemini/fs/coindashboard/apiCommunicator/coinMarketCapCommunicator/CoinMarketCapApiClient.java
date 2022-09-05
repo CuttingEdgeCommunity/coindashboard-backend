@@ -73,7 +73,7 @@ public final class CoinMarketCapApiClient extends ApiClient {
   }
 
   public Response getCoinsNames() throws IOException {
-    String requestUrl = RequestBuilder.buildRequestURI(this.url + "/cryptocurrency/map");
+    String requestUrl = httpRequestBuilder.buildRequestURI(this.url + "/cryptocurrency/map");
     return this.invokeGet(requestUrl, this.headers);
   }
 }

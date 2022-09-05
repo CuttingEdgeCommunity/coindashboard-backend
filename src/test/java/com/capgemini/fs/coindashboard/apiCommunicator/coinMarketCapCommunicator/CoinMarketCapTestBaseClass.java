@@ -20,12 +20,9 @@ public class CoinMarketCapTestBaseClass {
   public Response correctGetNamesR;
 
   void setupCorrectGetNames() throws JsonProcessingException {
-    this.correctTranslationMap.put(
-        "6qizk8ybgf6", new PlaceHolder("oi0q3jjo7v", "4554", "6qizk8ybgf6"));
-    this.correctTranslationMap.put(
-        "gloxcwf04vo", new PlaceHolder("i3vsqatexar", "2956", "gloxcwf04vo"));
-    this.correctTranslationMap.put(
-        "lqg5gyt9g8g", new PlaceHolder("dsnl073mh5e", "218", "lqg5gyt9g8g"));
+    this.correctTranslationMap.put("6qizk8ybgf6", new PlaceHolder("oi0q3jjo7v", "4554"));
+    this.correctTranslationMap.put("gloxcwf04vo", new PlaceHolder("i3vsqatexar", "2956"));
+    this.correctTranslationMap.put("lqg5gyt9g8g", new PlaceHolder("dsnl073mh5e", "218"));
     this.inputsymbols = List.of("6qizk8ybgf6", "gloxcwf04vo", "lqg5gyt9g8g");
     this.correctNames =
         List.of(

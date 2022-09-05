@@ -3,7 +3,6 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapApiClient;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapFacade;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapFieldNameMapper;
-import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapTranslator;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.ResultBuilderDirector;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.HttpRequestBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +24,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
       CoinMarketCapFieldNameMapper.class,
       CoinMarketCapTopCoinsResultBuilder.class,
       ResultBuilderDirector.class,
-      CoinMarketCapTranslator.class,
       CoinMarketCapApiClient.class
     })
 @EnableConfigurationProperties

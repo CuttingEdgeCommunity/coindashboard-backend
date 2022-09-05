@@ -8,7 +8,6 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.facade.ApiCommunicatorFacadeTemplate;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.IResultBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,7 +37,7 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
   public void init() {
     try {
       this.coinTranslator.initialize(((CoinMarketCapApiClient) this.apiClient).getCoinsNames());
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.info("Error with translator initialization...");
     }
   }

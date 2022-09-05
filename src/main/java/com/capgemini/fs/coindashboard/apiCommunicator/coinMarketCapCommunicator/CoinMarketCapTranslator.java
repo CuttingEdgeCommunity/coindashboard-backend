@@ -24,8 +24,7 @@ final class CoinMarketCapTranslator extends CoinTranslator {
           symbol,
           new PlaceHolder(
               coinJson.get(coinMarketCapFieldNameMapper.NAME).asText(),
-              coinJson.get(coinMarketCapFieldNameMapper.ID).asText(),
-              symbol));
+              coinJson.get(coinMarketCapFieldNameMapper.ID).asText()));
     }
     log.info("PlaceHolderMap with lowercase 'symbol' initialized");
   }

@@ -11,9 +11,6 @@ import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.I
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
-import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.IResultBuilder;
-import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -44,7 +41,7 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
   public void init() {
     try {
       this.coinTranslator.initialize(((CoinGeckoApiClient) this.apiClient).getCoinsNames());
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.info("Error with translator initialization...");
     }
   }

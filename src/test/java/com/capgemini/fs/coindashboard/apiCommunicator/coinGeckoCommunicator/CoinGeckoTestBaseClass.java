@@ -20,14 +20,13 @@ public class CoinGeckoTestBaseClass {
   public Response correctGetNamesR;
 
   void setupCorrectGetNames() throws JsonProcessingException {
-    this.correctTranslationMap.put("zoc", new PlaceHolder("01coin", "01coin", "zoc"));
+    this.correctTranslationMap.put("zoc", new PlaceHolder("01coin", "01coin"));
     this.correctTranslationMap.put(
-        "algohalf", new PlaceHolder("0.5X Long Algorand", "0-5x-long-algorand-token", "algohalf"));
+        "algohalf", new PlaceHolder("0.5X Long Algorand", "0-5x-long-algorand-token"));
     this.correctTranslationMap.put(
-        "althalf",
-        new PlaceHolder("0.5X Long Altcoin Index", "0-5x-long-altcoin-index-token", "althalf"));
-    this.correctTranslationMap.put("btc", new PlaceHolder("Bitcoin", "bitcoin", "btc"));
-    this.correctTranslationMap.put("eth", new PlaceHolder("Ethereum", "ethereum", "eth"));
+        "althalf", new PlaceHolder("0.5X Long Altcoin Index", "0-5x-long-altcoin-index-token"));
+    this.correctTranslationMap.put("btc", new PlaceHolder("Bitcoin", "bitcoin"));
+    this.correctTranslationMap.put("eth", new PlaceHolder("Ethereum", "ethereum"));
     this.inputsymbols = List.of("zoc", "algohalf", "althalf", "btc", "eth");
     this.correctNames =
         List.of(
