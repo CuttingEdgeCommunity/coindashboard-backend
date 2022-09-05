@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class CoinGeckoTopCoinsResultBuilderTest {
   ObjectMapper mapper = new ObjectMapper();
@@ -91,7 +90,7 @@ class CoinGeckoTopCoinsResultBuilderTest {
 
   @Test
   void setCoins() {
-    this.builder.setData(goodResponse, Mockito.anyInt(), Mockito.anyInt(), "usd");
+    this.builder.setData(goodResponse, 0, 0, "usd");
     this.builder.setCoins();
     Result result = this.builder.getResult();
     assertEquals(3, result.getCoins().size());

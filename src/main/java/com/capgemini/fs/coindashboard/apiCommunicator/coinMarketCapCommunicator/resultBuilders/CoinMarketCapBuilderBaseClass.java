@@ -75,6 +75,7 @@ public abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder
       } else this.result.setStatus(ResultStatus.SUCCESS);
     }
     if (this.result.getStatus() == ResultStatus.SUCCESS
+        && this.result.getCoins() != null
         && ((List<?>) this.requestArgs[0]).size() > this.result.getCoins().size()) {
       this.result.setStatus(ResultStatus.PARTIAL_SUCCESS);
       String differences =
