@@ -32,7 +32,7 @@ class ApiHolderTest {
 
   @BeforeEach
   void mockCMCFacade() {
-    Answer<Result> res =
+    Answer<Result> resSuccess =
         new Answer<Result>() {
           @Override
           public Result answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -46,19 +46,19 @@ class ApiHolderTest {
     Mockito.when(
             this.coinMarketCapCommunicator.executeMethod(
                 eq(ApiCommunicatorMethodEnum.CURRENT_LISTING), ArgumentMatchers.<Object>any()))
-        .thenAnswer(res);
+        .thenAnswer(resSuccess);
     Mockito.when(
             this.coinMarketCapCommunicator.executeMethod(
                 eq(ApiCommunicatorMethodEnum.HISTORICAL_LISTING), ArgumentMatchers.<Object>any()))
-        .thenAnswer(res);
+        .thenAnswer(resSuccess);
     Mockito.when(
             this.coinMarketCapCommunicator.executeMethod(
                 eq(ApiCommunicatorMethodEnum.TOP_COINS), ArgumentMatchers.<Object>any()))
-        .thenAnswer(res);
+        .thenAnswer(resSuccess);
     Mockito.when(
             this.coinMarketCapCommunicator.executeMethod(
                 eq(ApiCommunicatorMethodEnum.COIN_INFO), ArgumentMatchers.<Object>any()))
-        .thenAnswer(res);
+        .thenAnswer(resSuccess);
   }
 
   @BeforeEach
@@ -70,6 +70,14 @@ class ApiHolderTest {
           public Result answer(InvocationOnMock invocationOnMock) throws Throwable {
             cgCalls++;
             return new Result(ApiProviderEnum.COIN_GECKO, ResultStatus.SUCCESS, ",", null);
+          }
+        };
+    Answer<Result> resError =
+        new Answer<Result>() {
+          @Override
+          public Result answer(InvocationOnMock invocationOnMock) throws Throwable {
+            cgCalls++;
+            return new Result(ApiProviderEnum.COIN_GECKO, ResultStatus.FAILURE, ",", null);
           }
         };
     Mockito.when(this.coinGeckoCommunicator.getApiProvider())
@@ -90,6 +98,11 @@ class ApiHolderTest {
             this.coinGeckoCommunicator.executeMethod(
                 eq(ApiCommunicatorMethodEnum.COIN_INFO), ArgumentMatchers.<Object>any()))
         .thenAnswer(res);
+
+    Mockito.when(
+            this.coinGeckoCommunicator.executeMethod(
+                eq(ApiCommunicatorMethodEnum.COIN_INFO), eq(List.of("bttc"))))
+        .thenAnswer(resError);
   }
 
   @BeforeEach
@@ -164,5 +177,11 @@ class ApiHolderTest {
     this.apiHolder.getCoinInfo(List.of(ApiProviderEnum.COIN_MARKET_CAP), new ArrayList<>());
     assertEquals(0, this.cgCalls);
     assertEquals(1, this.cmcCalls);
+  }
+
+  @Test
+  void executeAllFailures() {
+    this.apiHolder.getCoinInfo(List.of(ApiProviderEnum.COIN_GECKO), List.of("bttc"));
+    assertEquals(1, this.cgCalls);
   }
 }
