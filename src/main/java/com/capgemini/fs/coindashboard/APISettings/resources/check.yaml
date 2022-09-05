@@ -1,5 +1,0 @@
-get:
-  summary: Check if Server is Running
-  responses:
-    '200':
-      $ref: '../responses/success_response.yaml'
