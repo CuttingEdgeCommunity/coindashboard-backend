@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,16 +11,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {CoinMarketCapApiClient.class})
+@ContextConfiguration(classes = {CoinGeckoApiClient.class})
 @ExtendWith(SpringExtension.class)
 @EnableConfigurationProperties
 @TestPropertySource(locations = "classpath:application.properties")
-class CoinMarketCapApiClientTest {
+class CoinGeckoApiClientTest {
 
-  @Autowired private CoinMarketCapApiClient coinMarketCapApiClient;
+  @Autowired private CoinGeckoApiClient coinGeckoClient;
 
   @Test
   void getCoinsNames() throws IOException {
-    assertEquals(200, coinMarketCapApiClient.getCoinsNames().getResponseCode());
+    assertEquals(200, coinGeckoClient.getCoinsNames().getResponseCode());
   }
 }

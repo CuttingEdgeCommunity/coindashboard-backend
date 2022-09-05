@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.ID;
 import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.NAME;
@@ -21,17 +21,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(
-    classes = {
-      CoinMarketCapTranslator.class,
-      CoinMarketCapApiClient.class,
-      CoinMarketCapFieldNameMapper.class
-    })
+    classes = {CoinGeckoTranslator.class, CoinGeckoApiClient.class, CoinGeckoFieldNameMapper.class})
 @EnableConfigurationProperties
 @TestPropertySource(locations = "classpath:application.properties")
-class CoinMarketCapTranslatorTest extends CoinMarketCapTestBaseClass {
-  @Autowired private CoinMarketCapFieldNameMapper coinMarketCapFieldNameMapper;
-  @Autowired private CoinMarketCapTranslator coinMarketCapTranslator;
-  @MockBean private CoinMarketCapApiClient coinMarketCapApiClient;
+class CoinGeckoTranslatorTest extends CoinGeckoTestBaseClass {
+  @Autowired CoinGeckoTranslator coinGeckoTranslator;
+  @MockBean CoinGeckoApiClient coinGeckoApiClient;
 
   @BeforeEach
   void setup() throws JsonProcessingException {
@@ -40,27 +35,28 @@ class CoinMarketCapTranslatorTest extends CoinMarketCapTestBaseClass {
 
   @Test
   void initialize() throws IOException {
-    Mockito.when(coinMarketCapApiClient.getCoinsNames()).thenReturn(this.correctGetNamesR);
-    coinMarketCapTranslator.initialize(coinMarketCapApiClient.getCoinsNames());
-    assertEquals(this.correctNames, coinMarketCapTranslator.translate(inputsymbols, NAME));
-    assertEquals(this.correctIds, coinMarketCapTranslator.translate(inputsymbols, ID));
+    Mockito.when(coinGeckoApiClient.getCoinsNames()).thenReturn(this.correctGetNamesR);
+    coinGeckoTranslator.initialize(coinGeckoApiClient.getCoinsNames());
+    assertEquals(this.correctNames, coinGeckoTranslator.translate(this.inputsymbols, NAME));
+    assertEquals(this.correctIds, coinGeckoTranslator.translate(this.inputsymbols, ID));
   }
 
   @Test
   void translate() {
     assertEquals(
-        this.inputsymbols,
-        coinMarketCapTranslator.translate(inputsymbols, ApiCommunicatorMethodEnum.CURRENT_LISTING));
+        this.correctIds,
+        coinGeckoTranslator.translate(
+            this.inputsymbols, ApiCommunicatorMethodEnum.CURRENT_LISTING));
     assertEquals(
-        this.inputsymbols,
-        coinMarketCapTranslator.translate(
-            inputsymbols, ApiCommunicatorMethodEnum.HISTORICAL_LISTING));
+        this.correctIds,
+        coinGeckoTranslator.translate(
+            this.inputsymbols, ApiCommunicatorMethodEnum.HISTORICAL_LISTING));
     assertEquals(
         "Unexpected value: " + ApiCommunicatorMethodEnum.TOP_COINS,
         assertThrows(
                 IllegalStateException.class,
                 () -> {
-                  coinMarketCapTranslator.translate(
+                  coinGeckoTranslator.translate(
                       this.inputsymbols, ApiCommunicatorMethodEnum.TOP_COINS);
                 },
                 "Unexpected value: " + ApiCommunicatorMethodEnum.TOP_COINS)

@@ -2,15 +2,35 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.CoinTranslator;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.PlaceHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum;
 import java.util.List;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.util.List;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public final class CoinGeckoTranslator extends CoinTranslator {
+@Log4j2
+final class CoinGeckoTranslator extends CoinTranslator {
+  @Autowired CoinGeckoFieldNameMapper coinGeckoFieldNameMapper;
 
   @Override
-  public void initialize(Object data) {}
+  public void initialize(Response response) {
+    for (JsonNode coinJson : response.getResponseBody()) {
+      String symbol = coinJson.get(coinGeckoFieldNameMapper.SYMBOL).asText().toLowerCase();
+      this.setTranslation(
+          symbol,
+          new PlaceHolder(
+              coinJson.get(coinGeckoFieldNameMapper.NAME).asText(),
+              coinJson.get(coinGeckoFieldNameMapper.ID).asText(),
+              symbol));
+    }
+    log.info("PlaceHolderMap with lowercase 'symbol' initialized");
+  }
 
   @Override
   public List<String> translate(List<String> symbols, ApiCommunicatorMethodEnum method) {

@@ -1,6 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
+import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,13 +12,17 @@ public abstract class CoinTranslator {
   // maps symbol to PlaceHolder
   private final Map<String, PlaceHolder> translationMap = new HashMap<>();
 
-  public abstract void initialize(Object data);
+  public abstract void initialize(Response response);
 
   protected PlaceHolder getTranslation(String symbol) {
     return this.translationMap.get(symbol);
   }
 
-  protected List<String> translate(List<String> symbols, TranslationEnum wanted) {
+  protected void setTranslation(String symbol, PlaceHolder placeHolder) {
+    this.translationMap.put(symbol, placeHolder);
+  }
+
+  public List<String> translate(List<String> symbols, TranslationEnum wanted) {
     var result = new ArrayList<String>();
     for (String symbol : symbols) {
       String translation;

@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders;
+package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.IntervalEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.FieldNameMapper;
@@ -24,6 +24,8 @@ public final class CoinGeckoFieldNameMapper extends FieldNameMapper {
   public final String DAILY_VOLUME = "total_volume";
   public final String CURRENT_PRICE = "current_price";
   public final String LAST_UPDATE_DATE = "last_updated";
+  public final String ID = "id";
+
   public final String MARKET_DATA = "market_data";
   public final String PRICES = "prices";
   public final Map<IntervalEnum, String> DELTA_MAP =

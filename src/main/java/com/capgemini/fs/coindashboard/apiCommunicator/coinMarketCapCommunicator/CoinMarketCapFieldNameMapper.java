@@ -31,6 +31,7 @@ public final class CoinMarketCapFieldNameMapper extends FieldNameMapper {
   public final String IMAGE_URL = "logo";
   public final String TOKEN_ADDRESS = "token_address";
   public final String LINKS = "urls";
+  public final String ID = "id";
 
   public final Map<IntervalEnum, String> DELTA_MAP =
       Map.of(
