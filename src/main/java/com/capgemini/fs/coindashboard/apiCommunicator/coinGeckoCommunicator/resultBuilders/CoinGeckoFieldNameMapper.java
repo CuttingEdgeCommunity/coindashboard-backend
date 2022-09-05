@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
-final class CoinGeckoFieldNameMapper extends FieldNameMapper {
+public final class CoinGeckoFieldNameMapper extends FieldNameMapper {
   public final String INSERTED_QUOTE_NAME = "inserted_quote_name";
   public final String NAME = "name";
   public final String SYMBOL = "symbol";

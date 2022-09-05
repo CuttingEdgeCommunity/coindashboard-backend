@@ -13,7 +13,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
-class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketDataBuilderBaseClass {
+public class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketDataBuilderBaseClass {
   private final ApiCommunicatorMethodEnum method = ApiCommunicatorMethodEnum.HISTORICAL_LISTING;
 
   @Override

@@ -17,7 +17,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
-class CoinGeckoCoinInfoResultBuilder extends CoinGeckoBuilderBaseClass {
+public class CoinGeckoCoinInfoResultBuilder extends CoinGeckoBuilderBaseClass {
   private final ApiCommunicatorMethodEnum method = ApiCommunicatorMethodEnum.COIN_INFO;
 
   @Override

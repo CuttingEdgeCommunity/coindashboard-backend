@@ -40,7 +40,6 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
     return this.provider;
   }
 
-  // TODO more than 1 currency
   @Override
   public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies) {
 
