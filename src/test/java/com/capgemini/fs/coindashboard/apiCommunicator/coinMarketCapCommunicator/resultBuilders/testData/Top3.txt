@@ -1,0 +1,108 @@
+{"data": [
+        {},
+        {
+            "id": 1,
+            "name": "Bitcoin",
+            "symbol": "BTC",
+            "slug": "bitcoin",
+            "num_market_pairs": 9718,
+            "date_added": "2013-04-28T00:00:00.000Z",
+            "max_supply": 21000000,
+            "circulating_supply": 19139187,
+            "total_supply": 19139187,
+            "platform": null,
+            "cmc_rank": 1,
+            "self_reported_circulating_supply": null,
+            "self_reported_market_cap": null,
+            "tvl_ratio": null,
+            "last_updated": "2022-09-02T10:44:00.000Z",
+            "quote": {
+                "USD": {
+                    "price": 20071.025400915987,
+                    "volume_24h": 27924100456.377663,
+                    "volume_change_24h": -9.6682,
+                    "percent_change_1h": -0.28848647,
+                    "percent_change_24h": 0.40505183,
+                    "percent_change_7d": -6.19161959,
+                    "percent_change_30d": -14.23576568,
+                    "percent_change_60d": 3.06575002,
+                    "percent_change_90d": -32.44695084,
+                    "market_cap": 384143108429.88104,
+                    "market_cap_dominance": 39.0324,
+                    "fully_diluted_market_cap": 421491533419.24,
+                    "tvl": null,
+                    "last_updated": "2022-09-02T10:44:00.000Z"
+                }
+            }
+        },
+        {
+            "id": 1027,
+            "name": "Ethereum",
+            "symbol": "ETH",
+            "slug": "ethereum",
+            "num_market_pairs": 6068,
+            "date_added": "2015-08-07T00:00:00.000Z",
+            "max_supply": null,
+            "circulating_supply": 122208825.749,
+            "total_supply": 122208825.749,
+            "platform": null,
+            "cmc_rank": 2,
+            "self_reported_circulating_supply": null,
+            "self_reported_market_cap": null,
+            "tvl_ratio": null,
+            "last_updated": "2022-09-02T10:44:00.000Z",
+            "quote": {
+                "USD": {
+                    "price": 1587.510969508229,
+                    "volume_24h": 15498501414.159689,
+                    "volume_change_24h": -10.7965,
+                    "percent_change_1h": -0.31842342,
+                    "percent_change_24h": 1.93891399,
+                    "percent_change_7d": -3.94868754,
+                    "percent_change_30d": -4.2018732,
+                    "percent_change_60d": 47.91944388,
+                    "percent_change_90d": -10.40854666,
+                    "market_cap": 194007851447.2572,
+                    "market_cap_dominance": 19.7156,
+                    "fully_diluted_market_cap": 194007851447.26,
+                    "tvl": null,
+                    "last_updated": "2022-09-02T10:44:00.000Z"
+                }
+            }
+        },
+        {
+            "id": 825,
+            "name": "Tether",
+            "symbol": "USDT",
+            "slug": "tether",
+            "num_market_pairs": 39172,
+            "date_added": "2015-02-25T00:00:00.000Z",
+            "max_supply": null,
+            "circulating_supply": 67550404112.72471,
+            "total_supply": 69156782826.54617,
+            "cmc_rank": 3,
+            "self_reported_circulating_supply": null,
+            "self_reported_market_cap": null,
+            "tvl_ratio": null,
+            "last_updated": "2022-09-02T10:44:00.000Z",
+            "quote": {
+                "USD": {
+                    "price": 0.9999874895725852,
+                    "volume_24h": 41087080001.470406,
+                    "volume_change_24h": -10.0485,
+                    "percent_change_1h": -0.00433971,
+                    "percent_change_24h": -0.00353852,
+                    "percent_change_7d": -0.00684721,
+                    "percent_change_30d": -0.019183,
+                    "percent_change_60d": 0.08671461,
+                    "percent_change_90d": 0.08211937,
+                    "market_cap": 67549559028.29722,
+                    "market_cap_dominance": 6.8636,
+                    "fully_diluted_market_cap": 69155917645.63,
+                    "tvl": null,
+                    "last_updated": "2022-09-02T10:44:00.000Z"
+                }
+            }
+        }
+    ]
+}
