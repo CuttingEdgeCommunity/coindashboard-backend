@@ -46,6 +46,32 @@ public class GetQueriesImplementation implements GetQueries {
   }
 
   @Override
+  public String getCoinDetails(String symbol) {
+    MatchOperation matchStage = Aggregation.match(new Criteria("symbol").is(symbol));
+    ProjectionOperation projectStage =
+        Aggregation.project(
+                "name",
+                "symbol",
+                "image_url",
+                "genesis_date",
+                "is_token",
+                "contract_address",
+                "links",
+                "description")
+            .andExclude("_id");
+    Aggregation aggregation =
+        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(1));
+    List<Object> result =
+        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults();
+    if (result.isEmpty()) {
+      log.error("coin" + symbol + " does not exist");
+      return null;
+    }
+    log.info("passing CoinDetails from DB");
+    return gson.toJson(result);
+  }
+
+  @Override
   public String getCoins(int take, int page) {
     MatchOperation matchStage =
         Aggregation.match(new Criteria("marketCapRank").gt(take * page).lte(take * (page + 1)));
@@ -62,7 +88,7 @@ public class GetQueriesImplementation implements GetQueries {
       log.error("coin matching criteria does not exist");
       return null;
     }
-    log.info("passing coinMarketData from DB");
+    log.info("passing Coins from DB");
     return gson.toJson(result);
   }
 
