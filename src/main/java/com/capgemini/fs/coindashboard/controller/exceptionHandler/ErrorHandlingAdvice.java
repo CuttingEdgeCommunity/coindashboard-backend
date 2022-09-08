@@ -29,6 +29,4 @@ public class ErrorHandlingAdvice {
   String ServerNotRespondingHandler(ServerIsNotRespondingException ex) {
     return ex.getMessage();
   }
-
-
 }

@@ -14,15 +14,39 @@ public class CacheConfig {
   // TODO: we need to make it synchronized with update and custom for every method
   // in CacheService
 
-  @Bean
+  /* @Bean
   public Caffeine caffeineConfig() {
     return Caffeine.newBuilder().expireAfterWrite(1000, TimeUnit.MILLISECONDS);
-  }
-
+  }*/
   @Bean
-  public CacheManager cacheManager(Caffeine caffeine) {
+  public CacheManager cacheManager() {
     CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
-    caffeineCacheManager.setCaffeine(caffeine);
+    // caffeineCacheManager.setCaffeine(caffeine);
+    caffeineCacheManager.registerCustomCache(
+        "getCoinMarketData",
+        Caffeine.newBuilder()
+            .maximumSize(1000)
+            .expireAfterAccess(6000, TimeUnit.MILLISECONDS)
+            .build());
+    caffeineCacheManager.registerCustomCache(
+        "getCoinInfo",
+        Caffeine.newBuilder()
+            .maximumSize(2000)
+            .expireAfterAccess(12000, TimeUnit.MILLISECONDS)
+            .build());
+    caffeineCacheManager.registerCustomCache(
+        "getCoinDetails",
+        Caffeine.newBuilder()
+            .maximumSize(1000)
+            .expireAfterAccess(6000, TimeUnit.MILLISECONDS)
+            .build());
+    caffeineCacheManager.registerCustomCache(
+        "getChart",
+        Caffeine.newBuilder()
+            .maximumSize(2000)
+            .expireAfterAccess(1200, TimeUnit.MILLISECONDS)
+            .build());
+
     return caffeineCacheManager;
   }
 }
