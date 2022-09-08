@@ -27,8 +27,8 @@ public class CacheServiceImplementation implements CacheService {
 
   @Override
   @Cacheable(cacheNames = "getCoinDetails")
-  public Optional<String> getCoinDetails(String name) {
-    throw new UnsupportedOperationException("Method not yet implemented.");
+  public Optional<String> getCoinDetails(String symbol) {
+    return Optional.of(getQueries.getCoinDetails(symbol));
   }
 
   @Override
