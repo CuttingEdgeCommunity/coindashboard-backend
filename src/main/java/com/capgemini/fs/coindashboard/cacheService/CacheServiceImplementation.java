@@ -1,5 +1,4 @@
 package com.capgemini.fs.coindashboard.cacheService;
-
 import com.capgemini.fs.coindashboard.CRUDService.queries.Queries;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
