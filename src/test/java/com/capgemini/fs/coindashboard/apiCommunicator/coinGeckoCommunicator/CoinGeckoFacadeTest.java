@@ -1,5 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.ID;
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders.CoinGeckoCoinInfoResultBuilder;
@@ -40,10 +42,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
       CoinGeckoCoinInfoResultBuilder.class,
       HttpRequestBuilder.class,
       CoinGeckoFieldNameMapper.class,
-      ResultBuilderDirector.class
+      ResultBuilderDirector.class,
+      CoinGeckoTestBaseClass.class
     })
-class CoinGeckoFacadeTest {
+class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
   @Autowired private CoinGeckoFacade facade;
+  @Autowired private CoinGeckoTranslator translator;
   @MockBean private CoinGeckoApiClient client;
 
   private ObjectMapper mapper = new ObjectMapper();
@@ -189,5 +193,14 @@ class CoinGeckoFacadeTest {
         facade.getHistoricalListing(List.of("bitcoin"), List.of("usd"), 0L, 0L);
     assertEquals(ResultStatus.SUCCESS, result.get().getStatus());
     assertEquals(4, result.get().getCoins().get(0).getQuotes().get("usd").getChart().size());
+  }
+
+  @Test
+  void initTest() throws IOException {
+    this.setupCorrectGetNames();
+    Mockito.when(client.getCoinsNames()).thenReturn(this.correctGetNamesR);
+    facade.init();
+    assertEquals(this.correctNames, this.translator.translate(inputsymbols, NAME));
+    assertEquals(this.correctIds, this.translator.translate(inputsymbols, ID));
   }
 }
