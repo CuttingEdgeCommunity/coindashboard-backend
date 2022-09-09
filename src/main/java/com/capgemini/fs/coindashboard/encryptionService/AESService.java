@@ -1,5 +1,7 @@
 package com.capgemini.fs.coindashboard.encryptionService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
@@ -16,9 +18,8 @@ public class AESService {
   private String TRANSFORMATION = "AES/GCM/NoPadding";
   private int TAG_LENGTH = 128;
   private byte[] IV;
-
-  public void init(String secretKey, String IV){
-    key = new SecretKeySpec(decode(secretKey),"AES");
+  public AESService(@Value("${SECRET_KEY}") String SECRET_KEY,@Value("${IV}") String IV) {
+    key = new SecretKeySpec(decode(SECRET_KEY),"AES");
     this.IV = decode(IV);
   }
 
