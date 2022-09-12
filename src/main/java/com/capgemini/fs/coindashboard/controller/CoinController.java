@@ -69,14 +69,14 @@ public class CoinController {
     return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinMarketData);
   }
 
-  @GetMapping("/coins/{name}")
+  @GetMapping("/coins/{symbol}")
   ResponseEntity<String> details(
       @PathVariable
           @NotBlank(message = "name cannot be blank")
           @Size(max = 50, message = "name cannot be longer than 50 characters")
-          String name) {
+          String symbol) {
     String coinDetails =
-        cacheService.getCoinDetails(name).orElseThrow(() -> new CoinNotFoundException(name));
+        cacheService.getCoinDetails(symbol).orElseThrow(() -> new CoinNotFoundException(symbol));
     String location =
         ServletUriComponentsBuilder.fromCurrentRequest().path("coins/{name}").build().toUriString();
     return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinDetails);

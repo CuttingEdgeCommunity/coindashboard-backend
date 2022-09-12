@@ -60,6 +60,36 @@ class GetQueriesImplementationTest {
   }
 
   @Test
+  public void getCoinDetailsTestIfResultIsEmpty() {
+
+    List<Object> result = new ArrayList<>();
+
+    when(mockResults.getMappedResults()).thenReturn(result);
+    doReturn(mockResults)
+        .when(mongoTemplate)
+        .aggregate(Mockito.any(Aggregation.class), Mockito.eq("Coin"), Mockito.eq(Object.class));
+
+    assertNull(getQueries.getCoinDetails("btc"));
+  }
+
+  @Test
+  public void getCoinDetailsTestIfResultIsNotEmpty() {
+
+    List<Object> result = new ArrayList<>();
+    Coin coin = new Coin("1234", "BLABLA", "btc", 1, "", 123L, false, null, null, null, null);
+    result.add(coin);
+
+    when(mockResults.getMappedResults()).thenReturn(result);
+    doReturn(mockResults)
+        .when(mongoTemplate)
+        .aggregate(Mockito.any(Aggregation.class), Mockito.eq("Coin"), Mockito.eq(Object.class));
+
+    assertEquals(
+        getQueries.getCoinDetails("btc"),
+        "[{\"id\":\"1234\",\"name\":\"BLABLA\",\"symbol\":\"btc\",\"marketCapRank\":1,\"image_url\":\"\",\"genesis_date\":123,\"is_token\":false}]");
+  }
+
+  @Test
   public void getCoinsTestIfResultIsEmpty() {
 
     List<Object> result = new ArrayList<>();
