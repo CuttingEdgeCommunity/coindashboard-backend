@@ -20,7 +20,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   
-  deploy-mongo:
+  deploy-prometheus:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
