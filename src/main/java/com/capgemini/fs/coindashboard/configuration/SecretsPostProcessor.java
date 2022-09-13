@@ -33,7 +33,13 @@ public class SecretsPostProcessor implements EnvironmentPostProcessor,
     * properties are secrets. Then it reads these properties and creates a list of them.
     * Each item on the list is decrypted and added to a string builder which will
     * be then used to create a custom property source that is added on top of all
-    * property sources, so it overrides all the secret values*/
+    * property sources, so it overrides all the secret values
+    *
+    * Properties: secret.key and secrets.iv must be provided at application startup
+    * in order to correctly decrypt secrets
+    * */
+
+    //TO-DO: add docker iv and key params - ask buddy how to pass them in a secure way
 
     PropertySource<?> propertySource = environment.getPropertySources()
         .get("configurationProperties");
