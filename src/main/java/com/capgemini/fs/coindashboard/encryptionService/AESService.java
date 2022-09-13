@@ -1,8 +1,6 @@
 package com.capgemini.fs.coindashboard.encryptionService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -11,16 +9,16 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-@Component
+
 public class AESService {
   private SecretKey key;
   private int KEY_SIZE =128;
   private String TRANSFORMATION = "AES/GCM/NoPadding";
   private int TAG_LENGTH = 128;
   private byte[] IV;
-  public AESService(@Value("${SECRET_KEY}") String SECRET_KEY,@Value("${IV}") String IV) {
-    key = new SecretKeySpec(decode(SECRET_KEY),"AES");
-    this.IV = decode(IV);
+  public AESService(String secret_key,String iv) {
+    key = new SecretKeySpec(decode(secret_key),"AES");
+    this.IV = decode(iv);
   }
 
   public String encrypt(String message) throws NoSuchPaddingException,
