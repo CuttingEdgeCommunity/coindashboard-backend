@@ -14,7 +14,7 @@ public class CreateQueriesImplementation implements CreateQueries {
   @Autowired MongoTemplate mongoTemplate;
 
   @Override
-  public boolean CreateCoinDocument(Coin coin) {
+  public boolean createCoinDocument(Coin coin) {
     try {
       mongoTemplate.save(coin, "Coin");
       return true;
@@ -25,7 +25,7 @@ public class CreateQueriesImplementation implements CreateQueries {
   }
 
   @Override
-  public void CreateCoinDocuments(List<Coin> coins) {
+  public void createCoinDocuments(List<Coin> coins) {
     try {
       mongoTemplate.insertAll(coins);
       log.info("insert performed...");

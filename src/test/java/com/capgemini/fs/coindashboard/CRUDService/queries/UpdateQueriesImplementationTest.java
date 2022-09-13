@@ -74,7 +74,7 @@ class UpdateQueriesImplementationTest {
     UpdateResult updateResult = updateResult(true);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
 
-    assertTrue(updateQueries.UpdateCoinCurrentQuote("btc", newQuote, vs_currency));
+    assertTrue(updateQueries.updateCoinCurrentQuote("btc", newQuote, vs_currency));
   }
 
   @Test
@@ -86,7 +86,7 @@ class UpdateQueriesImplementationTest {
     UpdateResult updateResult = updateResult(false);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
 
-    assertFalse(updateQueries.UpdateCoinCurrentQuote("btc", newQuote, vs_currency));
+    assertFalse(updateQueries.updateCoinCurrentQuote("btc", newQuote, vs_currency));
   }
 
   @Test
@@ -98,7 +98,7 @@ class UpdateQueriesImplementationTest {
     UpdateResult updateResult = updateResult(true);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
 
-    assertTrue(updateQueries.UpdateCoinMarketRankCap("btc", 1));
+    assertTrue(updateQueries.UpdateCoinMarketCapRank("btc", 1));
   }
 
   @Test
@@ -110,6 +110,6 @@ class UpdateQueriesImplementationTest {
     UpdateResult updateResult = updateResult(false);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
 
-    assertFalse(updateQueries.UpdateCoinMarketRankCap("btc", 1));
+    assertFalse(updateQueries.UpdateCoinMarketCapRank("btc", 1));
   }
 }

@@ -89,7 +89,7 @@ class DatabaseUpdaterTest {
     Mockito.when(apiHolder.getCoinInfo(List.of("btc")))
         .thenReturn(Optional.of(resultOfGetCoinInfo));
     Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(false);
-    Mockito.when(createQueries.CreateCoinDocument(coin)).thenReturn(true);
+    Mockito.when(createQueries.createCoinDocument(coin)).thenReturn(true);
     databaseUpdater.setEnabled(true);
     assertTrue(databaseUpdater.currentQuoteUpdates());
   }

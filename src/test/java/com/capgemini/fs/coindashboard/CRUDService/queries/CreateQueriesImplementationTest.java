@@ -25,7 +25,7 @@ class CreateQueriesImplementationTest {
   @Test
   public void CreateDocumentWhenPassedNull() {
     Mockito.when(mongoTemplate.save(null, "Coin")).thenThrow(new IllegalArgumentException());
-    assertFalse(createQueries.CreateCoinDocument(null));
+    assertFalse(createQueries.createCoinDocument(null));
   }
 
   @Test
@@ -34,6 +34,6 @@ class CreateQueriesImplementationTest {
     Coin coin = new Coin();
     Mockito.when(mongoTemplate.save(coin, "Coin")).thenReturn(coin);
 
-    assertTrue(createQueries.CreateCoinDocument(coin));
+    assertTrue(createQueries.createCoinDocument(coin));
   }
 }

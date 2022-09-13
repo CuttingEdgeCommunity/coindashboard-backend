@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface CreateQueries {
 
-  boolean CreateCoinDocument(Coin coin);
+  boolean createCoinDocument(Coin coin);
 
-  void CreateCoinDocuments(List<Coin> coins);
+  void createCoinDocuments(List<Coin> coins);
 }

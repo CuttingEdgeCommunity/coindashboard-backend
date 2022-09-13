@@ -3,6 +3,7 @@ package com.capgemini.fs.coindashboard.CRUDService.mongoconfig;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
+import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,10 @@ public class MongoConfig {
   @Bean
   public MongoTemplate mongoTemplate() {
     return new MongoTemplate(mongo(), mongoEnv.getDatabase());
+  }
+
+  @Bean
+  public ClientSession mongoSession() {
+    return mongo().startSession();
   }
 }
