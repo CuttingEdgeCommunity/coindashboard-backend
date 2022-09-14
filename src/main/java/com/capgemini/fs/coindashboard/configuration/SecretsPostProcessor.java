@@ -28,26 +28,21 @@ public class SecretsPostProcessor implements EnvironmentPostProcessor,
   public void postProcessEnvironment(ConfigurableEnvironment environment,
       SpringApplication application) {
 
-    /*TEMP-DOC:
-    * preprocessor works in a way that it reads a property that tells which
-    * properties are secrets. Then it reads these properties and creates a list of them.
-    * Each item on the list is decrypted and added to a string builder which will
-    * be then used to create a custom property source that is added on top of all
-    * property sources, so it overrides all the secret values
-    *
-    * Properties: secret.key and secrets.iv must be provided at application startup
-    * in order to correctly decrypt secrets - add validation logic
-    * */
-
-    //TO-DO: iv and key params - ask buddy how to pass them in a secure way
-
+    //configurationProperties is a main configuration properties source
     PropertySource<?> propertySource = environment.getPropertySources()
         .get("configurationProperties");
+
+    if(propertySource.getProperty("secret.key")==null ||
+        propertySource.getProperty("secret.iv") == null){
+      log.error("Can't find secret key and/or iv");
+      return;
+    }
 
     aesService = new AESService(propertySource.getProperty("secret.key").toString(),
         propertySource.getProperty("secret.iv").toString());
 
     String secretPropertiesString = propertySource.getProperty("secret.properties").toString();
+
     List<String> secretProperties = Arrays.stream(secretPropertiesString.split(" ")).toList(),
       propertiesNotFound = new ArrayList<>(),
       propertiesNotDecrypted = new ArrayList<>();
@@ -89,16 +84,21 @@ public class SecretsPostProcessor implements EnvironmentPostProcessor,
       properties.load(new StringReader(decryptedPropertiesString));
     }
     catch(IOException exception) {
-        log.warn("SecretsPostProcessor could not initialize new Properties object with values");
+      log.warn("Can't fetch decrypted properties into configuration");
     }
-    PropertiesPropertySource decryptedSecretsPropertySource = new PropertiesPropertySource("decryptedSecretsProperties", properties);
+    PropertiesPropertySource decryptedSecretsPropertySource = new PropertiesPropertySource(
+        "decryptedSecretsProperties", properties);
     propertySourcesHandle.addFirst(decryptedSecretsPropertySource);
+
+    if(propertiesNotFound.size() < 1 && propertiesNotDecrypted.size() < 1){
+      log.info("Successfully decrypted all properties");
+    }
   }
 
   private void logTroubles(List<String> problemSource,String actionName){
     StringBuilder propertiesNotFoundStringBuilder = new StringBuilder();
     String propertiesWord = problemSource.size() == 1 ? "property" : "properties";
-    propertiesNotFoundStringBuilder.append("SecretsPostProcessor could not "+actionName+" "+
+    propertiesNotFoundStringBuilder.append("Can't "+actionName+" "+
         problemSource.size()+" "+propertiesWord+": [ ");
     for (String propertyNotFound: problemSource) {
       propertiesNotFoundStringBuilder.append(propertyNotFound+" ");
