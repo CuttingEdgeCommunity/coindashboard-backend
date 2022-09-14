@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(
     scanBasePackages = {
+      "com.capgemini.fs.coindashboard.configuration",
       "com.capgemini.fs.coindashboard.controller",
       "com.capgemini.fs.coindashboard.database",
       "com.capgemini.fs.coindashboard.initializer",
@@ -16,7 +17,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
       "com.capgemini.fs.coindashboard.updatingService",
       "com.capgemini.fs.coindashboard.cacheService",
       "com.capgemini.fs.coindashboard.encryptionService",
-      "com.capgemini.fs.coindashboard.configuration"
     })
 @EnableScheduling
 @OpenAPIDefinition(
