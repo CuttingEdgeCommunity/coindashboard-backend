@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import java.util.Arrays;
 import java.util.List;
@@ -65,14 +66,13 @@ class ApiCommunicatorFacadeTemplateTest {
 
   @Test
   void executeMethod() {
+    var params = new ApiCommunicatorMethodParametersDto(1, 1, List.of(), List.of(), false, 0L, 0L);
     this.apiCommunicatorFacadeTemplate.executeMethod(
-        ApiCommunicatorMethodEnum.HISTORICAL_LISTING, List.of(), List.of(), 0L, 0L);
+        ApiCommunicatorMethodEnum.HISTORICAL_LISTING, params);
     this.apiCommunicatorFacadeTemplate.executeMethod(
-        ApiCommunicatorMethodEnum.CURRENT_LISTING, List.of(), List.of(), false);
-    this.apiCommunicatorFacadeTemplate.executeMethod(
-        ApiCommunicatorMethodEnum.TOP_COINS, 1, 1, List.of());
-    this.apiCommunicatorFacadeTemplate.executeMethod(
-        ApiCommunicatorMethodEnum.COIN_INFO, List.of());
+        ApiCommunicatorMethodEnum.CURRENT_LISTING, params);
+    this.apiCommunicatorFacadeTemplate.executeMethod(ApiCommunicatorMethodEnum.TOP_COINS, params);
+    this.apiCommunicatorFacadeTemplate.executeMethod(ApiCommunicatorMethodEnum.COIN_INFO, params);
     assertTrue(this.invokedMethods.values().stream().allMatch(integer -> integer == 1));
   }
 }
