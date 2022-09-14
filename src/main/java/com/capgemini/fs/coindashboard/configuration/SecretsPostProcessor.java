@@ -36,10 +36,10 @@ public class SecretsPostProcessor implements EnvironmentPostProcessor,
     * property sources, so it overrides all the secret values
     *
     * Properties: secret.key and secrets.iv must be provided at application startup
-    * in order to correctly decrypt secrets
+    * in order to correctly decrypt secrets - add validation logic
     * */
 
-    //TO-DO: add docker iv and key params - ask buddy how to pass them in a secure way
+    //TO-DO: iv and key params - ask buddy how to pass them in a secure way
 
     PropertySource<?> propertySource = environment.getPropertySources()
         .get("configurationProperties");
@@ -63,7 +63,6 @@ public class SecretsPostProcessor implements EnvironmentPostProcessor,
         catch (Exception ex)
         {
           propertiesNotDecrypted.add(secret);
-
         }
       }
       else
@@ -72,30 +71,13 @@ public class SecretsPostProcessor implements EnvironmentPostProcessor,
       }
     }
 
-    //TO DO: EXTRACT A GENERIC VERSION OF THESE TWO METHODS - DRY!
     if(propertiesNotFound.size()>=1)
     {
-      StringBuilder propertiesNotFoundStringBuilder = new StringBuilder();
-      String propertiesWord = propertiesNotFound.size() == 1 ? "property" : "properties";
-      propertiesNotFoundStringBuilder.append("SecretsPostProcessor could not find "+
-          propertiesNotFound.size()+" "+propertiesWord+": [ ");
-      for (String propertyNotFound: propertiesNotFound) {
-        propertiesNotFoundStringBuilder.append(propertyNotFound+" ");
-      }
-      propertiesNotFoundStringBuilder.append("]");
-      log.warn(propertiesNotFoundStringBuilder.toString());
+      logTroubles(propertiesNotFound,"find");
     }
     if(propertiesNotDecrypted.size()>=1)
     {
-      StringBuilder propertiesNotDecryptedStringBuilder = new StringBuilder();
-      String propertiesWord = propertiesNotFound.size() == 1 ? "property" : "properties";
-      propertiesNotDecryptedStringBuilder.append("SecretsPostProcessor could not decrypt "+
-          propertiesNotDecrypted.size()+" "+propertiesWord+": [ ");
-      for (String propertyNotDecrypted : propertiesNotDecrypted) {
-        propertiesNotDecryptedStringBuilder.append(propertyNotDecrypted+" ");
-      }
-      propertiesNotDecryptedStringBuilder.append("]");
-      log.warn(propertiesNotDecryptedStringBuilder.toString());
+      logTroubles(propertiesNotDecrypted,"decrypt");
     }
 
     String decryptedPropertiesString = decryptedPropertiesStringBuilder.toString();
@@ -111,6 +93,18 @@ public class SecretsPostProcessor implements EnvironmentPostProcessor,
     }
     PropertiesPropertySource decryptedSecretsPropertySource = new PropertiesPropertySource("decryptedSecretsProperties", properties);
     propertySourcesHandle.addFirst(decryptedSecretsPropertySource);
+  }
+
+  private void logTroubles(List<String> problemSource,String actionName){
+    StringBuilder propertiesNotFoundStringBuilder = new StringBuilder();
+    String propertiesWord = problemSource.size() == 1 ? "property" : "properties";
+    propertiesNotFoundStringBuilder.append("SecretsPostProcessor could not "+actionName+" "+
+        problemSource.size()+" "+propertiesWord+": [ ");
+    for (String propertyNotFound: problemSource) {
+      propertiesNotFoundStringBuilder.append(propertyNotFound+" ");
+    }
+    propertiesNotFoundStringBuilder.append("]");
+    log.warn(propertiesNotFoundStringBuilder.toString());
   }
 
   @Override
