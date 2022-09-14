@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
+import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -15,7 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = {CreateQueriesImplementation.class, MongoTemplate.class})
+@ContextConfiguration(
+    classes = {CreateQueriesImplementation.class, MongoTemplate.class, ApiHolder.class})
 class CreateQueriesImplementationTest {
 
   @Autowired private CreateQueriesImplementation createQueries;

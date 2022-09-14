@@ -6,7 +6,9 @@ import static org.mockito.Mockito.when;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
+import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
+import com.mongodb.client.ClientSession;
 import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,10 +28,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = {UpdateQueriesImplementation.class, MongoTemplate.class})
+@ContextConfiguration(
+    classes = {
+      UpdateQueriesImplementation.class,
+      ClientSession.class,
+      MongoTemplate.class,
+      GetQueriesImplementation.class,
+      CreateQueriesImplementation.class,
+      ApiHolder.class
+    })
 class UpdateQueriesImplementationTest {
   @Autowired private UpdateQueriesImplementation updateQueries;
   @MockBean private MongoTemplate mongoTemplate;
+  @MockBean private ClientSession mongoSession;
 
   private final String vs_currency = "usd";
   private List<String> vsCurrencies = new ArrayList<>();

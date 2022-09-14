@@ -33,7 +33,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
       update.set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
-        log.info("Update CurrentQuote for " + symbol + " vs " + vs_currency + " performed.");
+        log.info("Update CurrentQuote for " + symbol + " vs " + vs_currency + " is completed.");
         return true;
       }
     } catch (Exception e) {
@@ -48,17 +48,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
     for (Coin coin : coins) {
       if (!getQueries.isCoinInDBBySymbol(coin.getSymbol())) {
         try {
-          List<String> symbols = List.of(coin.getSymbol());
-          var resultCoinInfo = this.apiHolder.getCoinInfo(symbols);
-          Coin coinWithDetails = resultCoinInfo.orElseThrow().getCoins().get(0);
-          coin.setContract_address(coinWithDetails.getContract_address());
-          coin.setDescription(coinWithDetails.getDescription());
-          coin.setGenesis_date(coinWithDetails.getGenesis_date());
-          coin.setImage_url(coinWithDetails.getImage_url());
-          coin.setIs_token(coinWithDetails.getIs_token());
-          coin.setLinks(coinWithDetails.getLinks());
-          createQueries.createCoinDocument(coin);
-          log.info("new coin (" + coin.getSymbol() + ") in the database.");
+          createQueries.createCoinDocumentWithUpdatingDetails(coin);
         } catch (Exception ex) {
           log.error(ex.getMessage());
         }
@@ -67,13 +57,13 @@ public class UpdateQueriesImplementation implements UpdateQueries {
           try {
             updateCoinCurrentQuote(
                 coin.getSymbol(), coin.getQuotes().get(currency).getCurrentQuote(), currency);
-            log.info("Update of coin: " + coin.getSymbol() + " has started...");
           } catch (Exception ex) {
             log.error(ex.getMessage());
           }
         }
       }
     }
+    log.info(coins.size() + " coins has been updated or inserted to the database.");
     return true;
   }
 

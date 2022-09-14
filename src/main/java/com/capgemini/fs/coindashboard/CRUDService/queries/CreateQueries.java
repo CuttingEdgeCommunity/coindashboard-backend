@@ -7,5 +7,7 @@ public interface CreateQueries {
 
   boolean createCoinDocument(Coin coin);
 
+  boolean createCoinDocumentWithUpdatingDetails(Coin coin);
+
   void createCoinDocuments(List<Coin> coins);
 }
