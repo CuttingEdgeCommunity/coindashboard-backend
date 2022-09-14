@@ -99,7 +99,7 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
   @Override
   public Optional<Result> getCurrentListing(
       List<String> coins, List<String> vsCurrencies, boolean include7dSparkline) {
-    // coinTranslator.translate(coins, ApiCommunicatorMethodEnum.CURRENT_LISTING);
+    coins = coinTranslator.translate(coins, ApiCommunicatorMethodEnum.CURRENT_LISTING);
 
     try {
       Result result = new Result(this.provider, ResultStatus.FAILURE, null, new ArrayList<>());
@@ -136,7 +136,7 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
   @Override
   public Optional<Result> getHistoricalListing(
       List<String> coins, List<String> vsCurrencies, Long timestampFrom, Long timestampTo) {
-    // coinTranslator.translate(coins, ApiCommunicatorMethodEnum.HISTORICAL_LISTING);
+    coins = coinTranslator.translate(coins, ApiCommunicatorMethodEnum.HISTORICAL_LISTING);
 
     try {
       Result result = new Result(this.provider, ResultStatus.FAILURE, null, new ArrayList<>());
@@ -183,7 +183,7 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
 
   @Override
   public Optional<Result> getCoinInfo(List<String> coins) {
-    // coinTranslator.translate(coins, ApiCommunicatorMethodEnum.COIN_INFO);
+    coins = coinTranslator.translate(coins, ApiCommunicatorMethodEnum.COIN_INFO);
 
     try {
       Result result = new Result(this.provider, ResultStatus.FAILURE, null, new ArrayList<>());
