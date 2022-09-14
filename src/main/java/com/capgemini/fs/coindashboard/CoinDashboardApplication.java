@@ -4,11 +4,20 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
-@ComponentScan
+// @SpringBootApplication
+@SpringBootApplication(
+    scanBasePackages = {
+      "com.capgemini.fs.coindashboard.controller",
+      "com.capgemini.fs.coindashboard.database",
+      "com.capgemini.fs.coindashboard.initializer",
+      "com.capgemini.fs.coindashboard.CRUDService",
+      "com.capgemini.fs.coindashboard.apiCommunicator",
+      "com.capgemini.fs.coindashboard.updatingService",
+      "com.capgemini.fs.coindashboard.cacheService",
+      "com.capgemini.fs.coindashboard.utils"
+    })
 @EnableScheduling
 @OpenAPIDefinition(
     info = @Info(title = "API Documentation", version = "1.1", description = "Finally working"))
