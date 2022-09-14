@@ -1,4 +1,5 @@
 package com.capgemini.fs.coindashboard.cacheService.cacheConfig;
+
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.concurrent.TimeUnit;
 import org.springframework.cache.CacheManager;
