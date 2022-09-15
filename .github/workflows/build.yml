@@ -34,6 +34,10 @@ jobs:
           -Dsonar.organization=cuttingedgecommunity 
           -Dsonar.projectKey=CuttingEdgeCommunity_coindashboard-backend 
           -Dsonar.host.url=https://sonarcloud.io
+        with:
+          secrets: |
+            "app.key=${{ secrets.APP_KEY }}"
+            "app.iv={{ secrets.APP_IV }}"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -67,3 +71,6 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/cuttingedgecommunity/coindashboard-backend:latest
+          secrets: |
+            "app.key=${{ secrets.APP_KEY }}"
+            "app.iv={{ secrets.APP_IV }}"
