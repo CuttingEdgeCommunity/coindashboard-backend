@@ -183,19 +183,19 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
 
   @Override
   public Optional<Result> getCoinInfo(List<String> coins) {
-    coinTranslator.translate(coins, ApiCommunicatorMethodEnum.COIN_INFO);
+    coins = coinTranslator.translate(coins, ApiCommunicatorMethodEnum.COIN_INFO);
 
     try {
       Result result = new Result(this.provider, ResultStatus.FAILURE, null, new ArrayList<>());
       List<String> errorMessages = new ArrayList<>();
 
-      for (int i =0; i < coins.size()-1; i++) {
-        if(i%48 == 0 && i!=0){
-          log.info("Sleeping for 1 minute...{}",i);
+      for (int i = 0; i < coins.size() - 1; i++) {
+        if (i % 48 == 0 && i != 0) {
+          log.info("Sleeping for 1 minute...{}", i);
           Thread.sleep(60000);
         }
         Response response = ((CoinGeckoApiClient) this.apiClient).getCoinInfo(coins.get(i));
-        log.info("Iteration: {}",i);
+        log.info("Iteration: {}", i);
         this.resultBuilderDirector.constructCoinMarketDataResult(
             this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO), response, coins.get(i));
         Result responseResult =

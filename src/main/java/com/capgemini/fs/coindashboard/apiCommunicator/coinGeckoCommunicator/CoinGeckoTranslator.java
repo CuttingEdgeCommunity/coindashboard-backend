@@ -32,7 +32,8 @@ public final class CoinGeckoTranslator extends CoinTranslator {
   @Override
   public List<String> translate(List<String> symbols, ApiCommunicatorMethodEnum method) {
     return switch (method) {
-      case CURRENT_LISTING, HISTORICAL_LISTING,COIN_INFO -> this.translate(symbols, TranslationEnum.ID);
+      case CURRENT_LISTING, HISTORICAL_LISTING, COIN_INFO -> this.translate(
+          symbols, TranslationEnum.ID);
       default -> throw new IllegalStateException("Unexpected value: " + method);
     };
   }

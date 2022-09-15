@@ -15,7 +15,7 @@ public abstract class CoinTranslator {
   public abstract void initialize(Response response);
 
   protected PlaceHolder getTranslation(String symbol) {
-    return this.translationMap.get(symbol);
+      return this.translationMap.get(symbol);
   }
 
   protected void setTranslation(String symbol, PlaceHolder placeHolder) {
