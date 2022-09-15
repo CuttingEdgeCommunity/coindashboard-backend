@@ -32,7 +32,8 @@ public class MongoConfig {
                 builder ->
                     builder
                         .maxWaitTime(mongoEnv.getConnection_pool_wait_time(), SECONDS)
-                        .maxSize(mongoEnv.getConnection_pool_size()))
+                        .maxSize(mongoEnv.getConnection_pool_size())
+                        .addConnectionPoolListener(new ConnectionPoolLogger()))
             .applyConnectionString(connectionString)
             .credential(mongoCredential)
             .build();

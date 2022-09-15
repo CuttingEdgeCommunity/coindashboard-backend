@@ -1,4 +1,4 @@
-package com.capgemini.fs.coindashboard;
+package com.capgemini.fs.coindashboard.utils;
 
 import java.util.concurrent.Executor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Configuration
 @EnableAsync
 @EnableConfigurationProperties
-public class AppConfig implements AsyncConfigurer {
+public class AsyncConfig implements AsyncConfigurer {
   @Value("${thread-pool-config.core-pool-size}")
   private Integer core_pool_size;
 
