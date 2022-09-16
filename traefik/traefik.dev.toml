@@ -1,0 +1,17 @@
+[entrypoints]
+    [entrypoints.web]
+        address = ":80"
+    [entrypoints.grafana]
+        address = ":3000"
+
+[api]
+insecure = true
+
+[log]
+level = "DEBUG"
+
+[accessLog]
+
+[provider]
+    [providers.docker]
+        exposedByDefault = false

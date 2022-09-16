@@ -3,8 +3,7 @@ services:
   mongo:
     build: ./mongoDB
     container_name: mongoDB
-    ports:
-      - "27017:27017"
+
     volumes:
       - mongodbdata:/data/db
   
@@ -12,28 +11,43 @@ services:
   coindashboard-backend:
     build: .
     restart: always
-    ports:
-      - "8080:8080"
     environment:
       - COINDASHBOARD_RUNTIME_ENVIRONMENT=DOCKER
+    expose:
+      - 80
     depends_on:
       - mongo
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.coindashboard-backend.entryPoints=web"
+      - "traefik.http.routers.coindashboard-backend.rule=PathPrefix(`/api`)"
 
   prometheus:
     build: ./prometheus
     container_name: prometheus
-    ports:
-      - "9090:9090"
     depends_on:
       - coindashboard-backend
   
   grafana:
     build: ./grafana
     container_name: grafana
-    ports:
-      - "3000:3000"
+    expose:
+      - 3000
     depends_on:
     - prometheus
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.coindashboard-grafana.entryPoints=grafana"
+      - "traefik.http.routers.coindashboard-grafana.rule=HostRegexp(`{.+}`)"
+
+  traefik:
+    build: ./traefik
+    ports:
+      - 80:80
+      - 8080:8080
+      - 3000:3000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro"
 
 volumes:
   mongodbdata:
