@@ -69,6 +69,3 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/cuttingedgecommunity/coindashboard-backend:latest
-          secrets: |
-            "app.key=${{ secrets.APP_KEY }}"
-            "app.iv={{ secrets.APP_IV }}"
