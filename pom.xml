@@ -169,8 +169,8 @@
               <excludes>
                 <exclude>com/capgemini/fs/coindashboard/controller/utils/*</exclude>
                 <exclude>com/capgemini/fs/coindashboard/CoinDashboardApplication.*</exclude>
-                <exclude>com/capgemini/fs/coindashboard/configuration/SecretsPostProcessor</exclude>
-                <exclude>com/capgemini/fs/coindashboard/encryptionService/AESService</exclude>
+                <exclude>com/capgemini/fs/coindashboard/configuration/*</exclude>
+                <exclude>com/capgemini/fs/coindashboard/encryptionService/*</exclude>
               </excludes>
               <rules>
                 <rule>
