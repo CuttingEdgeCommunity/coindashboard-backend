@@ -17,20 +17,29 @@ services:
       - 80
     depends_on:
       - mongo
+<<<<<<< HEAD
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.coindashboard-backend.entryPoints=web"
       - "traefik.http.routers.coindashboard-backend.rule=PathPrefix(`/api`)"
+=======
+>>>>>>> a55e97d47793557c1fe7b3c92d5b75f72c9e0c96
 
   prometheus:
     build: ./prometheus
     container_name: prometheus
+<<<<<<< HEAD
+=======
+    ports:
+      - "9090:9090"
+>>>>>>> a55e97d47793557c1fe7b3c92d5b75f72c9e0c96
     depends_on:
       - coindashboard-backend
   
   grafana:
     build: ./grafana
     container_name: grafana
+<<<<<<< HEAD
     expose:
       - 3000
     depends_on:
@@ -48,6 +57,12 @@ services:
       - 3000:3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro"
+=======
+    ports:
+      - "3000:3000"
+    depends_on:
+    - prometheus
+>>>>>>> a55e97d47793557c1fe7b3c92d5b75f72c9e0c96
 
 volumes:
   mongodbdata:
