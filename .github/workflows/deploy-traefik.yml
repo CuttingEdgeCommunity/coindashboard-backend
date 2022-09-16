@@ -19,7 +19,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   
-  deploy-mongo:
+  deploy-traefik:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
