@@ -49,19 +49,15 @@ public class MongoInitTest {
     assertFalse(output.getOut().contains("Requested 250 coins from API"));
   }
 
-    @Test
-    void afterPropertiesSet() {
-    }
+  @Test
+  void afterPropertiesSet() {}
 
-    @Test
-    void requestingInitialData() {
-    }
+  @Test
+  void requestingInitialData() {}
 
-    @Test
-    void coinInfo() {
-    }
+  @Test
+  void coinInfo() {}
 
-    @Test
-    void passingData() {
-    }
+  @Test
+  void passingData() {}
 }

@@ -29,7 +29,7 @@ public final class CoinMarketCapApiClient extends ApiClient {
   public Response getTopCoins(int take, int page, List<String> vsCurrencies) throws IOException {
     Map<String, String> queryParams = new LinkedHashMap<>();
     queryParams.put("start", String.valueOf(1 + page * take));
-    queryParams.put("limit", String.valueOf(take + 1));
+    queryParams.put("limit", String.valueOf(take));
     queryParams.put("convert", String.join(",", vsCurrencies));
     String requestUrl =
         httpRequestBuilder.buildRequestURI(
