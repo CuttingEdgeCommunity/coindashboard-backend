@@ -1,5 +1,7 @@
 package com.capgemini.fs.coindashboard.CRUDService.mongoconfig;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
@@ -26,10 +28,15 @@ public class MongoConfig {
                 mongoEnv.getHost(), mongoEnv.getPort(), mongoEnv.getPassword()));
     MongoClientSettings mongoClientSettings =
         MongoClientSettings.builder()
+            .applyToConnectionPoolSettings(
+                builder ->
+                    builder
+                        .maxWaitTime(mongoEnv.getConnection_pool_wait_time(), SECONDS)
+                        .maxSize(mongoEnv.getConnection_pool_size())
+                        .addConnectionPoolListener(new ConnectionPoolLogger()))
             .applyConnectionString(connectionString)
             .credential(mongoCredential)
             .build();
-
     return MongoClients.create(mongoClientSettings);
   }
 

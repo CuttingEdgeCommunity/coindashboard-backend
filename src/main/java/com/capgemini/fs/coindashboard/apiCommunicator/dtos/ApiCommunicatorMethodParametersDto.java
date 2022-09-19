@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,4 +18,29 @@ public class ApiCommunicatorMethodParametersDto {
   private boolean include7dSparkline;
   private Long timestampFrom;
   private Long timestampTo;
+
+  public ApiCommunicatorMethodParametersDto(int take, int page, List<String> vsCurrencies) {
+    this.take = take;
+    this.page = page;
+    this.vsCurrencies = vsCurrencies;
+  }
+
+  public ApiCommunicatorMethodParametersDto(
+      List<String> coins, List<String> vsCurrencies, boolean include7dSparkline) {
+    this.coins = coins;
+    this.vsCurrencies = vsCurrencies;
+    this.include7dSparkline = include7dSparkline;
+  }
+
+  public ApiCommunicatorMethodParametersDto(
+      List<String> coins, List<String> vsCurrencies, Long timestampFrom, Long timestampTo) {
+    this.coins = coins;
+    this.vsCurrencies = vsCurrencies;
+    this.timestampFrom = timestampFrom;
+    this.timestampTo = timestampTo;
+  }
+
+  public ApiCommunicatorMethodParametersDto(List<String> coins) {
+    this.coins = coins;
+  }
 }

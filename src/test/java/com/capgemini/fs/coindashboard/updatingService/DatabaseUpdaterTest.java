@@ -12,6 +12,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
+import com.capgemini.fs.coindashboard.utils.AsyncService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,6 +36,10 @@ class DatabaseUpdaterTest {
   @MockBean private UpdateQueries updateQueries;
   @MockBean private CreateQueries createQueries;
   @MockBean private GetQueries getQueries;
+
+  @MockBean(answer = Answers.CALLS_REAL_METHODS)
+  private AsyncService asyncService;
+
   private final String vsCurrency = "usd";
   private List<String> vsCurrencies = new ArrayList<>();
   private Quote quote = new Quote(vsCurrency, null, null);

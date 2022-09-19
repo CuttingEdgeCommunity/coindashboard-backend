@@ -5,6 +5,7 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.CreateQueries;
 import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.CRUDService.queries.UpdateQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
+import com.capgemini.fs.coindashboard.utils.AsyncService;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Setter;
@@ -20,13 +21,12 @@ import org.springframework.stereotype.Component;
 public class DatabaseUpdater {
 
   private boolean enabled = true;
-
+  @Autowired private AsyncService asyncService;
   @Autowired private UpdateQueries updateQueries;
   @Autowired private GetQueries getQueries;
   @Autowired private CreateQueries createQueries;
   @Autowired private ApiHolder apiHolder;
 
-  @Async
   private void singleCoinUpdate(Coin coin, String vs_currency) {
     if (!getQueries.isCoinInDBBySymbol(coin.getSymbol())) {
       try {
@@ -47,9 +47,9 @@ public class DatabaseUpdater {
       }
     } else {
       try {
+        log.info("update of coin: " + coin.getSymbol() + " has started...");
         updateQueries.UpdateCoinCurrentQuote(
             coin.getSymbol(), coin.getQuotes().get(vs_currency).getCurrentQuote(), vs_currency);
-        log.info("update of coin: " + coin.getSymbol() + " has started...");
       } catch (Exception ex) {
         log.error(ex.getMessage());
       }
@@ -58,7 +58,7 @@ public class DatabaseUpdater {
 
   @Async
   @Scheduled(fixedDelay = 10000)
-  public boolean currentQuoteUpdates() {
+  public Boolean currentQuoteUpdates() {
     if (this.enabled) {
       List<String> vsCurrencies = new ArrayList<>();
       vsCurrencies.add("usd");
@@ -66,7 +66,7 @@ public class DatabaseUpdater {
       try {
         List<Coin> coins = result.orElseThrow().getCoins();
         for (Coin coin : coins) {
-          singleCoinUpdate(coin, "usd");
+          this.asyncService.run(() -> this.singleCoinUpdate(coin, "usd"));
         }
         return true;
       } catch (Exception ex) {
@@ -79,7 +79,7 @@ public class DatabaseUpdater {
 
   @Async
   @Scheduled(cron = "* */5 * * * *")
-  public boolean chartUpdate() {
+  public Boolean chartUpdate() {
     if (this.enabled) {
       this.updateQueries.UpdateEveryCoinPriceChart();
       return true;

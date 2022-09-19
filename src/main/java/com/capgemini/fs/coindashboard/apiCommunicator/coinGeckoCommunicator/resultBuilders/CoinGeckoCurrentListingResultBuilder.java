@@ -40,7 +40,7 @@ public class CoinGeckoCurrentListingResultBuilder extends CoinGeckoMarketDataBui
   @Override
   protected Map<String, Quote> buildQuoteMap(JsonNode data) {
     Map<String, Quote> result = new HashMap<>();
-    List<String> vsCurrencies = (List<String>) requestArgs[1];
+    List<String> vsCurrencies = requestArgs.getVsCurrencies();
 
     for (String vsCurrency : vsCurrencies) {
       result.put(vsCurrency, this.buildSingleQuote(vsCurrency, data));

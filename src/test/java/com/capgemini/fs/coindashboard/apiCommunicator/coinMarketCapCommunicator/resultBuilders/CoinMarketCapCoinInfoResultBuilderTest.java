@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapFieldNameMapper;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.resultBuilders.testData.CoinMarketCapCoinInfoTestData;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.resultBuilders.testData.CoinMarketCapTestDataBaseClass;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
@@ -47,7 +48,7 @@ class CoinMarketCapCoinInfoResultBuilderTest {
   @Test
   void setResultStatusNoError() {
     this.builder.getResult().setCoins(List.of());
-    this.builder.setData(data.goodResponse, List.of());
+    this.builder.setData(data.goodResponse, new ApiCommunicatorMethodParametersDto(List.of()));
     this.builder.setResultStatus();
     assertEquals(ResultStatus.SUCCESS, this.builder.getResult().getStatus());
   }
@@ -55,7 +56,7 @@ class CoinMarketCapCoinInfoResultBuilderTest {
   @Test
   void setResultStatusError() {
     this.builder.getResult().setCoins(List.of());
-    this.builder.setData(data.badResponse, List.of());
+    this.builder.setData(data.badResponse, new ApiCommunicatorMethodParametersDto());
     this.builder.setResultStatus();
     assertEquals(ResultStatus.FAILURE, this.builder.getResult().getStatus());
   }
@@ -63,7 +64,7 @@ class CoinMarketCapCoinInfoResultBuilderTest {
   @Test
   void setResultStatusPartial() {
     this.builder.getResult().setCoins(List.of());
-    this.builder.setData(data.goodResponse, List.of(""));
+    this.builder.setData(data.goodResponse, new ApiCommunicatorMethodParametersDto(List.of("")));
     this.builder.setResultStatus();
     assertEquals(ResultStatus.PARTIAL_SUCCESS, this.builder.getResult().getStatus());
   }
@@ -77,7 +78,7 @@ class CoinMarketCapCoinInfoResultBuilderTest {
 
   @Test
   void setCoins() {
-    this.builder.setData(infoTestData.btcEthLeoResponse);
+    this.builder.setData(infoTestData.btcEthLeoResponse, new ApiCommunicatorMethodParametersDto());
     this.builder.setCoins();
     Result result = this.builder.getResult();
     assertEquals(3, result.getCoins().size());
