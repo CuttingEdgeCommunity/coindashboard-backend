@@ -9,14 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.capgemini.fs.coindashboard.cacheService.CacheService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest
-@AutoConfigureMockMvc
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(controllers = CoinController.class)
 class CoinControllerMarketDataTest {
 
   @Autowired private MockMvc mockMvc;
@@ -49,7 +50,7 @@ class CoinControllerMarketDataTest {
     this.mockMvc
         .perform(get("/api/coins/123456789012345678901234567890123456789012345678901/marketdata"))
         .andExpect(status().isBadRequest())
-        .andExpect(content().string(containsString("name cannot be longer than 50 characters")));
+        .andExpect(content().string(containsString("symbol cannot be longer than 50 characters")));
   }
 
   @Test
@@ -60,7 +61,7 @@ class CoinControllerMarketDataTest {
             get("/api/coins/123456789012345678901234567890123456789012345678901/marketdata")
                 .param("vs_currency", "pln"))
         .andExpect(status().isBadRequest())
-        .andExpect(content().string(containsString("name cannot be longer than 50 characters")));
+        .andExpect(content().string(containsString("symbol cannot be longer than 50 characters")));
   }
 
   @Test

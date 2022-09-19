@@ -2,10 +2,11 @@ package com.capgemini.fs.coindashboard;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+// @SpringBootApplication
 @SpringBootApplication(
     scanBasePackages = {
       "com.capgemini.fs.coindashboard.controller",
@@ -14,7 +15,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
       "com.capgemini.fs.coindashboard.CRUDService",
       "com.capgemini.fs.coindashboard.apiCommunicator",
       "com.capgemini.fs.coindashboard.updatingService",
-      "com.capgemini.fs.coindashboard.cacheService"
+      "com.capgemini.fs.coindashboard.cacheService",
+      "com.capgemini.fs.coindashboard.utils"
     })
 @EnableScheduling
 @OpenAPIDefinition(
@@ -22,6 +24,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class CoinDashboardApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(CoinDashboardApplication.class, args);
+    final String env = System.getenv("COINDASHBOARD_RUNTIME_ENVIRONMENT");
+    final String activeProfile = (env != null && env.equals("DOCKER")) ? "docker" : "host";
+    new SpringApplicationBuilder(CoinDashboardApplication.class).profiles(activeProfile).run(args);
   }
 }

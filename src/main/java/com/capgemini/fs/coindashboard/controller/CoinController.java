@@ -6,7 +6,6 @@ import com.capgemini.fs.coindashboard.cacheService.CacheService;
 import com.capgemini.fs.coindashboard.controller.exceptionHandler.CoinNotFoundException;
 import com.capgemini.fs.coindashboard.controller.exceptionHandler.ServerIsNotRespondingException;
 import com.capgemini.fs.coindashboard.controller.utils.ValidTimestamp;
-import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -14,15 +13,12 @@ import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -51,36 +47,36 @@ public class CoinController {
     return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinInfo);
   }
 
-  @GetMapping("/coins/{name}/marketdata")
+  @GetMapping("/coins/{symbol}/marketdata")
   ResponseEntity<String> marketData(
       @PathVariable
-          @NotBlank(message = "name cannot be blank")
-          @Size(max = 50, message = "name cannot be longer than 50 characters")
-          String name,
+          @NotBlank(message = "symbol cannot be blank")
+          @Size(max = 50, message = "symbol cannot be longer than 50 characters")
+          String symbol,
       @RequestParam(defaultValue = "usd", required = false)
           @NotBlank(message = "vs_currency cannot be blank")
           @Size(max = 10, message = "vs_currency cannot be longer than 10 characters")
           String vs_currency) {
     String coinMarketData =
         cacheService
-            .getCoinMarketData(name, vs_currency) //
-            .orElseThrow(() -> new CoinNotFoundException(name));
+            .getCoinMarketData(symbol, vs_currency) //
+            .orElseThrow(() -> new CoinNotFoundException(symbol));
     String location =
         ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("coins/{name}/marketdata")
+            .path("coins/{symbol}/marketdata")
             .build()
             .toUriString();
     return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinMarketData);
   }
 
-  @GetMapping("/coins/{name}")
+  @GetMapping("/coins/{symbol}")
   ResponseEntity<String> details(
       @PathVariable
           @NotBlank(message = "name cannot be blank")
           @Size(max = 50, message = "name cannot be longer than 50 characters")
-          String name) {
+          String symbol) {
     String coinDetails =
-        cacheService.getCoinDetails(name).orElseThrow(() -> new CoinNotFoundException(name));
+        cacheService.getCoinDetails(symbol).orElseThrow(() -> new CoinNotFoundException(symbol));
     String location =
         ServletUriComponentsBuilder.fromCurrentRequest().path("coins/{name}").build().toUriString();
     return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coinDetails);
@@ -107,10 +103,19 @@ public class CoinController {
     return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(chart);
   }
 
-  @ExceptionHandler(ConstraintViolationException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
-    return new ResponseEntity<>(
-        "not valid due to validation error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+  @GetMapping("/coins/find/{regex}")
+  ResponseEntity<String> coinByRegex(
+      @PathVariable
+          @NotBlank(message = "regex cannot be blank")
+          @Size(max = 50, message = "regex cannot be longer than 50 characters")
+          String regex) {
+    String coins =
+        cacheService.getCoinByRegex(regex).orElseThrow(() -> new CoinNotFoundException(regex));
+    String location =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("coins/find/{regex}")
+            .build()
+            .toUriString();
+    return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coins);
   }
 }

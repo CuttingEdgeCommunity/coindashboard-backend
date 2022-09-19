@@ -7,13 +7,33 @@ services:
       - "27017:27017"
     volumes:
       - mongodbdata:/data/db
+  
+
   coindashboard-backend:
     build: .
     restart: always
     ports:
-      - 8080:8080
+      - "8080:8080"
+    environment:
+      - COINDASHBOARD_RUNTIME_ENVIRONMENT=DOCKER
     depends_on:
       - mongo
+
+  prometheus:
+    build: ./prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - coindashboard-backend
+  
+  grafana:
+    build: ./grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+    - prometheus
+
 volumes:
   mongodbdata:
-
