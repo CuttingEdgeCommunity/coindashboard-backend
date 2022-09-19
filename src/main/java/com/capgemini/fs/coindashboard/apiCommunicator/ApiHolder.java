@@ -61,11 +61,10 @@ public class ApiHolder implements IApiMethods {
       List<String> coins,
       List<String> vsCurrencies,
       boolean include7dSparkline) {
-    ApiCommunicatorMethodParametersDto params = new ApiCommunicatorMethodParametersDto();
-    params.setCoins(coins);
-    params.setVsCurrencies(vsCurrencies);
-    params.setInclude7dSparkline(include7dSparkline);
-    return this.execute(ApiCommunicatorMethodEnum.CURRENT_LISTING, providersToUse, params);
+    return this.execute(
+        ApiCommunicatorMethodEnum.CURRENT_LISTING,
+        providersToUse,
+        new ApiCommunicatorMethodParametersDto(coins, vsCurrencies, include7dSparkline));
   }
 
   @Override
@@ -81,12 +80,10 @@ public class ApiHolder implements IApiMethods {
       List<String> vsCurrencies,
       Long timestampFrom,
       Long timestampTo) {
-    ApiCommunicatorMethodParametersDto params = new ApiCommunicatorMethodParametersDto();
-    params.setCoins(coins);
-    params.setVsCurrencies(vsCurrencies);
-    params.setTimestampFrom(timestampFrom);
-    params.setTimestampTo(timestampTo);
-    return this.execute(ApiCommunicatorMethodEnum.HISTORICAL_LISTING, providersToUse, params);
+    return this.execute(
+        ApiCommunicatorMethodEnum.HISTORICAL_LISTING,
+        providersToUse,
+        new ApiCommunicatorMethodParametersDto(coins, vsCurrencies, timestampFrom, timestampTo));
   }
 
   @Override
@@ -96,11 +93,10 @@ public class ApiHolder implements IApiMethods {
 
   public Optional<Result> getTopCoins(
       List<ApiProviderEnum> providersToUse, int take, int page, List<String> vsCurrencies) {
-    ApiCommunicatorMethodParametersDto params = new ApiCommunicatorMethodParametersDto();
-    params.setTake(take);
-    params.setPage(page);
-    params.setVsCurrencies(vsCurrencies);
-    return this.execute(ApiCommunicatorMethodEnum.TOP_COINS, providersToUse, params);
+    return this.execute(
+        ApiCommunicatorMethodEnum.TOP_COINS,
+        providersToUse,
+        new ApiCommunicatorMethodParametersDto(take, page, vsCurrencies));
   }
 
   @Override
@@ -109,8 +105,9 @@ public class ApiHolder implements IApiMethods {
   }
 
   public Optional<Result> getCoinInfo(List<ApiProviderEnum> providersToUse, List<String> coins) {
-    ApiCommunicatorMethodParametersDto params = new ApiCommunicatorMethodParametersDto();
-    params.setCoins(coins);
-    return this.execute(ApiCommunicatorMethodEnum.COIN_INFO, providersToUse, params);
+    return this.execute(
+        ApiCommunicatorMethodEnum.COIN_INFO,
+        providersToUse,
+        new ApiCommunicatorMethodParametersDto(coins));
   }
 }
