@@ -20,27 +20,32 @@ public class CacheConfig {
         "getCoinMarketData",
         Caffeine.newBuilder()
             .maximumSize(1000)
-            .expireAfterAccess(6000, TimeUnit.MILLISECONDS)
+            .expireAfterWrite(6000, TimeUnit.MILLISECONDS)
             .build());
     caffeineCacheManager.registerCustomCache(
         "getCoinInfo",
         Caffeine.newBuilder()
             .maximumSize(2000)
-            .expireAfterAccess(12000, TimeUnit.MILLISECONDS)
+            .expireAfterWrite(12000, TimeUnit.MILLISECONDS)
             .build());
     caffeineCacheManager.registerCustomCache(
         "getCoinDetails",
         Caffeine.newBuilder()
             .maximumSize(1000)
-            .expireAfterAccess(6000, TimeUnit.MILLISECONDS)
+            .expireAfterWrite(6000, TimeUnit.MILLISECONDS)
             .build());
     caffeineCacheManager.registerCustomCache(
         "getChart",
         Caffeine.newBuilder()
             .maximumSize(2000)
-            .expireAfterAccess(1200, TimeUnit.MILLISECONDS)
+            .expireAfterWrite(1200, TimeUnit.MILLISECONDS)
             .build());
-
+    caffeineCacheManager.registerCustomCache(
+        "getCoinByRegex",
+        Caffeine.newBuilder()
+            .maximumSize(2000)
+            .expireAfterWrite(6000, TimeUnit.MILLISECONDS)
+            .build());
     return caffeineCacheManager;
   }
 }
