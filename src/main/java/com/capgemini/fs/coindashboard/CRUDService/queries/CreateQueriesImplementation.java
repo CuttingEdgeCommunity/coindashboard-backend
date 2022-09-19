@@ -19,6 +19,7 @@ public class CreateQueriesImplementation implements CreateQueries {
   public boolean createCoinDocument(Coin coin) {
     try {
       mongoTemplate.save(coin, "Coin");
+      log.info("Coin {} has been successfully inserted into the database.", coin.getName());
       return true;
     } catch (Exception e) {
       log.error(e.getMessage());
@@ -27,26 +28,11 @@ public class CreateQueriesImplementation implements CreateQueries {
   }
 
   @Override
-  public boolean createCoinDocumentWithUpdatingDetails(Coin coin) {
-    List<String> symbols = List.of(coin.getSymbol());
-    var resultCoinInfo = this.apiHolder.getCoinInfo(symbols);
-    Coin coinWithDetails = resultCoinInfo.orElseThrow().getCoins().get(0);
-    coin.setContract_address(coinWithDetails.getContract_address());
-    coin.setDescription(coinWithDetails.getDescription());
-    coin.setGenesis_date(coinWithDetails.getGenesis_date());
-    coin.setImage_url(coinWithDetails.getImage_url());
-    coin.setIs_token(coinWithDetails.getIs_token());
-    coin.setLinks(coinWithDetails.getLinks());
-    createCoinDocument(coin);
-    log.info("new coin (" + coin.getSymbol() + ") in the database.");
-    return true;
-  }
-
-  @Override
   public void createCoinDocuments(List<Coin> coins) {
     try {
+      log.info("Insert of {} coins has started...", coins.size());
       mongoTemplate.insertAll(coins);
-      log.info("insert performed...");
+      log.info("Insert of {} coins has been completed.", coins.size());
     } catch (Exception ex) {
       log.error(ex.getMessage());
     }

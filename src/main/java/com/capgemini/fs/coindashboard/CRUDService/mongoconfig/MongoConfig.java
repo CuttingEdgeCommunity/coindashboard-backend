@@ -1,5 +1,6 @@
 package com.capgemini.fs.coindashboard.CRUDService.mongoconfig;
 
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
@@ -9,7 +10,9 @@ import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 
 @Configuration
 public class MongoConfig {
@@ -36,11 +39,18 @@ public class MongoConfig {
 
   @Bean
   public MongoTemplate mongoTemplate() {
-    return new MongoTemplate(mongo(), mongoEnv.getDatabase());
+    MongoTemplate mongoTemplate = new MongoTemplate(mongo(), mongoEnv.getDatabase());
+    mongoTemplate
+        .indexOps(Coin.class)
+        .ensureIndex(new Index().on("marketCapRank", Direction.ASC).named("rank"));
+    mongoTemplate
+        .indexOps(Coin.class)
+        .ensureIndex(new Index().on("symbol", Direction.ASC).named("symbol"));
+    return mongoTemplate;
   }
 
   @Bean
-  public ClientSession mongoSession() {
+  public ClientSession clientSession() {
     return mongo().startSession();
   }
 }
