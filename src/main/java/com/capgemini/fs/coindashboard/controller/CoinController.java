@@ -102,4 +102,20 @@ public class CoinController {
             .toUriString();
     return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(chart);
   }
+
+  @GetMapping("/coins/find/{regex}")
+  ResponseEntity<String> coinByRegex(
+      @PathVariable
+          @NotBlank(message = "regex cannot be blank")
+          @Size(max = 50, message = "regex cannot be longer than 50 characters")
+          String regex) {
+    String coins =
+        cacheService.getCoinByRegex(regex).orElseThrow(() -> new CoinNotFoundException(regex));
+    String location =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("coins/find/{regex}")
+            .build()
+            .toUriString();
+    return ResponseEntity.status(OK).header(HttpHeaders.LOCATION, location).body(coins);
+  }
 }
