@@ -111,7 +111,10 @@ public class GetQueriesImplementation implements GetQueries {
                 .orOperator(
                     new Criteria("symbol").regex(query), new Criteria("name").regex(query)));
     ProjectionOperation projectStage =
-        Aggregation.project("name", "symbol", "image_url", "marketCapRank").andExclude("_id");
+        Aggregation.project("name", "symbol", "marketCapRank", "image_url", "currentQuote")
+            .and("quotes.usd.currentQuote")
+            .as("CurrentQuote")
+            .andExclude("_id");
     Aggregation aggregation =
         Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(searchLimit));
     List<Object> result =
