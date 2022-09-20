@@ -21,14 +21,10 @@ import org.springframework.stereotype.Component;
 // class for initialization of a mongoDB with historical data of coins
 public class MongoInit implements InitializingBean {
 
-  @Autowired
-  private CreateQueries createQueries;
-  @Autowired
-  private GetQueries getQueries;
-  @Autowired
-  private ApiHolder apiHolder;
-  @Autowired
-  private MongoTemplate mongoTemplate;
+  @Autowired private CreateQueries createQueries;
+  @Autowired private GetQueries getQueries;
+  @Autowired private ApiHolder apiHolder;
+  @Autowired private MongoTemplate mongoTemplate;
 
   @Override
   public void afterPropertiesSet() {
@@ -37,7 +33,7 @@ public class MongoInit implements InitializingBean {
   }
 
   // method to make code cleaner
-  private void requestingInitialData() {
+  protected void requestingInitialData() {
     log.info("Requesting data...");
     final byte PAGES = 2;
     int TAKE = 500;
@@ -48,38 +44,42 @@ public class MongoInit implements InitializingBean {
         coinMarketDataResult =
             Optional.of(apiHolder.getTopCoins(TAKE, i, List.of("usd"))).orElse(null);
         log.info("Requested 250 topCoins from {} page", i);
-          try {
-            var res = coinInfo(coinMarketDataResult);
-            passingData(res);
-          } catch (Exception e) {
-            log.error(e.getMessage());
-          }
-
+        try {
+          var res = coinInfo(coinMarketDataResult);
+          passingData(res);
         } catch (Exception e) {
-          log.error("Problem with symbols: {}", e.getMessage());
+          log.error(e.getMessage());
         }
+
+      } catch (Exception e) {
+        log.error("Problem with symbols: {}", e.getMessage());
       }
+    }
   }
 
   // coin info wrapper
-  private List<Coin> coinInfo(Optional<Result> coinMarketDataResult) {
+  protected List<Coin> coinInfo(Optional<Result> coinMarketDataResult) {
     List<Coin> coins = new ArrayList<>();
-    var result = this.apiHolder.getCoinInfo(coinMarketDataResult.get().getCoins().stream().map(Coin::getSymbol).collect(Collectors.toList()));
+    var result =
+        this.apiHolder.getCoinInfo(
+            coinMarketDataResult.get().getCoins().stream()
+                .map(Coin::getSymbol)
+                .collect(Collectors.toList()));
     // maps
     Map<String, Coin> resultMap =
         result.get().getCoins().stream().collect(Collectors.toMap(Coin::getSymbol, (c) -> c));
-    for(Coin coin : coinMarketDataResult.get().getCoins()) {
-      coins.add(new Coin(resultMap.get(coin.getSymbol()),coin));
+    for (Coin coin : coinMarketDataResult.get().getCoins()) {
+      coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
     }
     log.info(coins.size());
     return coins;
   }
   // passer to queries
-  private void passingData(List <Coin> coins) {
+  protected void passingData(List<Coin> coins) {
     log.info("Passing data...");
     try {
       createQueries.CreateCoinDocuments(coins);
-      log.info("Successfully added initial {} topCoins data",coins.size());
+      log.info("Successfully added initial {} topCoins data", coins.size());
     } catch (Exception e) {
       log.error(e.getMessage());
     }

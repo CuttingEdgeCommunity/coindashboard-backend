@@ -40,17 +40,17 @@ public class Coin {
   private String description;
   private Map<String, Quote> quotes;
 
-  public Coin(Coin info, Coin marketData){
-      this.contract_address = info.contract_address;
-      this.image_url = info.image_url;
-      this.genesis_date = info.genesis_date;
-      this.is_token = info.is_token;
-      this.description = info.description;
-      this.links = info.links;
-      this.symbol = info.symbol;
+  public Coin(Coin info, Coin marketData) {
+    this.contract_address = info.contract_address;
+    this.image_url = info.image_url;
+    this.genesis_date = info.genesis_date;
+    this.is_token = info.is_token;
+    this.description = info.description;
+    this.links = info.links;
+    this.symbol = info.symbol;
 
-      this.quotes = marketData.quotes;
-      this.marketCapRank = marketData.marketCapRank;
-      this.name = marketData.name;
+    this.quotes = marketData.quotes;
+    this.marketCapRank = marketData.marketCapRank;
+    this.name = marketData.name;
   }
 }
