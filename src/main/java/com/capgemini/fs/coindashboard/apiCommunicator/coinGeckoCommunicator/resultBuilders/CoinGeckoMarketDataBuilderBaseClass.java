@@ -29,7 +29,7 @@ public abstract class CoinGeckoMarketDataBuilderBaseClass extends CoinGeckoBuild
   protected Map<String, Quote> buildQuoteMap(JsonNode data) {
     Map<String, Quote> result = new HashMap<>();
 
-    ((ObjectNode) data).put("inserted_quote_name", (String) requestArgs[2]);
+    ((ObjectNode) data).put("inserted_quote_name", requestArgs.getVsCurrencies().get(0));
     result.put(data.get(mapper.INSERTED_QUOTE_NAME).asText(), this.buildSingleQuote(data));
 
     return result;

@@ -1,5 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ResultBuilderDirector {
   public void constructCoinMarketDataResult(
-      IResultBuilder builder, Response response, Object... requestArgs) {
+      IResultBuilder builder, Response response, ApiCommunicatorMethodParametersDto requestArgs) {
     builder.reset();
     builder.setData(response, requestArgs);
     builder.setResultProvider();
