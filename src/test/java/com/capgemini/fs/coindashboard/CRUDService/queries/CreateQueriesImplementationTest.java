@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -37,5 +38,22 @@ class CreateQueriesImplementationTest {
     Mockito.when(mongoTemplate.save(coin, "Coin")).thenReturn(coin);
 
     assertTrue(createQueries.createCoinDocument(coin));
+  }
+
+  @Test
+  public void CreateDocumentsWhenPassedNull() {
+    // Mockito.when(mongoTemplate.insertAll(null)).thenThrow(new IllegalStateException());
+    createQueries.createCoinDocuments(null);
+    // assertEquals("Expected list of coins but null has been provided",
+    // assertThrows(IllegalStateException.class, ()->{
+    //  mongoTemplate.insertAll(null);
+    // }, "Expected list of coins but null has been provided").getMessage());
+  }
+
+  @Test
+  public void CreateDocumentsWhenPassedNewCoins() {
+    Coin coin1 = new Coin();
+    Coin coin2 = new Coin();
+    createQueries.createCoinDocuments(List.of(coin1, coin2));
   }
 }

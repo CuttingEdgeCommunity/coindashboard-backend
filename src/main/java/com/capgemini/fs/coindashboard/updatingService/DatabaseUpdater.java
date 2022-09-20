@@ -99,7 +99,7 @@ public class DatabaseUpdater {
         updateQueries.updateTopCoinsTransaction(curr_coins, kicked_from_top, marketCapRank_update);
         return true;
       } catch (Exception ex) {
-        log.error(ex.getMessage());
+        log.error(ex);
         return false;
       }
     }
