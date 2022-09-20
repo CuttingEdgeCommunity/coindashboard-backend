@@ -3,7 +3,6 @@ package com.capgemini.fs.coindashboard.CRUDService.queries;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
-import com.mongodb.client.ClientSession;
 import com.mongodb.client.result.UpdateResult;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
@@ -20,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Log4j2
 public class UpdateQueriesImplementation implements UpdateQueries {
   @Autowired MongoTemplate mongoTemplate;
-  @Autowired ClientSession clientSession;
+  // @Autowired ClientSession clientSession;
   @Autowired private CreateQueries createQueries;
   @Autowired private GetQueries getQueries;
   @Autowired private ApiHolder apiHolder;

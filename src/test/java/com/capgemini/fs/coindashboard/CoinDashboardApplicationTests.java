@@ -1,11 +1,11 @@
- package com.capgemini.fs.coindashboard;
+package com.capgemini.fs.coindashboard;
 
- import org.junit.jupiter.api.Test;
- import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
- @SpringBootTest
- class CoinDashboardApplicationTests {
+@SpringBootTest
+class CoinDashboardApplicationTests {
 
   @Test
   void contextLoads() {}
- }
+}
