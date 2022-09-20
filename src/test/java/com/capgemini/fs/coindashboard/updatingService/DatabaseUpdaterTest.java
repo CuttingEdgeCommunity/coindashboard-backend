@@ -12,6 +12,8 @@ import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +40,7 @@ class DatabaseUpdaterTest {
   private List<String> vsCurrencies = new ArrayList<>();
   private Quote quote = new Quote(vsCurrency, null, null);
   private Map<String, Quote> quotes = new HashMap<>();
+  private Map<String, Integer> ranks = new HashMap<>();
   private Coin coin;
   private List<Coin> coins = new ArrayList<>();
   private Result resultOfGetTopCoins;
@@ -71,47 +74,6 @@ class DatabaseUpdaterTest {
     assertFalse(databaseUpdater.currentQuoteUpdates());
   }
 
-  //  @Test
-  //  void currentQuoteUpdatesIfEnabledIsTrueAndCoinExists() {
-  //    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
-  //        .thenReturn(Optional.of(resultOfGetTopCoins));
-  //    // Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(true);
-  //    Mockito.when(getQueries.getCoinsNotInDBBySymbols(List.of("btc"))).thenReturn(List.of());
-  //    Mockito.when(apiHolder.getCoinInfo(List.of())).thenReturn(Optional.of(resultEmpty));
-  //    Mockito.when(updateQueries.updateTopCoinsTransaction2(resultOfGetTopCoins, resultEmpty))
-  //        .thenReturn(true);
-  //    databaseUpdater.setEnabled(true);
-  //    assertTrue(databaseUpdater.currentQuoteUpdates());
-  //  }
-  //
-  //  @Test
-  //  void currentQuoteUpdatesIfEnabledIsTrueAndCoinDoesNotExistsAndGetCoinInfoReturnsNull() {
-  //    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
-  //        .thenReturn(Optional.of(resultOfGetTopCoins));
-  //    // Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(false);
-  //
-  // Mockito.when(getQueries.getCoinsNotInDBBySymbols(List.of("btc"))).thenReturn(List.of("btc"));
-  //    databaseUpdater.setEnabled(true);
-  //    Mockito.when(apiHolder.getCoinInfo(List.of("btc"))).thenReturn(Optional.of(resultEmpty));
-  //    Mockito.when(updateQueries.updateTopCoinsTransaction2(resultOfGetTopCoins, resultEmpty))
-  //        .thenReturn(true);
-  //    assertTrue(databaseUpdater.currentQuoteUpdates());
-  //  }
-
-  //  @Test
-  //  void currentQuoteUpdatesIfEnabledIsTrueAndCoinDoesNotExists() {
-  //    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
-  //        .thenReturn(Optional.of(resultOfGetTopCoins));
-  //    Mockito.when(apiHolder.getCoinInfo(List.of("btc")))
-  //        .thenReturn(Optional.of(resultOfGetCoinInfo));
-  //    // Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(false);
-  //
-  // Mockito.when(getQueries.getCoinsNotInDBBySymbols(List.of("btc"))).thenReturn(List.of("btc"));
-  //    Mockito.when(createQueries.createCoinDocument(coin)).thenReturn(true);
-  //    databaseUpdater.setEnabled(true);
-  //    assertTrue(databaseUpdater.currentQuoteUpdates());
-  //  }
-
   @Test
   void currentQuoteUpdatesIfEnabledIsTrueAndResponseIsNull() {
     Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies)).thenReturn(Optional.empty());
@@ -131,4 +93,67 @@ class DatabaseUpdaterTest {
     databaseUpdater.setEnabled(true);
     assertTrue(databaseUpdater.chartUpdate());
   }
+
+  @Test
+  void ComparerCurrentAndPreviousResultTestWith2SameListsAllCoinsAlreadyInDb() {
+    ObjectMapper mapper = new ObjectMapper();
+    String prev_coins_JsonString;
+    try {
+      prev_coins_JsonString = mapper.writeValueAsString(coins);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
+        .thenReturn(Optional.of(resultOfGetTopCoins));
+    Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
+    Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(true);
+    databaseUpdater.setEnabled(true);
+    databaseUpdater.currentQuoteUpdates();
+  }
+
+  @Test
+  void CurrentQuoteUpdatesTestWith2DiffListsCoinsNotInDb() {
+    ObjectMapper mapper = new ObjectMapper();
+    String prev_coins_JsonString;
+    Coin eth = new Coin("1234", "Ethereum", "eth", 2, "", 123L, false, null, null, null, quotes);
+    List<Coin> curr_coins = List.of(eth);
+    resultOfGetTopCoins.setCoins(curr_coins);
+    try {
+      prev_coins_JsonString = mapper.writeValueAsString(coins);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
+        .thenReturn(Optional.of(resultOfGetTopCoins));
+    Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
+    Mockito.when(getQueries.isCoinInDBBySymbol("eth")).thenReturn(false);
+    Mockito.when(apiHolder.getCoinInfo(List.of("eth")))
+        .thenReturn(Optional.of(resultOfGetTopCoins));
+    databaseUpdater.setEnabled(true);
+    assertTrue(databaseUpdater.currentQuoteUpdates());
+  }
+  //  @Test
+  //  void CurrentQuoteUpdatesTestWith2DiffListsCoinsNotInDbWithDuplicates() {
+  //    ObjectMapper mapper = new ObjectMapper();
+  //    String prev_coins_JsonString;
+  //    Coin eth = new Coin("1234", "Ethereum", "eth", 2, "", 123L, false, null, null, null,
+  // quotes);
+  //    List<Coin> curr_coins = List.of(eth);
+  //    resultOfGetTopCoins.setCoins(curr_coins);
+  //    coins.add(coin);
+  //    try {
+  //      prev_coins_JsonString = mapper.writeValueAsString(coins);
+  //    } catch (JsonProcessingException e) {
+  //      throw new RuntimeException(e);
+  //    }
+  //    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
+  //        .thenReturn(Optional.of(resultOfGetTopCoins));
+  //    Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
+  //    Mockito.when(getQueries.isCoinInDBBySymbol("eth")).thenReturn(false);
+  //    Mockito.when(apiHolder.getCoinInfo(List.of("eth")))
+  //        .thenReturn(Optional.of(resultOfGetTopCoins));
+  //    doNothing().when(updateQueries).removeDuplicates("1234");
+  //    databaseUpdater.setEnabled(true);
+  //    assertTrue(databaseUpdater.currentQuoteUpdates());
+  //  }
 }

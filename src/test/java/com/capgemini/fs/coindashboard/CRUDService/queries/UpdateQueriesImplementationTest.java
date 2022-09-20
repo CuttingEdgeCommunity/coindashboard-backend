@@ -51,6 +51,7 @@ class UpdateQueriesImplementationTest {
   private Map<String, Quote> quotes = new HashMap<>();
   private CurrentQuote newQuote = new CurrentQuote();
   private Coin coin;
+  private Integer marketCapRank;
   private List<Coin> coins = new ArrayList<>();
   private Result resultOfGetTopCoins =
       new Result(ApiProviderEnum.COIN_MARKET_CAP, ResultStatus.SUCCESS, "", coins);
@@ -94,6 +95,30 @@ class UpdateQueriesImplementationTest {
   }
 
   @Test
+  public void UpdateCoinCurrentQuoteTestNull() {
+    assertFalse(updateQueries.updateCoinCurrentQuote(null, null, null));
+  }
+
+  @Test
+  public void UpdateCoinCurrentQuoteAndMarketCapRankTestNull() {
+    assertFalse(updateQueries.updateCoinCurrentQuoteAndMarketCapRank(null, null, null, null));
+  }
+
+  @Test
+  public void UpdateCoinsCurrentQuoteAndMarketCapRankTestForEmptyList() {
+    assertTrue(updateQueries.updateCoinsCurrentQuotesAndMarketCapRank(List.of()));
+  }
+
+  @Test
+  public void UpdateCoinsCurrentQuoteAndMarketCapRankTestForNewList() {
+    quote.setCurrentQuote(newQuote);
+    quotes.put("usd", quote);
+    coin = new Coin();
+    coin.setQuotes(quotes);
+    assertTrue(updateQueries.updateCoinsCurrentQuotesAndMarketCapRank(List.of(coin)));
+  }
+
+  @Test
   public void UpdateCoinsCurrentQuotesTest() {
     assertTrue(
         updateQueries.updateCoinsCurrentQuotesAndMarketCapRank(resultOfGetTopCoins.getCoins()));
@@ -119,29 +144,21 @@ class UpdateQueriesImplementationTest {
     assertFalse(updateQueries.updateCoinCurrentQuote("btc", newQuote, vs_currency));
   }
 
-  //  @Test
-  //  public void UpdateCoinMarketRankCapTest() {
-  //    Query query = new Query();
-  //    query.addCriteria(Criteria.where("symbol").is("btc"));
-  //    Update update = new Update();
-  //    update.set("marketCapRank", 1);
-  //    UpdateResult updateResult = updateResult(true);
-  //    when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
-  //
-  //    assertTrue(updateQueries.updateCoinMarketCapRank("btc", 1));
-  //  }
-  //
-  //  @Test
-  //  public void UpdateCoinMarketRankCapWasNotAcknowledged() {
-  //    Query query = new Query();
-  //    query.addCriteria(Criteria.where("symbol").is("btc"));
-  //    Update update = new Update();
-  //    update.set("marketCapRank", 1);
-  //    UpdateResult updateResult = updateResult(false);
-  //    when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
-  //
-  //    assertFalse(updateQueries.updateCoinMarketCapRank("btc", 1));
-  //  }
+  @Test
+  public void UpdateCoinCurrentQuoteAndMarketCapRankWasNotAcknowledged() {
+    Query query = new Query();
+    query.addCriteria(Criteria.where("symbol").is("btc"));
+    Update update = new Update();
+    update
+        .set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote)
+        .set("marketCapRank", marketCapRank);
+    UpdateResult updateResult = updateResult(false);
+    when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
+
+    assertFalse(
+        updateQueries.updateCoinCurrentQuoteAndMarketCapRank(
+            "btc", newQuote, vs_currency, marketCapRank));
+  }
 
   @Test
   @Disabled // TODO repair test after refactoring
