@@ -22,12 +22,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
@@ -40,6 +42,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
       CreateQueriesImplementation.class,
       ApiHolder.class
     })
+@EnableConfigurationProperties
+@TestPropertySource(locations = "classpath:application.properties")
 class UpdateQueriesImplementationTest {
   @Autowired private UpdateQueriesImplementation updateQueries;
   @MockBean private MongoTemplate mongoTemplate;
