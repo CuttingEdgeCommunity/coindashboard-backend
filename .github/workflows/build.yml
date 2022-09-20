@@ -28,9 +28,8 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Append secrets to configuration
+      - name: Append secrets to test config
         run: echo $'spring.data.mongodb.username=${{ secrets.MONGODB_USERNAME }}\nspring.data.mongodb.password=${{ secrets.MONGODB_PASSWORD }}' >> ./src/test/resources/secrets.properties
-           # echo $'spring.data.mongodb.username=${{ secrets.MONGODB_USERNAME }}\nspring.data.mongodb.password=${{ secrets.MONGODB_PASSWORD }}\ncoinmarketcap.key=${{ secrets.COINMARKETCAP_KEY }}\ncoinmarketcap.key2=${{ secrets.COINMARKETCAP_KEY_2 }}' >> ./src/main/resources/secrets.properties &&
       - name: Run the Maven verify phase
         run: >
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
