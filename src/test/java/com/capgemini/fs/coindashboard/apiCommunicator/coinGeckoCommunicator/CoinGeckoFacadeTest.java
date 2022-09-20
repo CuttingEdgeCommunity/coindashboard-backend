@@ -8,6 +8,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resu
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders.CoinGeckoTopCoinsResultBuilder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder.ResultBuilderDirector;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.HttpRequestBuilder;
@@ -43,6 +44,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
       ResultBuilderDirector.class
     })
 class CoinGeckoFacadeTest {
+  @MockBean private CoinGeckoTranslator translator;
   @Autowired private CoinGeckoFacade facade;
   @MockBean private CoinGeckoApiClient client;
 
@@ -57,6 +59,26 @@ class CoinGeckoFacadeTest {
     InputStream targetStream = new FileInputStream(initialFile);
     JsonNode data = mapper.readTree(targetStream);
     badResponse = new Response(400, data);
+
+    Mockito.when(translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.COIN_INFO))
+        .thenReturn(List.of("bitcoin"));
+    Mockito.when(
+            translator.translate(
+                List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.COIN_INFO))
+        .thenReturn(List.of("bitcoin", "ethereum"));
+
+    Mockito.when(
+            translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
+        .thenReturn(List.of("bitcoin"));
+    Mockito.when(
+            translator.translate(
+                List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
+        .thenReturn(List.of("bitcoin", "ethereum"));
+
+    Mockito.when(
+            translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.HISTORICAL_LISTING))
+        .thenReturn(List.of("bitcoin"));
+
     Mockito.when(client.getTopCoins(3, 1, "aed")).thenReturn(badResponse);
     Mockito.when(client.getCoinInfo("ethereum")).thenReturn(badResponse);
     Mockito.when(client.getCurrentListing("ethereum", true)).thenReturn(badResponse);
