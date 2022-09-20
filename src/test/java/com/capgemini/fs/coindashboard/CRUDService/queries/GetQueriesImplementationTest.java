@@ -107,15 +107,28 @@ class GetQueriesImplementationTest {
   }
 
   @Test
-  public void findCoinByRegexTestIfResultIsEmpty() {
+  public void getALLCoins() {
+    getQueries.getAllCoins();
+  }
 
+  @Test
+  public void getCoinsSimpleTestIfResultIsEmpty() {
     List<Object> result = new ArrayList<>();
 
     when(mockResults.getMappedResults()).thenReturn(result);
     doReturn(mockResults)
         .when(mongoTemplate)
         .aggregate(Mockito.any(Aggregation.class), Mockito.eq("Coin"), Mockito.eq(Object.class));
+    assertEquals("[]", getQueries.getCoinsSimple(1, 0));
+  }
 
+  @Test
+  public void isCoinInDBBySymbolTestFalse() {
+    assertFalse(getQueries.isCoinInDBBySymbol("btc"));
+  }
+
+  @Test
+  public void getCoinsTestIfResultIsNotEmpty() {
     assertNull(getQueries.findCoinByRegex("btc"));
   }
 
@@ -132,7 +145,7 @@ class GetQueriesImplementationTest {
         .aggregate(Mockito.any(Aggregation.class), Mockito.eq("Coin"), Mockito.eq(Object.class));
 
     assertEquals(
-        getQueries.getCoinDetails("btc"),
-        "[{\"id\":\"1234\",\"name\":\"BLABLA\",\"symbol\":\"btc\",\"marketCapRank\":1,\"image_url\":\"\",\"genesis_date\":123,\"is_token\":false}]");
+        "[{\"id\":\"1234\",\"name\":\"BLABLA\",\"symbol\":\"btc\",\"marketCapRank\":1,\"image_url\":\"\",\"genesis_date\":123,\"is_token\":false}]",
+        getQueries.getCoins(1, 0));
   }
 }

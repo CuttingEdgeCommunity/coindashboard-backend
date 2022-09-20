@@ -35,7 +35,7 @@ public class MongoInit implements InitializingBean {
       }
       try {
         coinMarketDataResult.ifPresent(
-            result -> createQueries.CreateCoinDocuments(result.getCoins()));
+            result -> createQueries.createCoinDocuments(result.getCoins()));
         log.info("Successfully added initial 250 topCoins data from {} page", i);
       } catch (Exception e) {
         log.error(e.getMessage());

@@ -36,7 +36,7 @@ public class MongoInitTest {
     Optional<Result> testRes1 =
         Optional.of(apiHolder.getTopCoins(250, 0, List.of("usd"))).orElse(null);
     mongoInit.afterPropertiesSet();
-    testRes1.ifPresent(result -> createQueries.CreateCoinDocuments(result.getCoins()));
+    testRes1.ifPresent(result -> createQueries.createCoinDocuments(result.getCoins()));
     assertFalse(testRes1.isPresent());
     verify(mongoInit).afterPropertiesSet();
   }

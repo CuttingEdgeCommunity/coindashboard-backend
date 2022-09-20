@@ -33,7 +33,7 @@ public class GetQueriesImplementation implements GetQueries {
       String symbol, String vs_currency) { // TODO: check if vs_currency exists in the data base
     MatchOperation matchStage = Aggregation.match(new Criteria("symbol").is(symbol));
     ProjectionOperation projectStage =
-        Aggregation.project("name", "symbol", "currentQuote")
+        Aggregation.project("name", "symbol", "marketCapRank", "currentQuote")
             .and("quotes." + vs_currency + ".currentQuote")
             .as("CurrentQuote")
             .andExclude("_id");
@@ -75,12 +75,18 @@ public class GetQueriesImplementation implements GetQueries {
     return gson.toJson(result);
   }
 
+  public String getCoinsSimple(int take, int page) {
+    Query query = new Query(new Criteria("marketCapRank").gt(take * page).lte(take * (page + 1)));
+    query.fields().include("id", "symbol", "marketCapRank");
+    return (gson.toJson(mongoTemplate.find(query, Coin.class, "Coin")));
+  }
+
   @Override
   public String getCoins(int take, int page) {
     MatchOperation matchStage =
         Aggregation.match(new Criteria("marketCapRank").gt(take * page).lte(take * (page + 1)));
     ProjectionOperation projectStage =
-        Aggregation.project("name", "symbol", "image_url", "currentQuote")
+        Aggregation.project("name", "symbol", "marketCapRank", "image_url", "currentQuote")
             .and("quotes.usd.currentQuote")
             .as("CurrentQuote")
             .andExclude("_id");

@@ -6,13 +6,18 @@ import static org.mockito.Mockito.when;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
+import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
+import com.mongodb.client.ClientSession;
 import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bson.BsonValue;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,10 +31,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = {UpdateQueriesImplementation.class, MongoTemplate.class})
+@ContextConfiguration(
+    classes = {
+      UpdateQueriesImplementation.class,
+      ClientSession.class,
+      MongoTemplate.class,
+      GetQueriesImplementation.class,
+      CreateQueriesImplementation.class,
+      ApiHolder.class
+    })
 class UpdateQueriesImplementationTest {
   @Autowired private UpdateQueriesImplementation updateQueries;
   @MockBean private MongoTemplate mongoTemplate;
+  @MockBean private ClientSession mongoSession;
 
   private final String vs_currency = "usd";
   private List<String> vsCurrencies = new ArrayList<>();
@@ -37,9 +51,12 @@ class UpdateQueriesImplementationTest {
   private Map<String, Quote> quotes = new HashMap<>();
   private CurrentQuote newQuote = new CurrentQuote();
   private Coin coin;
+  private Integer marketCapRank;
   private List<Coin> coins = new ArrayList<>();
-  private Result resultOfGetTopCoins;
-  private Result resultOfGetCoinInfo;
+  private Result resultOfGetTopCoins =
+      new Result(ApiProviderEnum.COIN_MARKET_CAP, ResultStatus.SUCCESS, "", coins);
+  private Result resultOfGetCoinInfo =
+      new Result(ApiProviderEnum.COIN_MARKET_CAP, ResultStatus.SUCCESS, "", coins);
 
   private UpdateResult updateResult(boolean wasAcknowledged) {
     return new UpdateResult() {
@@ -74,7 +91,45 @@ class UpdateQueriesImplementationTest {
     UpdateResult updateResult = updateResult(true);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
 
-    assertTrue(updateQueries.UpdateCoinCurrentQuote("btc", newQuote, vs_currency));
+    assertTrue(updateQueries.updateCoinCurrentQuote("btc", newQuote, vs_currency));
+  }
+
+  @Test
+  public void UpdateCoinCurrentQuoteTestNull() {
+    assertFalse(updateQueries.updateCoinCurrentQuote(null, null, null));
+  }
+
+  @Test
+  public void UpdateCoinCurrentQuoteAndMarketCapRankTestNull() {
+    assertFalse(updateQueries.updateCoinCurrentQuoteAndMarketCapRank(null, null, null, null));
+  }
+
+  @Test
+  public void UpdateCoinsCurrentQuoteAndMarketCapRankTestForEmptyList() {
+    assertTrue(updateQueries.updateCoinsCurrentQuotesAndMarketCapRank(List.of()));
+  }
+
+  @Test
+  public void UpdateCoinsCurrentQuoteAndMarketCapRankTestForNewList() {
+    quote.setCurrentQuote(newQuote);
+    quotes.put("usd", quote);
+    coin = new Coin();
+    coin.setQuotes(quotes);
+    assertTrue(updateQueries.updateCoinsCurrentQuotesAndMarketCapRank(List.of(coin)));
+  }
+
+  @Test
+  public void UpdateCoinsCurrentQuotesTest() {
+    assertTrue(
+        updateQueries.updateCoinsCurrentQuotesAndMarketCapRank(resultOfGetTopCoins.getCoins()));
+  }
+
+  @Test
+  @Disabled
+  public void UpdateTopCoinsTransactionTest() {
+    assertTrue(
+        updateQueries.updateTopCoinsTransaction(
+            resultOfGetTopCoins.getCoins(), List.of(), resultOfGetTopCoins.getCoins()));
   }
 
   @Test
@@ -86,30 +141,44 @@ class UpdateQueriesImplementationTest {
     UpdateResult updateResult = updateResult(false);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
 
-    assertFalse(updateQueries.UpdateCoinCurrentQuote("btc", newQuote, vs_currency));
+    assertFalse(updateQueries.updateCoinCurrentQuote("btc", newQuote, vs_currency));
   }
 
   @Test
-  public void UpdateCoinMarketRankCapTest() {
+  public void UpdateCoinCurrentQuoteAndMarketCapRankWasNotAcknowledged() {
     Query query = new Query();
     query.addCriteria(Criteria.where("symbol").is("btc"));
     Update update = new Update();
-    update.set("marketCapRank", 1);
-    UpdateResult updateResult = updateResult(true);
-    when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
-
-    assertTrue(updateQueries.UpdateCoinMarketRankCap("btc", 1));
-  }
-
-  @Test
-  public void UpdateCoinMarketRankCapWasNotAcknowledged() {
-    Query query = new Query();
-    query.addCriteria(Criteria.where("symbol").is("btc"));
-    Update update = new Update();
-    update.set("marketCapRank", 1);
+    update
+        .set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote)
+        .set("marketCapRank", marketCapRank);
     UpdateResult updateResult = updateResult(false);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
 
-    assertFalse(updateQueries.UpdateCoinMarketRankCap("btc", 1));
+    assertFalse(
+        updateQueries.updateCoinCurrentQuoteAndMarketCapRank(
+            "btc", newQuote, vs_currency, marketCapRank));
+  }
+
+  @Test
+  @Disabled // TODO repair test after refactoring
+  public void CleanCoinsMarketCapRanksTest() {
+    Query query = new Query(Criteria.where("rank").gte(1).lte(250));
+    Update update = new Update();
+    update.set("marketCapRank", Integer.MAX_VALUE);
+    UpdateResult updateResult = updateResult(true);
+    when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
+    assertTrue(updateQueries.cleanCoinsMarketCapRanks(List.of()));
+  }
+
+  @Test
+  @Disabled // TODO repair test after refactoring
+  public void CleanCoinsMarketCapRanksWasNotAcknowledged() {
+    Query query = new Query(Criteria.where("rank").gte(1).lte(250));
+    Update update = new Update();
+    update.set("marketCapRank", Integer.MAX_VALUE);
+    UpdateResult updateResult = updateResult(false);
+    when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
+    assertFalse(updateQueries.cleanCoinsMarketCapRanks(List.of()));
   }
 }

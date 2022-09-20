@@ -1,5 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.ID;
+import static com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders.CoinGeckoCoinInfoResultBuilder;
@@ -22,6 +24,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -41,11 +44,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
       CoinGeckoCoinInfoResultBuilder.class,
       HttpRequestBuilder.class,
       CoinGeckoFieldNameMapper.class,
-      ResultBuilderDirector.class
+      ResultBuilderDirector.class,
+      CoinGeckoTestBaseClass.class
     })
-class CoinGeckoFacadeTest {
-  @MockBean private CoinGeckoTranslator translator;
+class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
   @Autowired private CoinGeckoFacade facade;
+  @MockBean private CoinGeckoTranslator translator;
   @MockBean private CoinGeckoApiClient client;
 
   private ObjectMapper mapper = new ObjectMapper();
@@ -211,5 +215,17 @@ class CoinGeckoFacadeTest {
         facade.getHistoricalListing(List.of("bitcoin"), List.of("usd"), 0L, 0L);
     assertEquals(ResultStatus.SUCCESS, result.get().getStatus());
     assertEquals(4, result.get().getCoins().get(0).getQuotes().get("usd").getChart().size());
+  }
+
+  @Test
+  @Disabled
+  void initTest() throws IOException {
+    this.setupCorrectGetNames();
+    Mockito.when(client.getCoinsNames()).thenReturn(this.correctGetNamesR);
+    Mockito.when(translator.translate(inputsymbols, NAME)).thenReturn(correctNames);
+    Mockito.when(translator.translate(inputsymbols, ID)).thenReturn(correctIds);
+    facade.init();
+    assertEquals(this.correctNames, this.translator.translate(inputsymbols, NAME));
+    assertEquals(this.correctIds, this.translator.translate(inputsymbols, ID));
   }
 }
