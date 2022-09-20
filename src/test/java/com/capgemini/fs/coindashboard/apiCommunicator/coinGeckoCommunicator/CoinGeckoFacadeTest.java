@@ -47,8 +47,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
       ResultBuilderDirector.class,
       CoinGeckoTestBaseClass.class
     })
-class CoinGeckoFacadeTest {
-  @MockBean private CoinGeckoTranslator translator;
+class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
   @Autowired private CoinGeckoFacade facade;
   @MockBean private CoinGeckoTranslator translator;
   @MockBean private CoinGeckoApiClient client;

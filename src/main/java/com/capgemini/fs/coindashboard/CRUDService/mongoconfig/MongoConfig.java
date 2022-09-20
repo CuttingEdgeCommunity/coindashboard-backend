@@ -1,7 +1,8 @@
 package com.capgemini.fs.coindashboard.CRUDService.mongoconfig;
 
-import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import static java.util.concurrent.TimeUnit.SECONDS;
+
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
