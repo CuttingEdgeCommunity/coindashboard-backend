@@ -36,4 +36,10 @@ public class CacheServiceImplementation implements CacheService {
   public Optional<String> getChart(String name, long chart_from, long chart_to) {
     throw new UnsupportedOperationException("Method not yet implemented.");
   }
+
+  @Override
+  @Cacheable(cacheNames = "getCoinByRegex")
+  public Optional<String> getCoinByRegex(String query) {
+    return Optional.of(getQueries.findCoinByRegex(query));
+  }
 }
