@@ -57,7 +57,7 @@ public class DatabaseUpdater {
   }
 
   @Async
-  @Scheduled(fixedDelay = 5000)
+  @Scheduled(fixedRate = 5000)
   public boolean currentQuoteUpdates() {
     if (this.enabled) {
       List<String> vsCurrencies = new ArrayList<>();

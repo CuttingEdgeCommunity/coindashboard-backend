@@ -61,16 +61,22 @@ class CoinGeckoFacadeTest {
     badResponse = new Response(400, data);
 
     Mockito.when(translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.COIN_INFO))
-            .thenReturn(List.of("bitcoin"));
-    Mockito.when(translator.translate(List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.COIN_INFO))
-        .thenReturn(List.of("bitcoin", "ethereum"));
-
-    Mockito.when(translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
         .thenReturn(List.of("bitcoin"));
-    Mockito.when(translator.translate(List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
+    Mockito.when(
+            translator.translate(
+                List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.COIN_INFO))
         .thenReturn(List.of("bitcoin", "ethereum"));
 
-    Mockito.when(translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.HISTORICAL_LISTING))
+    Mockito.when(
+            translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
+        .thenReturn(List.of("bitcoin"));
+    Mockito.when(
+            translator.translate(
+                List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
+        .thenReturn(List.of("bitcoin", "ethereum"));
+
+    Mockito.when(
+            translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.HISTORICAL_LISTING))
         .thenReturn(List.of("bitcoin"));
 
     Mockito.when(client.getTopCoins(3, 1, "aed")).thenReturn(badResponse);
