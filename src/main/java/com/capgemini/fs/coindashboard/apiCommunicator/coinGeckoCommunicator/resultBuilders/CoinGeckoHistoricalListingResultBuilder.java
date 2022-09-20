@@ -23,7 +23,7 @@ public class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketData
 
   @Override
   protected List<Coin> buildCoinList(JsonNode data) {
-    return List.of(this.buildSingleCoin((String) requestArgs[0], data));
+    return List.of(this.buildSingleCoin(requestArgs.getCoins().get(0), data));
   }
 
   @Override
@@ -37,7 +37,7 @@ public class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketData
   @Override
   protected Map<String, Quote> buildQuoteMap(JsonNode data) {
     Map<String, Quote> result = new HashMap<>();
-    result.put((String) requestArgs[1], buildSingleQuote(data));
+    result.put(requestArgs.getVsCurrencies().get(0), buildSingleQuote(data));
 
     return result;
   }
@@ -45,7 +45,7 @@ public class CoinGeckoHistoricalListingResultBuilder extends CoinGeckoMarketData
   @Override
   protected Quote buildSingleQuote(JsonNode data) {
     Quote result = new Quote();
-    result.setVs_currency((String) requestArgs[1]);
+    result.setVs_currency(requestArgs.getVsCurrencies().get(0));
     result.setCurrentQuote(this.buildCurrentQuote(data));
     result.setChart(this.buildPriceList(data.get(this.mapper.PRICES)));
     return result;

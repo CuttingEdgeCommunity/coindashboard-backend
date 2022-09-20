@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Component;
 public class GetQueriesImplementation implements GetQueries {
   private static final Gson gson = new Gson();
   @Autowired private MongoTemplate mongoTemplate;
+
+  @Value("${controller.search-limit}")
+  private int searchLimit;
 
   @Override
   public String getAllCoins() {
@@ -103,5 +107,29 @@ public class GetQueriesImplementation implements GetQueries {
     Query query = new Query();
     query.addCriteria(Criteria.where("symbol").is(symbol));
     return mongoTemplate.exists(query, Coin.class);
+  }
+
+  @Override
+  public String findCoinByRegex(String query) {
+    MatchOperation matchStage =
+        Aggregation.match(
+            new Criteria()
+                .orOperator(
+                    new Criteria("symbol").regex(query), new Criteria("name").regex(query)));
+    ProjectionOperation projectStage =
+        Aggregation.project("name", "symbol", "marketCapRank", "image_url", "currentQuote")
+            .and("quotes.usd.currentQuote")
+            .as("CurrentQuote")
+            .andExclude("_id");
+    Aggregation aggregation =
+        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(searchLimit));
+    List<Object> result =
+        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults();
+    if (result.isEmpty()) {
+      log.error("coin matching regex: " + query + " does not exist");
+      return null;
+    }
+    log.info("passing found coins from DB for regex: " + query);
+    return gson.toJson(result);
   }
 }

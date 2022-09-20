@@ -9,6 +9,7 @@ import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.capgemini.fs.coindashboard.utils.AsyncService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class DatabaseUpdater {
 
   private final int MAX_COINS = 250;
   private boolean enabled = true;
-
+  @Autowired private AsyncService asyncService;
   @Autowired private UpdateQueries updateQueries;
   @Autowired private GetQueries getQueries;
   @Autowired private CreateQueries createQueries;
@@ -78,7 +79,7 @@ public class DatabaseUpdater {
   // Updating current market data for top 250 coins each few seconds.
   @Async
   @Scheduled(fixedDelay = 10000)
-  public boolean currentQuoteUpdates() {
+  public Boolean currentQuoteUpdates() {
     if (this.enabled) {
       try {
         List<String> vsCurrencies = List.of("usd");
@@ -108,7 +109,7 @@ public class DatabaseUpdater {
 
   @Async
   @Scheduled(cron = "* */5 * * * *")
-  public boolean chartUpdate() {
+  public Boolean chartUpdate() {
     if (this.enabled) {
       this.updateQueries.UpdateEveryCoinPriceChart();
       return true;

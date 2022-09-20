@@ -17,4 +17,6 @@ public class MongoEnv {
   private String username;
   private String password;
   private String database;
+  private Integer connection_pool_size;
+  private Integer connection_pool_wait_time;
 }

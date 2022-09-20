@@ -14,26 +14,32 @@ public class CacheServiceImplementation implements CacheService {
   @Autowired GetQueries getQueries;
 
   @Override
-  @Cacheable(cacheNames = "getCoinMarketData")
-  public Optional<String> getCoinMarketData(String symbol, String vs_currency) {
-    return Optional.of(getQueries.getCoinMarketData(symbol, vs_currency));
+  @Cacheable("getCoinMarketData")
+  public Optional<String> getCoinMarketData(String name, String vs_currency) {
+    return Optional.of(getQueries.getCoinMarketData(name, vs_currency));
   }
 
   @Override
-  @Cacheable(cacheNames = "getCoinInfo")
+  @Cacheable("getCoinInfo")
   public Optional<String> getCoinInfo(int take, int page) {
     return Optional.of(getQueries.getCoins(take, page));
   }
 
   @Override
-  @Cacheable(cacheNames = "getCoinDetails")
+  @Cacheable("getCoinDetails")
   public Optional<String> getCoinDetails(String symbol) {
     return Optional.of(getQueries.getCoinDetails(symbol));
   }
 
   @Override
-  @Cacheable(cacheNames = "getChart")
+  @Cacheable("getChart")
   public Optional<String> getChart(String name, long chart_from, long chart_to) {
     throw new UnsupportedOperationException("Method not yet implemented.");
+  }
+
+  @Override
+  @Cacheable("getCoinByRegex")
+  public Optional<String> getCoinByRegex(String query) {
+    return Optional.of(getQueries.findCoinByRegex(query));
   }
 }

@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders.CoinGeckoBuilderBaseClass;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
@@ -64,9 +65,7 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
         this.resultBuilderDirector.constructCoinMarketDataResult(
             this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS),
             response,
-            take,
-            page,
-            vsCurrency);
+            new ApiCommunicatorMethodParametersDto(take, page, List.of(vsCurrency)));
         Result responseResult =
             this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS).getResult();
         if (responseResult.getStatus() == ResultStatus.FAILURE) {
@@ -110,8 +109,8 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
         this.resultBuilderDirector.constructCoinMarketDataResult(
             this.resultBuilders.get(ApiCommunicatorMethodEnum.CURRENT_LISTING),
             response,
-            coin,
-            vsCurrencies);
+            new ApiCommunicatorMethodParametersDto(
+                List.of(coin), vsCurrencies, include7dSparkline));
         Result responseResult =
             this.resultBuilders.get(ApiCommunicatorMethodEnum.CURRENT_LISTING).getResult();
         if (responseResult.getStatus() == ResultStatus.FAILURE) {
@@ -153,8 +152,8 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
           this.resultBuilderDirector.constructCoinMarketDataResult(
               this.resultBuilders.get(ApiCommunicatorMethodEnum.HISTORICAL_LISTING),
               response,
-              coin,
-              vsCurrency);
+              new ApiCommunicatorMethodParametersDto(
+                  List.of(coin), List.of(vsCurrency), timestampFrom, timestampTo));
           Result responseResult =
               this.resultBuilders.get(ApiCommunicatorMethodEnum.HISTORICAL_LISTING).getResult();
           if (responseResult.getStatus() == ResultStatus.FAILURE) {
@@ -190,7 +189,9 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
       for (String coin : coins) {
         Response response = ((CoinGeckoApiClient) this.apiClient).getCoinInfo(coin);
         this.resultBuilderDirector.constructCoinMarketDataResult(
-            this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO), response, coin);
+            this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO),
+            response,
+            new ApiCommunicatorMethodParametersDto(List.of(coin)));
         Result responseResult =
             this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO).getResult();
         if (responseResult.getStatus() == ResultStatus.FAILURE) {
