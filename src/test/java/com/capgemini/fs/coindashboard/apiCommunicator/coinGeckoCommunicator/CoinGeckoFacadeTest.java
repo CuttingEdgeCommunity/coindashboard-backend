@@ -51,7 +51,6 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
   @Autowired private CoinGeckoFacade facade;
   @MockBean private CoinGeckoTranslator translator;
   @MockBean private CoinGeckoApiClient client;
-  @MockBean private CoinGeckoTranslator translator;
   private ObjectMapper mapper = new ObjectMapper();
   Response badResponse;
 

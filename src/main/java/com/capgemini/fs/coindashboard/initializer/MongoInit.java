@@ -85,7 +85,7 @@ public class MongoInit implements InitializingBean {
   protected void passingData(List<Coin> coins) {
     log.info("Passing data...");
     try {
-      createQueries.CreateCoinDocuments(coins);
+      createQueries.createCoinDocuments(coins);
       log.info("Successfully added initial {} topCoins data", coins.size());
     } catch (Exception e) {
       log.error(e.getMessage());
