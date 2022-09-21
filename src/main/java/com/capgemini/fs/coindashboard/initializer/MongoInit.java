@@ -75,7 +75,7 @@ public class MongoInit implements InitializingBean {
                       log.info("duplicate symbol: {}", coinlhs.getSymbol());
                       return coinlhs;
                     }));
-    for (Coin coin : coinMarketDataResult.get().getCoins()) {
+    for (Coin coin : coinMarketDataResult.orElseThrow().getCoins()) {
       coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
     }
     log.info(coins.size());
