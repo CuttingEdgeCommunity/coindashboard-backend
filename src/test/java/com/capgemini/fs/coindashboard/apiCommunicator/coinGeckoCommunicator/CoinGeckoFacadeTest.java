@@ -51,7 +51,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
   @Autowired private CoinGeckoFacade facade;
   @MockBean private CoinGeckoTranslator translator;
   @MockBean private CoinGeckoApiClient client;
-
+  @MockBean private CoinGeckoTranslator translator;
   private ObjectMapper mapper = new ObjectMapper();
   Response badResponse;
 
@@ -85,6 +85,24 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
 
     Mockito.when(client.getTopCoins(3, 1, "aed")).thenReturn(badResponse);
     Mockito.when(client.getCoinInfo("ethereum")).thenReturn(badResponse);
+    Mockito.when(translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.COIN_INFO))
+        .thenReturn(List.of("bitcoin"));
+    Mockito.when(
+            translator.translate(
+                List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.COIN_INFO))
+        .thenReturn(List.of("bitcoin", "ethereum"));
+
+    Mockito.when(
+            translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
+        .thenReturn(List.of("bitcoin"));
+    Mockito.when(
+            translator.translate(
+                List.of("bitcoin", "ethereum"), ApiCommunicatorMethodEnum.CURRENT_LISTING))
+        .thenReturn(List.of("bitcoin", "ethereum"));
+
+    Mockito.when(
+            translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.HISTORICAL_LISTING))
+        .thenReturn(List.of("bitcoin"));
     Mockito.when(client.getCurrentListing("ethereum", true)).thenReturn(badResponse);
     Mockito.when(client.getHistoricalListing("bitcoin", "aed", 0L, 0L)).thenReturn(badResponse);
   }
@@ -135,7 +153,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
     Mockito.when(client.getCoinInfo("bitcoin")).thenReturn(response);
 
     Optional<Result> result = facade.getCoinInfo(List.of("bitcoin", "ethereum"));
-    assertEquals(ResultStatus.PARTIAL_SUCCESS, result.get().getStatus());
+    assertEquals(ResultStatus.SUCCESS, result.get().getStatus());
     assertEquals("bitcoin", result.get().getCoins().get(0).getName());
   }
 
@@ -150,8 +168,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
     Mockito.when(client.getCoinInfo("bitcoin")).thenReturn(response);
 
     Optional<Result> result = facade.getCoinInfo(List.of("bitcoin"));
-    assertEquals(ResultStatus.SUCCESS, result.get().getStatus());
-    assertEquals("bitcoin", result.get().getCoins().get(0).getName());
+    assertEquals(ResultStatus.FAILURE, result.get().getStatus());
   }
 
   @Test

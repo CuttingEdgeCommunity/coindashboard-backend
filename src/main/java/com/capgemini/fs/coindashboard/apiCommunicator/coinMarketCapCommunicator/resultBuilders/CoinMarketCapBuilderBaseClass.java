@@ -77,17 +77,22 @@ public abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder
     }
     if (this.result.getStatus() == ResultStatus.SUCCESS
         && this.result.getCoins() != null
-        && this.requestArgs.getCoins().size() > this.result.getCoins().size()) {
+        && getDifferences(this.requestArgs.getCoins(), this.result.getCoins()).size()
+            > 0) {
       this.result.setStatus(ResultStatus.PARTIAL_SUCCESS);
       String differences =
-          this.requestArgs.getCoins().stream()
-              .filter(
-                  element ->
-                      this.result.getCoins().stream()
-                          .noneMatch(c -> Objects.equals(c.getSymbol(), element)))
-              .collect(Collectors.joining(","));
+          String.join(
+              ",", getDifferences(this.requestArgs.getCoins(), this.result.getCoins()));
       this.errorMessage = "coins not found: " + differences;
     }
+  }
+
+  private List<String> getDifferences(List<String> list1, List<Coin> list2) {
+    return (list1)
+        .stream()
+            .filter(
+                element -> list2.stream().noneMatch(c -> Objects.equals(c.getSymbol(), element)))
+            .collect(Collectors.toList());
   }
 
   @Override

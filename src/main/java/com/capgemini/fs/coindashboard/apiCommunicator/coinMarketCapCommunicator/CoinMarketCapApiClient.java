@@ -66,7 +66,7 @@ public final class CoinMarketCapApiClient extends ApiClient {
 
   public Response getCoinInfo(List<String> coins) throws IOException {
     Map<String, String> queryParams = new LinkedHashMap<>();
-    queryParams.put("symbol", String.join(",", coins));
+    queryParams.put("id", String.join(",", coins));
     String requestUrl =
         httpRequestBuilder.buildRequestURI(this.url + "/cryptocurrency/info", queryParams);
     return this.invokeGet(requestUrl, this.headers);

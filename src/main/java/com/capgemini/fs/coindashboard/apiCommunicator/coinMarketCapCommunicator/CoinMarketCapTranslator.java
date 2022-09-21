@@ -3,6 +3,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.CoinTranslator;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.PlaceHolder;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator.TranslationEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
@@ -33,6 +34,7 @@ final class CoinMarketCapTranslator extends CoinTranslator {
   public List<String> translate(List<String> symbols, ApiCommunicatorMethodEnum method) {
     return switch (method) {
       case CURRENT_LISTING, HISTORICAL_LISTING -> symbols;
+      case COIN_INFO -> this.translate(symbols, TranslationEnum.ID);
       default -> throw new IllegalStateException("Unexpected value: " + method);
     };
   }

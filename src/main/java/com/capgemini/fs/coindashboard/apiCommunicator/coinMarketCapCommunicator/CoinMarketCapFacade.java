@@ -102,7 +102,9 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
   @Override
   public Optional<Result> getCoinInfo(List<String> coins) {
     try {
-      Response response = ((CoinMarketCapApiClient) this.apiClient).getCoinInfo(coins);
+      List<String> coinsTranslated =
+          this.coinTranslator.translate(coins, ApiCommunicatorMethodEnum.COIN_INFO);
+      Response response = ((CoinMarketCapApiClient) this.apiClient).getCoinInfo(coinsTranslated);
       this.resultBuilderDirector.constructCoinMarketDataResult(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO),
           response,
