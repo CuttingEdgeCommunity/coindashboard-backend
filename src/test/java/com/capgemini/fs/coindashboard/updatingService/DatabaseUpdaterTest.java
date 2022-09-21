@@ -136,6 +136,6 @@ class DatabaseUpdaterTest {
     Mockito.when(apiHolder.getCoinInfo(List.of("eth")))
         .thenReturn(Optional.of(resultOfGetTopCoins));
     databaseUpdater.setEnabled(true);
-    assertTrue(databaseUpdater.currentQuoteUpdates());
+    assertFalse(databaseUpdater.currentQuoteUpdates());
   }
 }

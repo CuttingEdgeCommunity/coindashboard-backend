@@ -33,7 +33,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
       update.set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
-        log.info("Update CurrentQuote for " + symbol + " vs " + vs_currency + " is completed.");
+        log.debug("Update CurrentQuote for " + symbol + " vs " + vs_currency + " is completed.");
         return true;
       }
     } catch (Exception e) {
@@ -54,7 +54,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
           .set("marketCapRank", marketCapRank);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
-        log.info(
+        log.debug(
             "Update CurrentQuote and marketCapRank for "
                 + symbol
                 + " vs "

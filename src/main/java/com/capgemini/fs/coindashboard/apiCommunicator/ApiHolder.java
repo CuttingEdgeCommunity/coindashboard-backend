@@ -45,7 +45,11 @@ public class ApiHolder implements IApiMethods {
     return this.apiCommunicators.values().stream()
         .filter(provider -> providersToUse.contains(provider.getApiProvider()))
         .map(iApiCommunicatorFacade -> iApiCommunicatorFacade.executeMethod(methodEnum, args))
-        .filter(result -> result != null && result.getStatus().equals(ResultStatus.SUCCESS))
+        .filter(
+            result ->
+                result != null
+                    && (result.getStatus().equals(ResultStatus.SUCCESS)
+                        || result.getStatus().equals(ResultStatus.PARTIAL_SUCCESS)))
         .findFirst();
   }
 

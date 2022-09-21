@@ -29,13 +29,17 @@ public abstract class CoinTranslator {
   public List<String> translate(List<String> symbols, TranslationEnum wanted) {
     var result = new ArrayList<String>();
     for (String symbol : symbols) {
-      String translation;
-      translation =
-          switch (wanted) {
-            case NAME -> this.getTranslation(symbol).getName();
-            case ID -> this.getTranslation(symbol).getId();
-          };
-      result.add(translation);
+      try {
+        String translation;
+        translation =
+            switch (wanted) {
+              case NAME -> this.getTranslation(symbol).getName();
+              case ID -> this.getTranslation(symbol).getId();
+            };
+        result.add(translation);
+      } catch (Exception ignored) {
+        log.error("Symbol not found: {}", symbol);
+      }
     }
     return result;
   }

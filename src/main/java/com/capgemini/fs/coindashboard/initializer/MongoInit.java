@@ -5,6 +5,7 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.CreateQueries;
 import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +36,17 @@ public class MongoInit implements InitializingBean {
   // method to make code cleaner
   protected void requestingInitialData() {
     log.info("Requesting data...");
-    final byte PAGES = 2;
-    int TAKE = 500;
+    final byte PAGES = 4;
+    int TAKE = 250;
     List<String> symbols = new ArrayList<>();
     Optional<Result> coinMarketDataResult;
     for (byte i = 0; i < PAGES; i++) {
       try {
         coinMarketDataResult =
-            Optional.of(apiHolder.getTopCoins(TAKE, i, List.of("usd"))).orElse(null);
+            Optional.of(
+                    apiHolder.getTopCoins(
+                        List.of(ApiProviderEnum.COIN_GECKO), TAKE, i, List.of("usd")))
+                .orElse(null);
         log.info("Requested {} topCoins from {} page", TAKE, i);
         try {
           var res = coinInfo(coinMarketDataResult);
@@ -61,6 +65,7 @@ public class MongoInit implements InitializingBean {
     List<Coin> coins = new ArrayList<>();
     var result =
         this.apiHolder.getCoinInfo(
+            List.of(ApiProviderEnum.COIN_MARKET_CAP),
             coinMarketDataResult.orElseThrow().getCoins().stream()
                 .map(Coin::getSymbol)
                 .collect(Collectors.toList()));
@@ -76,7 +81,19 @@ public class MongoInit implements InitializingBean {
                       return coinlhs;
                     }));
     for (Coin coin : coinMarketDataResult.orElseThrow().getCoins()) {
-      coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
+      try {
+        coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
+      } catch (Exception e) {
+        var infoResult =
+            this.apiHolder.getCoinInfo(
+                List.of(ApiProviderEnum.COIN_GECKO), List.of(coin.getSymbol()));
+        Coin info = new Coin();
+        info.setSymbol(coin.getSymbol());
+        if (infoResult.isPresent()) {
+          info = infoResult.get().getCoins().get(0);
+        }
+        coins.add(new Coin(info, coin));
+      }
     }
     log.info(coins.size());
     return coins;
