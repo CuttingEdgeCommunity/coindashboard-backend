@@ -152,7 +152,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
     Mockito.when(client.getCoinInfo("bitcoin")).thenReturn(response);
 
     Optional<Result> result = facade.getCoinInfo(List.of("bitcoin", "ethereum"));
-    assertEquals(ResultStatus.SUCCESS, result.get().getStatus());
+    assertEquals(ResultStatus.PARTIAL_SUCCESS, result.get().getStatus());
     assertEquals("bitcoin", result.get().getCoins().get(0).getName());
   }
 
@@ -167,7 +167,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
     Mockito.when(client.getCoinInfo("bitcoin")).thenReturn(response);
 
     Optional<Result> result = facade.getCoinInfo(List.of("bitcoin"));
-    assertEquals(ResultStatus.FAILURE, result.get().getStatus());
+    assertEquals(ResultStatus.SUCCESS, result.get().getStatus());
   }
 
   @Test

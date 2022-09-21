@@ -98,9 +98,9 @@ public class MongoInitTest {
   void requestingInitialDataWithSuccess(CapturedOutput output) {
     mongoInit.requestingInitialData();
     times(1);
-    assertTrue(output.getOut().contains("Requested 250 topCoins from 0 page"));
+    assertTrue(output.getOut().contains("Requested 500 topCoins from 0 page"));
     times(2);
-    assertTrue(output.getOut().contains("Requested 250 topCoins from 1 page"));
+    assertTrue(output.getOut().contains("Requested 500 topCoins from 1 page"));
   }
 
   @Test

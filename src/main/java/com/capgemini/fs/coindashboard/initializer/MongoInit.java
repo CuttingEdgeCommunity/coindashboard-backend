@@ -43,7 +43,7 @@ public class MongoInit implements InitializingBean {
       try {
         coinMarketDataResult =
             Optional.of(apiHolder.getTopCoins(TAKE, i, List.of("usd"))).orElse(null);
-        log.info("Requested 250 topCoins from {} page", i);
+        log.info("Requested {} topCoins from {} page", TAKE, i);
         try {
           var res = coinInfo(coinMarketDataResult);
           passingData(res);
@@ -61,12 +61,12 @@ public class MongoInit implements InitializingBean {
     List<Coin> coins = new ArrayList<>();
     var result =
         this.apiHolder.getCoinInfo(
-            coinMarketDataResult.get().getCoins().stream()
+            coinMarketDataResult.orElseThrow().getCoins().stream()
                 .map(Coin::getSymbol)
                 .collect(Collectors.toList()));
     // maps
     Map<String, Coin> resultMap =
-        result.get().getCoins().stream()
+        result.orElseThrow().getCoins().stream()
             .collect(
                 Collectors.toMap(
                     Coin::getSymbol,

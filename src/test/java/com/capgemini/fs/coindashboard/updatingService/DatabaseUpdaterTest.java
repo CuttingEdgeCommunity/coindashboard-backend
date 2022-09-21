@@ -138,28 +138,4 @@ class DatabaseUpdaterTest {
     databaseUpdater.setEnabled(true);
     assertTrue(databaseUpdater.currentQuoteUpdates());
   }
-  //  @Test
-  //  void CurrentQuoteUpdatesTestWith2DiffListsCoinsNotInDbWithDuplicates() {
-  //    ObjectMapper mapper = new ObjectMapper();
-  //    String prev_coins_JsonString;
-  //    Coin eth = new Coin("1234", "Ethereum", "eth", 2, "", 123L, false, null, null, null,
-  // quotes);
-  //    List<Coin> curr_coins = List.of(eth);
-  //    resultOfGetTopCoins.setCoins(curr_coins);
-  //    coins.add(coin);
-  //    try {
-  //      prev_coins_JsonString = mapper.writeValueAsString(coins);
-  //    } catch (JsonProcessingException e) {
-  //      throw new RuntimeException(e);
-  //    }
-  //    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
-  //        .thenReturn(Optional.of(resultOfGetTopCoins));
-  //    Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
-  //    Mockito.when(getQueries.isCoinInDBBySymbol("eth")).thenReturn(false);
-  //    Mockito.when(apiHolder.getCoinInfo(List.of("eth")))
-  //        .thenReturn(Optional.of(resultOfGetTopCoins));
-  //    doNothing().when(updateQueries).removeDuplicates("1234");
-  //    databaseUpdater.setEnabled(true);
-  //    assertTrue(databaseUpdater.currentQuoteUpdates());
-  //  }
 }

@@ -186,17 +186,12 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
       Result result = new Result(this.provider, ResultStatus.FAILURE, null, new ArrayList<>());
       List<String> errorMessages = new ArrayList<>();
 
-      for (int i = 0; i < coins.size() - 1; i++) {
-        if (i % 48 == 0 && i != 0) {
-          log.info("Sleeping for 1 minute...{}", i);
-          Thread.sleep(60000);
-        }
-        Response response = ((CoinGeckoApiClient) this.apiClient).getCoinInfo(coins.get(i));
-        log.info("Iteration: {}", i);
+      for (String coin : coins) {
+        Response response = ((CoinGeckoApiClient) this.apiClient).getCoinInfo(coin);
         this.resultBuilderDirector.constructCoinMarketDataResult(
             this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO),
             response,
-            new ApiCommunicatorMethodParametersDto(List.of(coins.get(i))));
+            new ApiCommunicatorMethodParametersDto(List.of(coin)));
         Result responseResult =
             this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO).getResult();
         if (responseResult.getStatus() == ResultStatus.FAILURE) {
