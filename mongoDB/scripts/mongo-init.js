@@ -1,3 +1,4 @@
+// This comment is even less important than the other one
 db.createUser(
     {
         user: 'root',
