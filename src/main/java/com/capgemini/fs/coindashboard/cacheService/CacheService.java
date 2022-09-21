@@ -13,4 +13,6 @@ public interface CacheService {
   Optional<String> getCoinDetails(String name);
 
   Optional<String> getChart(String name, long chart_from, long chart_to);
+
+  Optional<String> getCoinByRegex(String query);
 }

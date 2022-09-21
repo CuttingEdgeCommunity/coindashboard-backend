@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.CoinMarketCapFieldNameMapper;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
@@ -40,7 +41,7 @@ public abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder
   }
 
   @Override
-  public void setData(Response response, Object... requestArgs) {
+  public void setData(Response response, ApiCommunicatorMethodParametersDto requestArgs) {
     this.response = response;
     this.requestArgs = requestArgs;
   }
@@ -76,12 +77,12 @@ public abstract class CoinMarketCapBuilderBaseClass extends ResultBuilder
     }
     if (this.result.getStatus() == ResultStatus.SUCCESS
         && this.result.getCoins() != null
-        && getDifferences(((List<String>) this.requestArgs[0]), this.result.getCoins()).size()
+        && getDifferences(this.requestArgs.getCoins(), this.result.getCoins()).size()
             > 0) {
       this.result.setStatus(ResultStatus.PARTIAL_SUCCESS);
       String differences =
           String.join(
-              ",", getDifferences(((List<String>) this.requestArgs[0]), this.result.getCoins()));
+              ",", getDifferences(this.requestArgs.getCoins(), this.result.getCoins()));
       this.errorMessage = "coins not found: " + differences;
     }
   }

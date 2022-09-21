@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.CoinGeckoFieldNameMapper;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
@@ -68,7 +69,7 @@ class CoinGeckoCoinInfoResultBuilderTest {
   @Test
   void setResultStatusNoError() {
     this.builder.getResult().setCoins(List.of());
-    this.builder.setData(goodResponse, List.of());
+    this.builder.setData(goodResponse, new ApiCommunicatorMethodParametersDto());
     this.builder.setResultStatus();
     assertEquals(ResultStatus.SUCCESS, this.builder.getResult().getStatus());
   }
@@ -76,7 +77,7 @@ class CoinGeckoCoinInfoResultBuilderTest {
   @Test
   void setResultStatusError() {
     this.builder.getResult().setCoins(List.of());
-    this.builder.setData(badResponse, List.of());
+    this.builder.setData(badResponse, new ApiCommunicatorMethodParametersDto());
     this.builder.setResultStatus();
     assertEquals(ResultStatus.FAILURE, this.builder.getResult().getStatus());
   }
@@ -90,7 +91,7 @@ class CoinGeckoCoinInfoResultBuilderTest {
 
   @Test
   void setCoins() {
-    this.builder.setData(goodResponse);
+    this.builder.setData(goodResponse, new ApiCommunicatorMethodParametersDto());
     this.builder.setCoins();
     Result result = this.builder.getResult();
     assertEquals(1, result.getCoins().size());

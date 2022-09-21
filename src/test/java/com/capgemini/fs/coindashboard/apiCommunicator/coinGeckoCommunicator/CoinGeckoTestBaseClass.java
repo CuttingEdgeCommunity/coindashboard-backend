@@ -76,6 +76,5 @@ public class CoinGeckoTestBaseClass {
                                ]
                         """);
     this.correctGetNamesR = new Response(200, this.correctGetNames);
-    // this.errorR = new Response(400, this.error);
   }
 }

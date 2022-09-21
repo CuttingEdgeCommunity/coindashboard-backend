@@ -50,7 +50,6 @@ public class MongoInit implements InitializingBean {
         } catch (Exception e) {
           log.error(e.getMessage());
         }
-
       } catch (Exception e) {
         log.error("Problem with symbols: {}", e.getMessage());
       }
