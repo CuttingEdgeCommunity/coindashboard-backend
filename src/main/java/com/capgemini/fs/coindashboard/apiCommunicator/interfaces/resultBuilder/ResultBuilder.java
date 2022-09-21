@@ -7,6 +7,7 @@ import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Delta
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Link;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Quote;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 public abstract class ResultBuilder {
 
-  protected Object[] requestArgs;
+  protected ApiCommunicatorMethodParametersDto requestArgs;
   protected Response response;
   protected Result result;
   protected ApiProviderEnum provider;

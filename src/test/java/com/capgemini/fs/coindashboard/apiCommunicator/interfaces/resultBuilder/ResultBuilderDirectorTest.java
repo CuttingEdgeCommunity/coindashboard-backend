@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
@@ -50,7 +51,7 @@ class ResultBuilderDirectorTest {
               return res;
             });
     this.resultBuilderDirector.constructCoinMarketDataResult(
-        this.resultBuilderGood, new Response());
+        this.resultBuilderGood, new Response(), new ApiCommunicatorMethodParametersDto());
     assertEquals(8, this.methodCallCounter);
   }
 
@@ -63,7 +64,8 @@ class ResultBuilderDirectorTest {
               res.setStatus(ResultStatus.FAILURE);
               return res;
             });
-    this.resultBuilderDirector.constructCoinMarketDataResult(this.resultBuilderBad, new Response());
+    this.resultBuilderDirector.constructCoinMarketDataResult(
+        this.resultBuilderBad, new Response(), new ApiCommunicatorMethodParametersDto());
     assertEquals(6, this.methodCallCounter);
   }
 }

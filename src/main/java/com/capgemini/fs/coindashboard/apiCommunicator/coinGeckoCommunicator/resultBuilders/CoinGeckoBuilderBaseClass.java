@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.res
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.CoinGeckoFieldNameMapper;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
@@ -32,7 +33,7 @@ public abstract class CoinGeckoBuilderBaseClass extends ResultBuilder implements
   }
 
   @Override
-  public void setData(Response response, Object... requestArgs) {
+  public void setData(Response response, ApiCommunicatorMethodParametersDto requestArgs) {
     this.response = response;
     this.requestArgs = requestArgs;
   }

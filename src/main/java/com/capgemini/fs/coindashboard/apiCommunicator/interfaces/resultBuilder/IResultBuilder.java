@@ -1,5 +1,6 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.interfaces.resultBuilder;
 
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.FieldNameMapper;
@@ -18,7 +19,7 @@ public interface IResultBuilder {
 
   void setErrorMessage();
 
-  void setData(Response response, Object... requestArgs);
+  void setData(Response response, ApiCommunicatorMethodParametersDto requestArgs);
 
   void setCoins();
 

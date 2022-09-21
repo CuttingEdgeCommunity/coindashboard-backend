@@ -1,6 +1,7 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.coinMarketCapCommunicator.resultBuilders.CoinMarketCapBuilderBaseClass;
+import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ResultStatus;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
@@ -55,9 +56,7 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
       this.resultBuilderDirector.constructCoinMarketDataResult(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS),
           response,
-          take,
-          page,
-          vsCurrencies);
+          new ApiCommunicatorMethodParametersDto(take, page, vsCurrencies));
       return Optional.of(this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS).getResult());
     } catch (Exception e) {
       return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));
@@ -74,9 +73,7 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
       this.resultBuilderDirector.constructCoinMarketDataResult(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.CURRENT_LISTING),
           response,
-          coins,
-          vsCurrencies,
-          include7dSparkline);
+          new ApiCommunicatorMethodParametersDto(coins, vsCurrencies, include7dSparkline));
       return Optional.of(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.CURRENT_LISTING).getResult());
     } catch (Exception e) {
@@ -94,10 +91,7 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
       this.resultBuilderDirector.constructCoinMarketDataResult(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.HISTORICAL_LISTING),
           response,
-          coins,
-          vsCurrencies,
-          timestampFrom,
-          timestampTo);
+          new ApiCommunicatorMethodParametersDto(coins, vsCurrencies, timestampFrom, timestampTo));
       return Optional.of(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.HISTORICAL_LISTING).getResult());
     } catch (Exception e) {
@@ -108,9 +102,13 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
   @Override
   public Optional<Result> getCoinInfo(List<String> coins) {
     try {
-      Response response = ((CoinMarketCapApiClient) this.apiClient).getCoinInfo(coins);
+      List<String> coinsTranslated =
+          this.coinTranslator.translate(coins, ApiCommunicatorMethodEnum.COIN_INFO);
+      Response response = ((CoinMarketCapApiClient) this.apiClient).getCoinInfo(coinsTranslated);
       this.resultBuilderDirector.constructCoinMarketDataResult(
-          this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO), response, coins);
+          this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO),
+          response,
+          new ApiCommunicatorMethodParametersDto(coins));
       return Optional.of(this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO).getResult());
     } catch (Exception e) {
       return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));

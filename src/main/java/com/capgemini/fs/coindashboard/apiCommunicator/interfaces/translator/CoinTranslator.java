@@ -3,18 +3,22 @@ package com.capgemini.fs.coindashboard.apiCommunicator.interfaces.translator;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
 import com.capgemini.fs.coindashboard.apiCommunicator.utils.Response;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class CoinTranslator {
 
   // maps symbol to PlaceHolder
-  private final Map<String, PlaceHolder> translationMap = new HashMap<>();
+  private final Map<String, PlaceHolder> translationMap = new TreeMap<>();
 
   public abstract void initialize(Response response);
 
   protected PlaceHolder getTranslation(String symbol) {
+    if (this.translationMap.get(symbol) == null) log.error("no such coin symbol: {}", symbol);
+
     return this.translationMap.get(symbol);
   }
 

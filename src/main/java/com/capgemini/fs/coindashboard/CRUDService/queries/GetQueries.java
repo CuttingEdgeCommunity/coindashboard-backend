@@ -10,5 +10,9 @@ public interface GetQueries {
 
   String getCoins(int take, int page);
 
+  String getCoinsSimple(int take, int page);
+
   boolean isCoinInDBBySymbol(String name);
+
+  String findCoinByRegex(String query);
 }
