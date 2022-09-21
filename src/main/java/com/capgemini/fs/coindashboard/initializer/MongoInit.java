@@ -67,7 +67,15 @@ public class MongoInit implements InitializingBean {
                 .collect(Collectors.toList()));
     // maps
     Map<String, Coin> resultMap =
-        result.get().getCoins().stream().collect(Collectors.toMap(Coin::getSymbol, (c) -> c));
+        result.get().getCoins().stream()
+            .collect(
+                Collectors.toMap(
+                    Coin::getSymbol,
+                    (c) -> c,
+                    (coinlhs, coinrhs) -> {
+                      log.info("duplicate symbol: {}", coinlhs.getSymbol());
+                      return coinlhs;
+                    }));
     for (Coin coin : coinMarketDataResult.get().getCoins()) {
       coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
     }

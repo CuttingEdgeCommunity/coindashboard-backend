@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +58,7 @@ public class MongoInitTest {
   private final Map<String, Quote> quotes = new HashMap<>();
   private final Quote quote = new Quote(vs_currency, null, null);
   private final List<Link> links = new ArrayList<>();
-  private final Optional<Result> resultOfGetTopCoins = Optional.empty();
+  private Optional<Result> resultOfGetTopCoins = Optional.empty();
   private Result resultOfGetCoinInfo;
 
   @BeforeEach
@@ -137,5 +138,30 @@ public class MongoInitTest {
   void shouldPassDataFailure() throws Exception {
     mongoInit.passingData(_coins);
     assertEquals(_coins.size(), 0);
+  }
+
+  void setupCoinInfoTest() {
+    Mockito.when(this.apiHolder.getCoinInfo(List.of("btc")))
+        .thenReturn(Optional.ofNullable(this.resultOfGetCoinInfo));
+
+    List<Coin> topCoins = new ArrayList<>();
+    Coin coin = new Coin();
+    coin.setSymbol("btc");
+    coin.setName("bitcoin");
+    coin.setQuotes(new TreeMap<>());
+    coin.setMarketCapRank(1);
+    topCoins.add(coin);
+    Result marketData = new Result();
+    marketData.setCoins(topCoins);
+    this.resultOfGetTopCoins = Optional.of(marketData);
+  }
+
+  @Test
+  void coinInfoTest() {
+    this.setupCoinInfoTest();
+    var res = this.mongoInit.coinInfo(this.resultOfGetTopCoins);
+    assertEquals(1, res.size());
+    assertEquals("bitcoin", res.get(0).getName());
+    assertEquals(coin.getImage_url(), res.get(0).getImage_url());
   }
 }

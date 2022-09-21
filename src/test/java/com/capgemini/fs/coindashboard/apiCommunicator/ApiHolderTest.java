@@ -124,8 +124,8 @@ class ApiHolderTest {
   @Test
   void getCurrentListing() {
     this.apiHolder.getCurrentListing(new ArrayList<>(), new ArrayList<>(), false);
-    assertEquals(1, this.cgCalls);
-    assertEquals(0, this.cmcCalls);
+    assertEquals(0, this.cgCalls);
+    assertEquals(1, this.cmcCalls);
   }
 
   @Test
@@ -139,8 +139,8 @@ class ApiHolderTest {
   @Test
   void getHistoricalListing() {
     this.apiHolder.getHistoricalListing(new ArrayList<>(), new ArrayList<>(), 0L, 0L);
-    assertEquals(1, this.cgCalls);
-    assertEquals(0, this.cmcCalls);
+    assertEquals(0, this.cgCalls);
+    assertEquals(1, this.cmcCalls);
   }
 
   @Test
@@ -154,8 +154,8 @@ class ApiHolderTest {
   @Test
   void getTopCoins() {
     this.apiHolder.getTopCoins(0, 0, new ArrayList<>());
-    assertEquals(1, this.cgCalls);
-    assertEquals(0, this.cmcCalls);
+    assertEquals(0, this.cgCalls);
+    assertEquals(1, this.cmcCalls);
   }
 
   @Test
@@ -168,8 +168,8 @@ class ApiHolderTest {
   @Test
   void getCoinInfo() {
     this.apiHolder.getCoinInfo(new ArrayList<>());
-    assertEquals(1, this.cgCalls);
-    assertEquals(0, this.cmcCalls);
+    assertEquals(0, this.cgCalls);
+    assertEquals(1, this.cmcCalls);
   }
 
   @Test
