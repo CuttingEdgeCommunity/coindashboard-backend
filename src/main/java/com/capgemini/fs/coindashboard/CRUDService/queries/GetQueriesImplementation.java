@@ -80,7 +80,7 @@ public class GetQueriesImplementation implements GetQueries {
     query.fields().include("id", "symbol", "marketCapRank");
     return (gson.toJson(mongoTemplate.find(query, Coin.class, "Coin")));
   }
-  
+
   @Override
   public String getCoins(int take, int page) {
     MatchOperation matchStage =
