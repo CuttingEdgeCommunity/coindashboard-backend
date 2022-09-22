@@ -93,7 +93,7 @@ class CoinGeckoTopCoinsResultBuilderTest {
   @Test
   void setCoins() {
     this.builder.setData(
-        goodResponse, new ApiCommunicatorMethodParametersDto(0, 0, List.of("usd")));
+        goodResponse, new ApiCommunicatorMethodParametersDto(0, 0, List.of("usd"),false));
     this.builder.setCoins();
     Result result = this.builder.getResult();
     assertEquals(3, result.getCoins().size());

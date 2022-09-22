@@ -16,7 +16,7 @@ public final class CoinMarketCapApiClient extends ApiClient {
   @Value("${coinmarketcap.path}")
   private String url;
 
-  @Value("${coinmarketcap.key}")
+  @Value("${coinmarketcap.key2}")
   private String key;
 
   private Map<String, List<String>> headers;

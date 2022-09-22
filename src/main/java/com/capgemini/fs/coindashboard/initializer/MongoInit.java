@@ -45,7 +45,7 @@ public class MongoInit implements InitializingBean {
         coinMarketDataResult =
             Optional.of(
                     apiHolder.getTopCoins(
-                        List.of(ApiProviderEnum.COIN_GECKO), TAKE, i, List.of("usd")))
+                        List.of(ApiProviderEnum.COIN_GECKO), TAKE, i, List.of("usd"), true))
                 .orElse(null);
         log.info("Requested {} topCoins from {} page", TAKE, i);
         try {

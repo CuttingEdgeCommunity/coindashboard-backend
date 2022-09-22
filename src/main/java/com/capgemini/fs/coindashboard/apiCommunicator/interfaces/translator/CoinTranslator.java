@@ -23,7 +23,9 @@ public abstract class CoinTranslator {
   }
 
   protected void setTranslation(String symbol, PlaceHolder placeHolder) {
-    this.translationMap.put(symbol, placeHolder);
+    if (!this.translationMap.containsKey(symbol)) {
+      this.translationMap.put(symbol, placeHolder);
+    }
   }
 
   public List<String> translate(List<String> symbols, TranslationEnum wanted) {

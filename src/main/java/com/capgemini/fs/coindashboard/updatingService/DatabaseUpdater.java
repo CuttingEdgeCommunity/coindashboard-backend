@@ -79,14 +79,14 @@ public class DatabaseUpdater {
 
   // Updating current market data for top 250 coins each few seconds.
   @Async
-  @Scheduled(fixedDelay = 10000)
+  @Scheduled(fixedDelay = 5000)
   public Boolean currentQuoteUpdates() {
     if (this.enabled) {
       try {
         List<String> vsCurrencies = List.of("usd");
         var resultTop =
             this.apiHolder.getTopCoins(
-                List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies);
+                List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies,false);
         List<Coin> curr_coins = resultTop.orElseThrow().getCoins();
         String prev_coins = getQueries.getCoinsSimple(MAX_COINS, 0);
         Map<String, Integer> prev_coins_map = jsonToMapForMarketCapRank(prev_coins);
@@ -112,13 +112,23 @@ public class DatabaseUpdater {
   }
 
   @Async
-  @Scheduled(cron = "* */5 * * * *")
+  //@Scheduled(cron = "* */5 * * * *")
+  @Scheduled(cron = "* 1 * * * *")
   public Boolean chartUpdate() {
     if (this.enabled) {
-      this.updateQueries.UpdateEveryCoinPriceChart();
-      return true;
+      try {
+        List<String> vsCurrencies = List.of("usd");
+        var resultTop =
+            this.apiHolder.getTopCoins(
+                List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies, true);
+        List<Coin> curr_coins = resultTop.orElseThrow().getCoins();
+        this.updateQueries.updateTopCoinsPriceChart(curr_coins);
+      } catch (Exception ex){
+        log.error(ex);
+        return false;
+      }
     }
-    return false;
+    return true;
   }
 
   private Map<String, Integer> jsonToMapForMarketCapRank(String jsonString)

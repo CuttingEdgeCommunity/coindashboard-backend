@@ -21,6 +21,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static java.lang.Thread.sleep;
+
 @Component
 @Log4j2
 public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
@@ -52,8 +54,11 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
     return this.provider;
   }
 
-  @Override
   public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies) {
+    return this.getTopCoins(take, page, vsCurrencies, false);
+  }
+  @Override
+  public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies, boolean include7dSparkline) {
 
     try {
       Result result = new Result(this.provider, ResultStatus.FAILURE, null, null);
@@ -61,11 +66,11 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
 
       for (String vsCurrency : vsCurrencies) {
         Response response =
-            ((CoinGeckoApiClient) this.apiClient).getTopCoins(take, page, vsCurrency);
+            ((CoinGeckoApiClient) this.apiClient).getTopCoins(take, page, vsCurrency,include7dSparkline);
         this.resultBuilderDirector.constructCoinMarketDataResult(
             this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS),
             response,
-            new ApiCommunicatorMethodParametersDto(take, page, List.of(vsCurrency)));
+            new ApiCommunicatorMethodParametersDto(take, page, List.of(vsCurrency), include7dSparkline));
         Result responseResult =
             this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS).getResult();
         if (responseResult.getStatus() == ResultStatus.FAILURE) {
@@ -186,7 +191,18 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
       Result result = new Result(this.provider, ResultStatus.FAILURE, null, new ArrayList<>());
       List<String> errorMessages = new ArrayList<>();
 
-      for (String coin : coins) {
+      for (int c = 0; c < coins.size(); c++) {
+        String coin = coins.get(c);
+        if (c > 19) {
+          if (c == 20) {
+            log.info("{} Waiting 60 seconds to not block CoinGecko", c+1);
+            sleep(60000l);
+          }
+          //if ((c % 10) == 0) {
+            log.info("{} Waiting 3 seconds to not block CoinGecko", c+1);
+            sleep(3000l);
+          //}
+        }
         Response response = ((CoinGeckoApiClient) this.apiClient).getCoinInfo(coin);
         this.resultBuilderDirector.constructCoinMarketDataResult(
             this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO),

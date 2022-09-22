@@ -50,7 +50,7 @@ class ApiCommunicatorFacadeTemplateTest {
               invokedMethods.merge(ApiCommunicatorMethodEnum.CURRENT_LISTING, 1, Integer::sum);
               return Optional.empty();
             });
-    Mockito.when(this.apiCommunicatorFacadeTemplate.getTopCoins(anyInt(), anyInt(), anyList()))
+    Mockito.when(this.apiCommunicatorFacadeTemplate.getTopCoins(anyInt(), anyInt(), anyList(),false))
         .thenAnswer(
             input -> {
               invokedMethods.merge(ApiCommunicatorMethodEnum.TOP_COINS, 1, Integer::sum);

@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.CRUDService.queries;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.mongodb.client.result.UpdateResult;
 import java.util.List;
@@ -87,9 +88,26 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   }
 
   @Override
-  public boolean UpdateCoinPriceChart(String symbol) {
-
-    return false;
+  public boolean updateCoinPriceChart(String symbol, String vs_currency, List<Price> chart) {
+      try {
+        Query query = new Query(Criteria.where("symbol").is(symbol));
+        Update update = new Update();
+        update
+            .set("quotes." + vs_currency.toLowerCase() + ".chart", chart);
+        UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
+        if (updateResult.wasAcknowledged()) {
+          log.debug(
+              "Update CurrentQuote and marketCapRank for "
+                  + symbol
+                  + " vs "
+                  + vs_currency
+                  + " has been completed.");
+          return true;
+        }
+      } catch (Exception e) {
+        log.error(e.getMessage());
+      }
+      return false;
   }
 
   // Clearing the current marketCapRank and overwriting the retrieved values by Integer.MAX_VALUE.
@@ -112,7 +130,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   }
 
   @Override
-  public boolean UpdateEveryCoinPriceChart() {
+  public boolean updateEveryCoinPriceChart() {
     return false;
   }
   // Cleaning marketCapRank for coins which are out from current Top 250 and updating data for rest
@@ -139,5 +157,22 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   public void removeDuplicates(String id) {
     Query query = new Query(Criteria.where("id").is(id));
     mongoTemplate.findAndRemove(query, Coin.class, "Coin");
+  }
+  @Override
+  public boolean updateTopCoinsPriceChart(List<Coin> coins){
+    for (Coin coin : coins) {
+      for (String currency : coin.getQuotes().keySet()) {
+        try {
+          updateCoinPriceChart(
+              coin.getSymbol(),
+              currency,
+              coin.getQuotes().get(currency).getChart());
+        } catch (Exception ex) {
+          log.error(ex.getMessage());
+        }
+      }
+    }
+    log.info("Price list for {} coins has been successfully updated", coins.size());
+    return true;
   }
 }
