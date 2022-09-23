@@ -55,6 +55,7 @@ class UpdateQueriesImplementationTest {
   private Map<String, Quote> quotes = new HashMap<>();
   private CurrentQuote newQuote = new CurrentQuote();
   private Coin coin;
+  private String symbol;
   private Integer marketCapRank;
   private List<Coin> coins = new ArrayList<>();
   private Result resultOfGetTopCoins =
@@ -184,5 +185,25 @@ class UpdateQueriesImplementationTest {
     UpdateResult updateResult = updateResult(false);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
     assertFalse(updateQueries.cleanCoinsMarketCapRanks(List.of()));
+  }
+
+  @Test
+  public void UpdateCoinPriceChart() {
+    assertFalse(updateQueries.UpdateCoinPriceChart(symbol));
+  }
+
+  @Test
+  public void UpdateEveryCoinPriceChartTest() {
+    assertFalse(updateQueries.UpdateEveryCoinPriceChart());
+  }
+
+  @Test
+  public void cleanCoinsMarketCapRanksTestForEmptyList() {
+    assertFalse(updateQueries.cleanCoinsMarketCapRanks(List.of()));
+  }
+
+  @Test
+  public void updateTopCoinsTransactionTestForAllEmptyList() {
+    assertTrue(updateQueries.updateTopCoinsTransaction(List.of(), List.of(), List.of()));
   }
 }

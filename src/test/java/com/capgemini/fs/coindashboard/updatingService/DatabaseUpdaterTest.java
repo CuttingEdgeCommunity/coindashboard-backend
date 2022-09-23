@@ -109,7 +109,7 @@ class DatabaseUpdaterTest {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
+    Mockito.when(apiHolder.getTopCoins(List.of(ApiProviderEnum.COIN_GECKO), 250, 0, vsCurrencies))
         .thenReturn(Optional.of(resultOfGetTopCoins));
     Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
     Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(true);
