@@ -160,10 +160,11 @@ public class MongoInitTest {
   @Test
   void coinInfoTest() {
     this.setupCoinInfoTest();
+    // var res = this.mongoInit.coinInfo(this.resultOfGetTopCoins);
     assertThrows(
         NoSuchElementException.class, () -> this.mongoInit.coinInfo(this.resultOfGetTopCoins));
-    //    assertEquals(1, res.size());
-    //    assertEquals("bitcoin", res.get(0).getName());
-    //    assertEquals(coin.getImage_url(), res.get(0).getImage_url());
+    // assertEquals(1, res.size());
+    // assertEquals("bitcoin", res.get(0).getName());
+    // assertEquals(coin.getImage_url(), res.get(0).getImage_url());
   }
 }
