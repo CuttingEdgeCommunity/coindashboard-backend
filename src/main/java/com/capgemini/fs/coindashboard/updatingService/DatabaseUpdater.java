@@ -116,6 +116,7 @@ public class DatabaseUpdater {
   @Scheduled(cron = "* 1 * * * *")
   public Boolean chartUpdate() {
     if (this.enabled) {
+      log.info("Hourly sparkline update for top coins has started.");
       try {
         List<String> vsCurrencies = List.of("usd");
         var resultTop =

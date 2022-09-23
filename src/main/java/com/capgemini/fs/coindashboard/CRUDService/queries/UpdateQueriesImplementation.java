@@ -138,7 +138,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public boolean updateTopCoinsTransaction(
       List<Coin> top_coins, List<String> kicked_from_top, List<Coin> marketCapRank_update) {
-    log.info("Update transaction for {} remain coins has started", marketCapRank_update.size());
+    log.info("Update transaction for {} remain coins has started.", marketCapRank_update.size());
     long start = System.currentTimeMillis();
     try {
       cleanCoinsMarketCapRanks(kicked_from_top);
@@ -170,7 +170,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
         }
       }
     }
-    log.info("Price list for {} coins has been successfully updated", coins.size());
+    log.info("Price list for {} coins has been successfully updated.", coins.size());
     return true;
   }
 }

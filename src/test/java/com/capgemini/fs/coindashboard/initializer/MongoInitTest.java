@@ -1,7 +1,6 @@
 package com.capgemini.fs.coindashboard.initializer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 
@@ -52,7 +51,7 @@ public class MongoInitTest {
   @MockBean private ApiHolder apiHolder;
   @Autowired private MongoInit mongoInit;
   private Coin coin;
-  private final List<Coin> _coins = new ArrayList<Coin>();
+  private final List<Coin> _coins = new ArrayList<>();
   private final List<Coin> coins = new ArrayList<>();
   private final String vs_currency = "usd";
   private final List<String> vsCurrencies = new ArrayList<>();
@@ -142,7 +141,8 @@ public class MongoInitTest {
   }
 
   void setupCoinInfoTest() {
-    Mockito.when(this.apiHolder.getCoinInfo(List.of("btc")))
+    Mockito.when(
+            this.apiHolder.getCoinInfo(List.of(ApiProviderEnum.COIN_MARKET_CAP), List.of("btc")))
         .thenReturn(Optional.ofNullable(this.resultOfGetCoinInfo));
 
     List<Coin> topCoins = new ArrayList<>();
@@ -160,11 +160,9 @@ public class MongoInitTest {
   @Test
   void coinInfoTest() {
     this.setupCoinInfoTest();
-    // var res = this.mongoInit.coinInfo(this.resultOfGetTopCoins);
-    assertThrows(
-        NoSuchElementException.class, () -> this.mongoInit.coinInfo(this.resultOfGetTopCoins));
-    // assertEquals(1, res.size());
-    // assertEquals("bitcoin", res.get(0).getName());
-    // assertEquals(coin.getImage_url(), res.get(0).getImage_url());
+    var res = this.mongoInit.coinInfo(this.resultOfGetTopCoins);
+    assertEquals(1, res.size());
+    assertEquals("bitcoin", res.get(0).getName());
+    assertEquals(coin.getImage_url(), res.get(0).getImage_url());
   }
 }

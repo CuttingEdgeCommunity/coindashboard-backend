@@ -82,17 +82,25 @@ public class MongoInit implements InitializingBean {
                     }));
     for (Coin coin : coinMarketDataResult.orElseThrow().getCoins()) {
       try {
-        coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
-      } catch (Exception e) {
-        var infoResult =
-            this.apiHolder.getCoinInfo(
-                List.of(ApiProviderEnum.COIN_GECKO), List.of(coin.getSymbol()));
-        Coin info = new Coin();
-        info.setSymbol(coin.getSymbol());
-        if (infoResult.isPresent()) {
-          info = infoResult.get().getCoins().get(0);
+        if (resultMap.containsKey(coin.getSymbol())) {
+          coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
+        } else {
+          log.info(
+              "{} is not available in CMC and has been NOT added to the database",
+              coin.getSymbol());
         }
-        coins.add(new Coin(info, coin));
+      } catch (Exception e) {
+        log.info(e);
+        log.info("{} has been NOT added to the database", coin.getSymbol());
+        //        var infoResult =
+        //            this.apiHolder.getCoinInfo(
+        //                List.of(ApiProviderEnum.COIN_GECKO), List.of(coin.getSymbol()));
+        //        Coin info = new Coin();
+        //        info.setSymbol(coin.getSymbol());
+        //        if (infoResult.isPresent()) {
+        //          info = infoResult.get().getCoins().get(0);
+        //        }
+        //        coins.add(new Coin(info, coin));
       }
     }
     log.info(coins.size());
