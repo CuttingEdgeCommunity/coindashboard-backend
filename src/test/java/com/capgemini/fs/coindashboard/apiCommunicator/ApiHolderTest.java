@@ -145,14 +145,15 @@ class ApiHolderTest {
 
   @Test
   void getTopCoins() {
-    this.apiHolder.getTopCoins(0, 0, new ArrayList<>(),false);
+    this.apiHolder.getTopCoins(0, 0, new ArrayList<>(), false);
     assertEquals(0, this.cgCalls);
     assertEquals(1, this.cmcCalls);
   }
 
   @Test
   void getTopCoinsFiltered() {
-    this.apiHolder.getTopCoins(List.of(ApiProviderEnum.COIN_MARKET_CAP), 0, 0, new ArrayList<>(),false);
+    this.apiHolder.getTopCoins(
+        List.of(ApiProviderEnum.COIN_MARKET_CAP), 0, 0, new ArrayList<>(), false);
     assertEquals(0, this.cgCalls);
     assertEquals(1, this.cmcCalls);
   }

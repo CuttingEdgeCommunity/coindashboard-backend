@@ -16,7 +16,9 @@ final class CoinGeckoApiClient extends ApiClient {
   public Response getTopCoins(int take, int page, String vsCurrency) throws IOException {
     return this.getTopCoins(take, page, vsCurrency, false);
   }
-  public Response getTopCoins(int take, int page, String vsCurrency, boolean sparkline) throws IOException {
+
+  public Response getTopCoins(int take, int page, String vsCurrency, boolean sparkline)
+      throws IOException {
     Map<String, String> queryParams = new LinkedHashMap<>();
     queryParams.put("page", String.valueOf(page + 1));
     queryParams.put("per_page", String.valueOf(take));

@@ -73,7 +73,7 @@ class DatabaseUpdaterTest {
 
   @Test
   void currentQuoteUpdatesIfEnabledIsFalse() {
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies,false))
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies, false))
         .thenReturn(Optional.of(resultOfGetTopCoins));
 
     databaseUpdater.setEnabled(false);
@@ -109,7 +109,7 @@ class DatabaseUpdaterTest {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies,false))
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies, false))
         .thenReturn(Optional.of(resultOfGetTopCoins));
     Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
     Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(true);
@@ -129,7 +129,7 @@ class DatabaseUpdaterTest {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies,false))
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies, false))
         .thenReturn(Optional.of(resultOfGetTopCoins));
     Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
     Mockito.when(getQueries.isCoinInDBBySymbol("eth")).thenReturn(false);

@@ -89,25 +89,24 @@ public class UpdateQueriesImplementation implements UpdateQueries {
 
   @Override
   public boolean updateCoinPriceChart(String symbol, String vs_currency, List<Price> chart) {
-      try {
-        Query query = new Query(Criteria.where("symbol").is(symbol));
-        Update update = new Update();
-        update
-            .set("quotes." + vs_currency.toLowerCase() + ".chart", chart);
-        UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
-        if (updateResult.wasAcknowledged()) {
-          log.debug(
-              "Update CurrentQuote and marketCapRank for "
-                  + symbol
-                  + " vs "
-                  + vs_currency
-                  + " has been completed.");
-          return true;
-        }
-      } catch (Exception e) {
-        log.error(e.getMessage());
+    try {
+      Query query = new Query(Criteria.where("symbol").is(symbol));
+      Update update = new Update();
+      update.set("quotes." + vs_currency.toLowerCase() + ".chart", chart);
+      UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
+      if (updateResult.wasAcknowledged()) {
+        log.debug(
+            "Update CurrentQuote and marketCapRank for "
+                + symbol
+                + " vs "
+                + vs_currency
+                + " has been completed.");
+        return true;
       }
-      return false;
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+    return false;
   }
 
   // Clearing the current marketCapRank and overwriting the retrieved values by Integer.MAX_VALUE.
@@ -158,15 +157,14 @@ public class UpdateQueriesImplementation implements UpdateQueries {
     Query query = new Query(Criteria.where("id").is(id));
     mongoTemplate.findAndRemove(query, Coin.class, "Coin");
   }
+
   @Override
-  public boolean updateTopCoinsPriceChart(List<Coin> coins){
+  public boolean updateTopCoinsPriceChart(List<Coin> coins) {
     for (Coin coin : coins) {
       for (String currency : coin.getQuotes().keySet()) {
         try {
           updateCoinPriceChart(
-              coin.getSymbol(),
-              currency,
-              coin.getQuotes().get(currency).getChart());
+              coin.getSymbol(), currency, coin.getQuotes().get(currency).getChart());
         } catch (Exception ex) {
           log.error(ex.getMessage());
         }

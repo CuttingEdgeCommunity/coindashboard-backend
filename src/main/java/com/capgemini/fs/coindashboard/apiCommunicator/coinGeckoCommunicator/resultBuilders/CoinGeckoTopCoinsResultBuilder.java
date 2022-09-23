@@ -7,10 +7,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -45,25 +43,27 @@ public class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBa
   @Override
   protected List<Price> buildPriceList(JsonNode data) {
     List<Price> priceList = new ArrayList<>();
-    if (this.requestArgs.isInclude7dSparkline()){
-//      String date_string = data.get(mapper.LAST_UPDATE_DATE).textValue();
-      //Date last_update = Date.from(Instant.parse(data.get(mapper.LAST_UPDATE_DATE).textValue()));
-//      System.out.println(date_string.replace("Z",""));
-//      LocalDateTime test = LocalDateTime.parse(date_string.replace("Z",""));
-      LocalDateTime last_update = LocalDateTime.parse(data.get(mapper.LAST_UPDATE_DATE).textValue().replace("Z",""));
-//      System.out.println(test);
-//      System.out.println(test.minusHours(1l));
-//      System.out.println(test.minusHours(2l));
-//      System.out.println(Timestamp.valueOf(test.minusHours(2l)).getTime());
-//      System.out.println(data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE).size());
+    if (this.requestArgs.isInclude7dSparkline()) {
+      //      String date_string = data.get(mapper.LAST_UPDATE_DATE).textValue();
+      // Date last_update = Date.from(Instant.parse(data.get(mapper.LAST_UPDATE_DATE).textValue()));
+      //      System.out.println(date_string.replace("Z",""));
+      //      LocalDateTime test = LocalDateTime.parse(date_string.replace("Z",""));
+      LocalDateTime last_update =
+          LocalDateTime.parse(data.get(mapper.LAST_UPDATE_DATE).textValue().replace("Z", ""));
+      //      System.out.println(test);
+      //      System.out.println(test.minusHours(1l));
+      //      System.out.println(test.minusHours(2l));
+      //      System.out.println(Timestamp.valueOf(test.minusHours(2l)).getTime());
+      //      System.out.println(data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE).size());
       JsonNode prices = data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE);
-      for (int i = prices.size()-1; i >= 0; i--){
-        priceList.add(new Price(prices.get(i).asDouble(),Timestamp.valueOf(last_update).getTime()));
+      for (int i = prices.size() - 1; i >= 0; i--) {
+        priceList.add(
+            new Price(prices.get(i).asDouble(), Timestamp.valueOf(last_update).getTime()));
         last_update = last_update.minusHours(1l);
       }
-//      for (JsonNode node : data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE)){
-//        priceList.add(new Price(node.asDouble(),0L));
-//      }
+      //      for (JsonNode node : data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE)){
+      //        priceList.add(new Price(node.asDouble(),0L));
+      //      }
     }
     return priceList;
   }

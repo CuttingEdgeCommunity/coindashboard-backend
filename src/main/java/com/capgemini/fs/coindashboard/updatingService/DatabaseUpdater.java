@@ -86,7 +86,7 @@ public class DatabaseUpdater {
         List<String> vsCurrencies = List.of("usd");
         var resultTop =
             this.apiHolder.getTopCoins(
-                List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies,false);
+                List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies, false);
         List<Coin> curr_coins = resultTop.orElseThrow().getCoins();
         String prev_coins = getQueries.getCoinsSimple(MAX_COINS, 0);
         Map<String, Integer> prev_coins_map = jsonToMapForMarketCapRank(prev_coins);
@@ -112,7 +112,7 @@ public class DatabaseUpdater {
   }
 
   @Async
-  //@Scheduled(cron = "* */5 * * * *")
+  // @Scheduled(cron = "* */5 * * * *")
   @Scheduled(cron = "* 1 * * * *")
   public Boolean chartUpdate() {
     if (this.enabled) {
@@ -123,7 +123,7 @@ public class DatabaseUpdater {
                 List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies, true);
         List<Coin> curr_coins = resultTop.orElseThrow().getCoins();
         this.updateQueries.updateTopCoinsPriceChart(curr_coins);
-      } catch (Exception ex){
+      } catch (Exception ex) {
         log.error(ex);
         return false;
       }

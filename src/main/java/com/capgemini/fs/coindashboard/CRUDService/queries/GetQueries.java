@@ -15,4 +15,6 @@ public interface GetQueries {
   boolean isCoinInDBBySymbol(String name);
 
   String findCoinByRegex(String query);
+
+  String getChart(String symbol, Long chartFrom, Long chartTo);
 }

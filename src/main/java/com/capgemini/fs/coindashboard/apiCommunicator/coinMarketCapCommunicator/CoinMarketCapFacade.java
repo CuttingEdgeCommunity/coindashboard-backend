@@ -49,14 +49,15 @@ public final class CoinMarketCapFacade extends ApiCommunicatorFacadeTemplate {
   }
 
   @Override
-  public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies, boolean include7dSparkline) {
+  public Optional<Result> getTopCoins(
+      int take, int page, List<String> vsCurrencies, boolean include7dSparkline) {
     try {
       Response response =
           ((CoinMarketCapApiClient) this.apiClient).getTopCoins(take, page, vsCurrencies);
       this.resultBuilderDirector.constructCoinMarketDataResult(
           this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS),
           response,
-          new ApiCommunicatorMethodParametersDto(take, page, vsCurrencies,include7dSparkline));
+          new ApiCommunicatorMethodParametersDto(take, page, vsCurrencies, include7dSparkline));
       return Optional.of(this.resultBuilders.get(ApiCommunicatorMethodEnum.TOP_COINS).getResult());
     } catch (Exception e) {
       return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));

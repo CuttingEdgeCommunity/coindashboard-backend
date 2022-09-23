@@ -91,12 +91,18 @@ public class ApiHolder implements IApiMethods {
   }
 
   @Override
-  public Optional<Result> getTopCoins(int take, int page, List<String> vsCurrencies, boolean include7dSparkline) {
-    return this.getTopCoins(Arrays.asList(ApiProviderEnum.values()), take, page, vsCurrencies, include7dSparkline);
+  public Optional<Result> getTopCoins(
+      int take, int page, List<String> vsCurrencies, boolean include7dSparkline) {
+    return this.getTopCoins(
+        Arrays.asList(ApiProviderEnum.values()), take, page, vsCurrencies, include7dSparkline);
   }
 
   public Optional<Result> getTopCoins(
-      List<ApiProviderEnum> providersToUse, int take, int page, List<String> vsCurrencies, boolean include7dSparkline) {
+      List<ApiProviderEnum> providersToUse,
+      int take,
+      int page,
+      List<String> vsCurrencies,
+      boolean include7dSparkline) {
     return this.execute(
         ApiCommunicatorMethodEnum.TOP_COINS,
         providersToUse,
