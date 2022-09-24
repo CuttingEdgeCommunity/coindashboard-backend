@@ -1,7 +1,5 @@
 package com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator;
 
-import static java.lang.Thread.sleep;
-
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.apiCommunicator.coinGeckoCommunicator.resultBuilders.CoinGeckoBuilderBaseClass;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
@@ -17,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
@@ -197,26 +196,7 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
 
       for (int c = 0; c < coins.size(); c++) {
         String coin = coins.get(c);
-        if (c > 19) {
-          if (c == 20) {
-            try {
-              log.info("{} Waiting 60 seconds to not block CoinGecko", c + 1);
-              sleep(60000L);
-            } catch (InterruptedException e) {
-              log.error(e.getMessage());
-              Thread.currentThread().interrupt();
-            }
-          }
-          // if ((c % 10) == 0) {
-          try {
-            log.info("{} Waiting 3 seconds to not block CoinGecko", c + 1);
-            sleep(3000L);
-            // }
-          } catch (InterruptedException e) {
-            log.error(e.getMessage());
-            Thread.currentThread().interrupt();
-          }
-        }
+        extractedToGetCoinInfo(c);
         Response response = ((CoinGeckoApiClient) this.apiClient).getCoinInfo(coin);
         this.resultBuilderDirector.constructCoinMarketDataResult(
             this.resultBuilders.get(ApiCommunicatorMethodEnum.COIN_INFO),
@@ -239,6 +219,22 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
       return Optional.of(result);
     } catch (Exception e) {
       return Optional.of(new Result(this.provider, ResultStatus.FAILURE, e.getMessage(), null));
+    }
+  }
+
+  private void extractedToGetCoinInfo(int c) {
+    try {
+      if (c > 19) {
+        if (c == 20) {
+          log.info("{} Waiting 60 seconds to not block CoinGecko", c + 1);
+          TimeUnit.MINUTES.sleep(1L);
+        }
+        log.info("{} Waiting 3 seconds to not block CoinGecko", c + 1);
+        TimeUnit.SECONDS.sleep(3L);
+      }
+    } catch (InterruptedException e) {
+      log.error(e.getMessage());
+      Thread.currentThread().interrupt();
     }
   }
 }
