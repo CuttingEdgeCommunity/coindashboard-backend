@@ -199,20 +199,22 @@ public final class CoinGeckoFacade extends ApiCommunicatorFacadeTemplate {
         String coin = coins.get(c);
         if (c > 19) {
           if (c == 20) {
-            log.info("{} Waiting 60 seconds to not block CoinGecko", c + 1);
             try {
-              sleep(60000l);
+              log.info("{} Waiting 60 seconds to not block CoinGecko", c + 1);
+              sleep(60000L);
             } catch (InterruptedException e) {
               log.error(e.getMessage());
+              Thread.currentThread().interrupt();
             }
           }
+          // if ((c % 10) == 0) {
           try {
-            // if ((c % 10) == 0) {
             log.info("{} Waiting 3 seconds to not block CoinGecko", c + 1);
-            sleep(3000l);
+            sleep(3000L);
             // }
           } catch (InterruptedException e) {
             log.error(e.getMessage());
+            Thread.currentThread().interrupt();
           }
         }
         Response response = ((CoinGeckoApiClient) this.apiClient).getCoinInfo(coin);
