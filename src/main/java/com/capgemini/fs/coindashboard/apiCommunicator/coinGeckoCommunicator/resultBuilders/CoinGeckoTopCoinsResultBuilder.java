@@ -44,26 +44,19 @@ public class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBa
   protected List<Price> buildPriceList(JsonNode data) {
     List<Price> priceList = new ArrayList<>();
     if (this.requestArgs.isInclude7dSparkline()) {
-      //      String date_string = data.get(mapper.LAST_UPDATE_DATE).textValue();
-      // Date last_update = Date.from(Instant.parse(data.get(mapper.LAST_UPDATE_DATE).textValue()));
-      //      System.out.println(date_string.replace("Z",""));
-      //      LocalDateTime test = LocalDateTime.parse(date_string.replace("Z",""));
       LocalDateTime last_update =
           LocalDateTime.parse(data.get(mapper.LAST_UPDATE_DATE).textValue().replace("Z", ""));
-      //      System.out.println(test);
-      //      System.out.println(test.minusHours(1l));
-      //      System.out.println(test.minusHours(2l));
-      //      System.out.println(Timestamp.valueOf(test.minusHours(2l)).getTime());
-      //      System.out.println(data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE).size());
       JsonNode prices = data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE);
-      for (int i = prices.size() - 1; i >= 0; i--) {
-        priceList.add(
-            new Price(prices.get(i).asDouble(), Timestamp.valueOf(last_update).getTime()));
-        last_update = last_update.minusHours(1l);
+      int last_update_hour = last_update.getHour();
+      last_update = last_update.withHour(7).withMinute(0).withSecond(0).withNano(0);
+      if (last_update_hour < 7) {
+        last_update = last_update.minusDays(1L);
       }
-      //      for (JsonNode node : data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE)){
-      //        priceList.add(new Price(node.asDouble(),0L));
-      //      }
+      LocalDateTime _7days_ago = last_update.minusDays(7L);
+      for (int i = 0; i < prices.size(); i++) {
+        _7days_ago = _7days_ago.plusHours(1L);
+        priceList.add(new Price(prices.get(i).asDouble(), Timestamp.valueOf(_7days_ago).getTime()));
+      }
     }
     return priceList;
   }

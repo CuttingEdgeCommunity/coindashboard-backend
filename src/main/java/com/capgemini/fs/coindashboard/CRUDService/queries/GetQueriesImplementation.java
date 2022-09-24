@@ -148,6 +148,9 @@ public class GetQueriesImplementation implements GetQueries {
       return null;
     }
     log.info("passing chart from DB for symbol: " + symbol);
+    //    List chart = (List)((Map<?, ?>) result.get(0)).get("chart");
+    //    Collections.reverse(chart);
+    //    return gson.toJson(chart);
     return gson.toJson(((Map<?, ?>) result.get(0)).get("chart"));
   }
 }
