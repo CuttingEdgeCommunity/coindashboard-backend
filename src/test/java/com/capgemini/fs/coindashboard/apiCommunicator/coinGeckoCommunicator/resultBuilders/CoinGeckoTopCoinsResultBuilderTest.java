@@ -111,4 +111,12 @@ class CoinGeckoTopCoinsResultBuilderTest {
   void getMethod() {
     assertEquals(ApiCommunicatorMethodEnum.TOP_COINS, this.builder.getMethod());
   }
+
+  @Test
+  void bulidPriceList() {
+    this.builder.setData(
+        goodResponse, new ApiCommunicatorMethodParametersDto(0, 0, List.of("usd"), true));
+    assertEquals(19856.664922236272, builder.buildPriceList(goodData.get(0)).get(0).getPrice());
+    assertEquals(1661709600000L, builder.buildPriceList(goodData.get(0)).get(0).getTimestamp());
+  }
 }

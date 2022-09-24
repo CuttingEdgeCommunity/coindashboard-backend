@@ -63,6 +63,7 @@ public class MongoInit implements InitializingBean {
   // coin info wrapper
   protected List<Coin> coinInfo(Optional<Result> coinMarketDataResult) {
     List<Coin> coins = new ArrayList<>();
+    int not_in_cmc = 0;
     var result =
         this.apiHolder.getCoinInfo(
             List.of(ApiProviderEnum.COIN_MARKET_CAP),
@@ -85,22 +86,26 @@ public class MongoInit implements InitializingBean {
         if (resultMap.containsKey(coin.getSymbol())) {
           coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
         } else {
-          log.info(
-              "{} is not available in CMC and has been NOT added to the database",
-              coin.getSymbol());
+          not_in_cmc++;
+          if (not_in_cmc < 6) {
+            var infoResult =
+                this.apiHolder.getCoinInfo(
+                    List.of(ApiProviderEnum.COIN_GECKO), List.of(coin.getSymbol()));
+            Coin info = new Coin();
+            info.setSymbol(coin.getSymbol());
+            if (infoResult.isPresent()) {
+              info = infoResult.get().getCoins().get(0);
+            }
+            coins.add(new Coin(info, coin));
+          } else {
+            log.info(
+                "{} is not available in CMC and has been NOT added to the database",
+                coin.getSymbol());
+          }
         }
       } catch (Exception e) {
         log.info(e);
         log.info("{} has been NOT added to the database", coin.getSymbol());
-        //        var infoResult =
-        //            this.apiHolder.getCoinInfo(
-        //                List.of(ApiProviderEnum.COIN_GECKO), List.of(coin.getSymbol()));
-        //        Coin info = new Coin();
-        //        info.setSymbol(coin.getSymbol());
-        //        if (infoResult.isPresent()) {
-        //          info = infoResult.get().getCoins().get(0);
-        //        }
-        //        coins.add(new Coin(info, coin));
       }
     }
     log.info(coins.size());
