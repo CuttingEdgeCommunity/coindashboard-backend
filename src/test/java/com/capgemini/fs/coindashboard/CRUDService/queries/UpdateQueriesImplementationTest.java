@@ -165,9 +165,8 @@ class UpdateQueriesImplementationTest {
   }
 
   @Test
-  @Disabled // TODO repair test after refactoring
   public void CleanCoinsMarketCapRanksTest() {
-    Query query = new Query(Criteria.where("rank").gte(1).lte(250));
+    Query query = new Query(Criteria.where("symbol").in(List.of()));
     Update update = new Update();
     update.set("marketCapRank", Integer.MAX_VALUE);
     UpdateResult updateResult = updateResult(true);
@@ -176,13 +175,36 @@ class UpdateQueriesImplementationTest {
   }
 
   @Test
-  @Disabled // TODO repair test after refactoring
   public void CleanCoinsMarketCapRanksWasNotAcknowledged() {
-    Query query = new Query(Criteria.where("rank").gte(1).lte(250));
+    Query query = new Query(Criteria.where("symbol").in(List.of()));
     Update update = new Update();
     update.set("marketCapRank", Integer.MAX_VALUE);
     UpdateResult updateResult = updateResult(false);
     when(mongoTemplate.updateMulti(query, update, Coin.class)).thenReturn(updateResult);
     assertFalse(updateQueries.cleanCoinsMarketCapRanks(List.of()));
+  }
+
+  @Test
+  public void UpdateEveryCoinPriceChartTest() {
+    assertFalse(updateQueries.updateEveryCoinPriceChart());
+  }
+
+  @Test
+  public void cleanCoinsMarketCapRanksTestForEmptyList() {
+    assertFalse(updateQueries.cleanCoinsMarketCapRanks(List.of()));
+  }
+
+  @Test
+  public void updateTopCoinsTransactionTestForAllEmptyList() {
+    assertTrue(updateQueries.updateTopCoinsTransaction(List.of(), List.of(), List.of()));
+  }
+
+  @Test
+  public void updateTopCoinsPriceChartTest() {
+    quote.setCurrentQuote(newQuote);
+    quotes.put("usd", quote);
+    coin = new Coin();
+    coin.setQuotes(quotes);
+    assertTrue(updateQueries.updateTopCoinsPriceChart(List.of(coin)));
   }
 }

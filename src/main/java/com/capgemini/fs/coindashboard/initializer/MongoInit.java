@@ -5,6 +5,7 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.CreateQueries;
 import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +36,17 @@ public class MongoInit implements InitializingBean {
   // method to make code cleaner
   protected void requestingInitialData() {
     log.info("Requesting data...");
-    final byte PAGES = 2;
-    int TAKE = 500;
+    final byte PAGES = 4;
+    int TAKE = 250;
     List<String> symbols = new ArrayList<>();
     Optional<Result> coinMarketDataResult;
     for (byte i = 0; i < PAGES; i++) {
       try {
         coinMarketDataResult =
-            Optional.of(apiHolder.getTopCoins(TAKE, i, List.of("usd"))).orElse(null);
+            Optional.of(
+                    apiHolder.getTopCoins(
+                        List.of(ApiProviderEnum.COIN_GECKO), TAKE, i, List.of("usd"), true))
+                .orElse(null);
         log.info("Requested {} topCoins from {} page", TAKE, i);
         try {
           var res = coinInfo(coinMarketDataResult);
@@ -59,8 +63,10 @@ public class MongoInit implements InitializingBean {
   // coin info wrapper
   protected List<Coin> coinInfo(Optional<Result> coinMarketDataResult) {
     List<Coin> coins = new ArrayList<>();
+    int not_in_cmc = 0;
     var result =
         this.apiHolder.getCoinInfo(
+            List.of(ApiProviderEnum.COIN_MARKET_CAP),
             coinMarketDataResult.orElseThrow().getCoins().stream()
                 .map(Coin::getSymbol)
                 .collect(Collectors.toList()));
@@ -76,7 +82,31 @@ public class MongoInit implements InitializingBean {
                       return coinlhs;
                     }));
     for (Coin coin : coinMarketDataResult.orElseThrow().getCoins()) {
-      coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
+      try {
+        if (resultMap.containsKey(coin.getSymbol())) {
+          coins.add(new Coin(resultMap.get(coin.getSymbol()), coin));
+        } else {
+          not_in_cmc++;
+          if (not_in_cmc < 6) {
+            var infoResult =
+                this.apiHolder.getCoinInfo(
+                    List.of(ApiProviderEnum.COIN_GECKO), List.of(coin.getSymbol()));
+            Coin info = new Coin();
+            info.setSymbol(coin.getSymbol());
+            if (infoResult.isPresent()) {
+              info = infoResult.get().getCoins().get(0);
+            }
+            coins.add(new Coin(info, coin));
+          } else {
+            log.info(
+                "{} is not available in CMC and has been NOT added to the database",
+                coin.getSymbol());
+          }
+        }
+      } catch (Exception e) {
+        log.info(e);
+        log.info("{} has been NOT added to the database", coin.getSymbol());
+      }
     }
     log.info(coins.size());
     return coins;

@@ -19,10 +19,12 @@ public class ApiCommunicatorMethodParametersDto {
   private Long timestampFrom;
   private Long timestampTo;
 
-  public ApiCommunicatorMethodParametersDto(int take, int page, List<String> vsCurrencies) {
+  public ApiCommunicatorMethodParametersDto(
+      int take, int page, List<String> vsCurrencies, boolean include7dSparkline) {
     this.take = take;
     this.page = page;
     this.vsCurrencies = vsCurrencies;
+    this.include7dSparkline = include7dSparkline;
   }
 
   public ApiCommunicatorMethodParametersDto(

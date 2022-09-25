@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.ApiCommunicatorMethodParametersDto;
 import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiCommunicatorMethodEnum;
@@ -50,7 +51,9 @@ class ApiCommunicatorFacadeTemplateTest {
               invokedMethods.merge(ApiCommunicatorMethodEnum.CURRENT_LISTING, 1, Integer::sum);
               return Optional.empty();
             });
-    Mockito.when(this.apiCommunicatorFacadeTemplate.getTopCoins(anyInt(), anyInt(), anyList()))
+    Mockito.when(
+            this.apiCommunicatorFacadeTemplate.getTopCoins(
+                anyInt(), anyInt(), anyList(), eq(false)))
         .thenAnswer(
             input -> {
               invokedMethods.merge(ApiCommunicatorMethodEnum.TOP_COINS, 1, Integer::sum);

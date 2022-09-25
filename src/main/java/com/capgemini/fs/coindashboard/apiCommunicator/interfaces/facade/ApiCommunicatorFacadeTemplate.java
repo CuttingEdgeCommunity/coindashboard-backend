@@ -27,7 +27,7 @@ public abstract class ApiCommunicatorFacadeTemplate implements IApiCommunicatorF
     var result =
         switch (method) {
           case TOP_COINS -> this.getTopCoins(
-              args.getTake(), args.getPage(), args.getVsCurrencies());
+              args.getTake(), args.getPage(), args.getVsCurrencies(), args.isInclude7dSparkline());
           case CURRENT_LISTING -> this.getCurrentListing(
               args.getCoins(), args.getVsCurrencies(), args.isInclude7dSparkline());
           case HISTORICAL_LISTING -> this.getHistoricalListing(

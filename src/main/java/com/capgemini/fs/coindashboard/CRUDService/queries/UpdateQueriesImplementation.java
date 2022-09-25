@@ -2,6 +2,7 @@ package com.capgemini.fs.coindashboard.CRUDService.queries;
 
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.CurrentQuote;
+import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Price;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.mongodb.client.result.UpdateResult;
 import java.util.List;
@@ -33,7 +34,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
       update.set("quotes." + vs_currency.toLowerCase() + ".currentQuote", newQuote);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
-        log.info("Update CurrentQuote for " + symbol + " vs " + vs_currency + " is completed.");
+        log.debug("Update CurrentQuote for " + symbol + " vs " + vs_currency + " is completed.");
         return true;
       }
     } catch (Exception e) {
@@ -54,7 +55,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
           .set("marketCapRank", marketCapRank);
       UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
       if (updateResult.wasAcknowledged()) {
-        log.info(
+        log.debug(
             "Update CurrentQuote and marketCapRank for "
                 + symbol
                 + " vs "
@@ -87,8 +88,24 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   }
 
   @Override
-  public boolean UpdateCoinPriceChart(String symbol) {
-
+  public boolean updateCoinPriceChart(String symbol, String vs_currency, List<Price> chart) {
+    try {
+      Query query = new Query(Criteria.where("symbol").is(symbol));
+      Update update = new Update();
+      update.set("quotes." + vs_currency.toLowerCase() + ".chart", chart);
+      UpdateResult updateResult = mongoTemplate.updateMulti(query, update, Coin.class);
+      if (updateResult.wasAcknowledged()) {
+        log.debug(
+            "Update CurrentQuote and marketCapRank for "
+                + symbol
+                + " vs "
+                + vs_currency
+                + " has been completed.");
+        return true;
+      }
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
     return false;
   }
 
@@ -112,7 +129,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   }
 
   @Override
-  public boolean UpdateEveryCoinPriceChart() {
+  public boolean updateEveryCoinPriceChart() {
     return false;
   }
   // Cleaning marketCapRank for coins which are out from current Top 250 and updating data for rest
@@ -121,7 +138,7 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public boolean updateTopCoinsTransaction(
       List<Coin> top_coins, List<String> kicked_from_top, List<Coin> marketCapRank_update) {
-    log.info("Update transaction for {} remain coins has started", marketCapRank_update.size());
+    log.info("Update transaction for {} remain coins has started.", marketCapRank_update.size());
     long start = System.currentTimeMillis();
     try {
       cleanCoinsMarketCapRanks(kicked_from_top);
@@ -139,5 +156,21 @@ public class UpdateQueriesImplementation implements UpdateQueries {
   public void removeDuplicates(String id) {
     Query query = new Query(Criteria.where("id").is(id));
     mongoTemplate.findAndRemove(query, Coin.class, "Coin");
+  }
+
+  @Override
+  public boolean updateTopCoinsPriceChart(List<Coin> coins) {
+    for (Coin coin : coins) {
+      for (String currency : coin.getQuotes().keySet()) {
+        try {
+          updateCoinPriceChart(
+              coin.getSymbol(), currency, coin.getQuotes().get(currency).getChart());
+        } catch (Exception ex) {
+          log.error(ex.getMessage());
+        }
+      }
+    }
+    log.info("Price list for {} coins has been successfully updated.", coins.size());
+    return true;
   }
 }

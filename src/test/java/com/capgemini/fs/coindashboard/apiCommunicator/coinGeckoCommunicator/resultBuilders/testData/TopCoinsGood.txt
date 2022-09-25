@@ -26,6 +26,13 @@
     "atl_date": "2013-07-06T00:00:00.000Z",
     "roi": null,
     "last_updated": "2022-09-04T23:00:31.109Z",
+    "sparkline_in_7d": {
+                "price": [
+                    19856.664922236272,
+                    19839.890073082697,
+                    19852.282855587484
+                    ]
+                },
     "price_change_percentage_1h_in_currency": -0.16035001473665048,
     "price_change_percentage_24h_in_currency": 0.12938653835013414,
     "price_change_percentage_7d_in_currency": -1.1688627048963043

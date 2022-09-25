@@ -23,19 +23,25 @@ public abstract class CoinTranslator {
   }
 
   protected void setTranslation(String symbol, PlaceHolder placeHolder) {
-    this.translationMap.put(symbol, placeHolder);
+    if (!this.translationMap.containsKey(symbol)) {
+      this.translationMap.put(symbol, placeHolder);
+    }
   }
 
   public List<String> translate(List<String> symbols, TranslationEnum wanted) {
     var result = new ArrayList<String>();
     for (String symbol : symbols) {
-      String translation;
-      translation =
-          switch (wanted) {
-            case NAME -> this.getTranslation(symbol).getName();
-            case ID -> this.getTranslation(symbol).getId();
-          };
-      result.add(translation);
+      try {
+        String translation;
+        translation =
+            switch (wanted) {
+              case NAME -> this.getTranslation(symbol).getName();
+              case ID -> this.getTranslation(symbol).getId();
+            };
+        result.add(translation);
+      } catch (Exception ignored) {
+        log.error("Symbol not found: {}", symbol);
+      }
     }
     return result;
   }

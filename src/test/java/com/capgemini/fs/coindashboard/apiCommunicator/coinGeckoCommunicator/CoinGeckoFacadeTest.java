@@ -82,7 +82,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
             translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.HISTORICAL_LISTING))
         .thenReturn(List.of("bitcoin"));
 
-    Mockito.when(client.getTopCoins(3, 1, "aed")).thenReturn(badResponse);
+    Mockito.when(client.getTopCoins(3, 1, "aed", false)).thenReturn(badResponse);
     Mockito.when(client.getCoinInfo("ethereum")).thenReturn(badResponse);
     Mockito.when(translator.translate(List.of("bitcoin"), ApiCommunicatorMethodEnum.COIN_INFO))
         .thenReturn(List.of("bitcoin"));
@@ -119,7 +119,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
     InputStream targetStream = new FileInputStream(initialFile);
     JsonNode data = mapper.readTree(targetStream);
     Response response = new Response(200, data);
-    Mockito.when(client.getTopCoins(3, 1, "usd")).thenReturn(response);
+    Mockito.when(client.getTopCoins(3, 1, "usd", false)).thenReturn(response);
 
     Optional<Result> result = facade.getTopCoins(3, 1, List.of("usd", "aed"));
     assertEquals(ResultStatus.PARTIAL_SUCCESS, result.get().getStatus());
@@ -134,7 +134,7 @@ class CoinGeckoFacadeTest extends CoinGeckoTestBaseClass {
     InputStream targetStream = new FileInputStream(initialFile);
     JsonNode data = mapper.readTree(targetStream);
     Response response = new Response(200, data);
-    Mockito.when(client.getTopCoins(3, 1, "usd")).thenReturn(response);
+    Mockito.when(client.getTopCoins(3, 1, "usd", false)).thenReturn(response);
 
     Optional<Result> result = facade.getTopCoins(3, 1, List.of("usd", "usd"));
     assertEquals(ResultStatus.SUCCESS, result.get().getStatus());

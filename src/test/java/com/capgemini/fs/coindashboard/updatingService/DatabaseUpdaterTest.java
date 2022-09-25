@@ -73,7 +73,7 @@ class DatabaseUpdaterTest {
 
   @Test
   void currentQuoteUpdatesIfEnabledIsFalse() {
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies, false))
         .thenReturn(Optional.of(resultOfGetTopCoins));
 
     databaseUpdater.setEnabled(false);
@@ -82,7 +82,7 @@ class DatabaseUpdaterTest {
 
   @Test
   void currentQuoteUpdatesIfEnabledIsTrueAndResponseIsNull() {
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies)).thenReturn(Optional.empty());
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies, false)).thenReturn(Optional.empty());
 
     databaseUpdater.setEnabled(true);
     assertFalse(databaseUpdater.currentQuoteUpdates());
@@ -91,13 +91,13 @@ class DatabaseUpdaterTest {
   @Test
   void chartUpdateIfEnabledIsFalse() {
     databaseUpdater.setEnabled(false);
-    assertFalse(databaseUpdater.chartUpdate());
+    assertTrue(databaseUpdater.chartUpdate());
   }
 
   @Test
   void chartUpdateIfEnabledIsTrue() {
     databaseUpdater.setEnabled(true);
-    assertTrue(databaseUpdater.chartUpdate());
+    assertFalse(databaseUpdater.chartUpdate());
   }
 
   @Test
@@ -109,7 +109,8 @@ class DatabaseUpdaterTest {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
+    Mockito.when(
+            apiHolder.getTopCoins(List.of(ApiProviderEnum.COIN_GECKO), 250, 0, vsCurrencies, false))
         .thenReturn(Optional.of(resultOfGetTopCoins));
     Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
     Mockito.when(getQueries.isCoinInDBBySymbol("btc")).thenReturn(true);
@@ -129,13 +130,13 @@ class DatabaseUpdaterTest {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
-    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies))
+    Mockito.when(apiHolder.getTopCoins(250, 0, vsCurrencies, false))
         .thenReturn(Optional.of(resultOfGetTopCoins));
     Mockito.when(getQueries.getCoinsSimple(250, 0)).thenReturn(prev_coins_JsonString);
     Mockito.when(getQueries.isCoinInDBBySymbol("eth")).thenReturn(false);
     Mockito.when(apiHolder.getCoinInfo(List.of("eth")))
         .thenReturn(Optional.of(resultOfGetTopCoins));
     databaseUpdater.setEnabled(true);
-    assertTrue(databaseUpdater.currentQuoteUpdates());
+    assertFalse(databaseUpdater.currentQuoteUpdates());
   }
 }

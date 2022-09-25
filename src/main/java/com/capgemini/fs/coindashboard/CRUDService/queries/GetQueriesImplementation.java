@@ -3,6 +3,7 @@ package com.capgemini.fs.coindashboard.CRUDService.queries;
 import com.capgemini.fs.coindashboard.CRUDService.model.documentsTemplates.Coin;
 import com.google.gson.Gson;
 import java.util.List;
+import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -131,5 +132,25 @@ public class GetQueriesImplementation implements GetQueries {
     }
     log.info("passing found coins from DB for regex: " + query);
     return gson.toJson(result);
+  }
+
+  @Override
+  public String getChart(String symbol, Long chartFrom, Long chartTo) {
+    MatchOperation matchStage = Aggregation.match(new Criteria("symbol").is(symbol));
+    ProjectionOperation projectStage =
+        Aggregation.project("chart").and("quotes.usd.chart").as("chart").andExclude("_id");
+    Aggregation aggregation =
+        Aggregation.newAggregation(matchStage, projectStage, Aggregation.limit(searchLimit));
+    List<Object> result =
+        mongoTemplate.aggregate(aggregation, "Coin", Object.class).getMappedResults();
+    if (result.isEmpty()) {
+      log.error("coin: " + symbol + " does not exist");
+      return null;
+    }
+    log.info("passing chart from DB for symbol: " + symbol);
+    //    List chart = (List)((Map<?, ?>) result.get(0)).get("chart");
+    //    Collections.reverse(chart);
+    //    return gson.toJson(chart);
+    return gson.toJson(((Map<?, ?>) result.get(0)).get("chart"));
   }
 }

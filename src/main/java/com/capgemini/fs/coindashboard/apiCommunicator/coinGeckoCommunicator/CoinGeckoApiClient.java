@@ -14,11 +14,17 @@ final class CoinGeckoApiClient extends ApiClient {
   private String url;
 
   public Response getTopCoins(int take, int page, String vsCurrency) throws IOException {
+    return this.getTopCoins(take, page, vsCurrency, false);
+  }
+
+  public Response getTopCoins(int take, int page, String vsCurrency, boolean sparkline)
+      throws IOException {
     Map<String, String> queryParams = new LinkedHashMap<>();
     queryParams.put("page", String.valueOf(page + 1));
     queryParams.put("per_page", String.valueOf(take));
     queryParams.put("vs_currency", vsCurrency);
     queryParams.put("price_change_percentage", "1h,24h,7d");
+    queryParams.put("sparkline", String.valueOf(sparkline));
     String requestUrl =
         httpRequestBuilder.buildRequestURI(this.url + "/coins/markets", queryParams);
     return this.invokeGet(requestUrl);
