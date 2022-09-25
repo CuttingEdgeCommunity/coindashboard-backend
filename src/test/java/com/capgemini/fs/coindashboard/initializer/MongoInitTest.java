@@ -51,7 +51,7 @@ public class MongoInitTest {
   @MockBean private ApiHolder apiHolder;
   @Autowired private MongoInit mongoInit;
   private Coin coin;
-  private final List<Coin> _coins = new ArrayList<Coin>();
+  private final List<Coin> _coins = new ArrayList<>();
   private final List<Coin> coins = new ArrayList<>();
   private final String vs_currency = "usd";
   private final List<String> vsCurrencies = new ArrayList<>();
@@ -98,9 +98,9 @@ public class MongoInitTest {
   void requestingInitialDataWithSuccess(CapturedOutput output) {
     mongoInit.requestingInitialData();
     times(1);
-    assertTrue(output.getOut().contains("Requested 500 topCoins from 0 page"));
+    assertTrue(output.getOut().contains("Requested 250 topCoins from 0 page"));
     times(2);
-    assertTrue(output.getOut().contains("Requested 500 topCoins from 1 page"));
+    assertTrue(output.getOut().contains("Requested 250 topCoins from 1 page"));
   }
 
   @Test
@@ -141,27 +141,41 @@ public class MongoInitTest {
   }
 
   void setupCoinInfoTest() {
-    Mockito.when(this.apiHolder.getCoinInfo(List.of("btc")))
+    Mockito.when(
+            this.apiHolder.getCoinInfo(List.of(ApiProviderEnum.COIN_MARKET_CAP), List.of("btc")))
         .thenReturn(Optional.ofNullable(this.resultOfGetCoinInfo));
-
     List<Coin> topCoins = new ArrayList<>();
-    Coin coin = new Coin();
-    coin.setSymbol("btc");
-    coin.setName("bitcoin");
-    coin.setQuotes(new TreeMap<>());
-    coin.setMarketCapRank(1);
-    topCoins.add(coin);
+    Coin btc = new Coin();
+    btc.setSymbol("btc");
+    btc.setName("bitcoin");
+    btc.setQuotes(new TreeMap<>());
+    btc.setMarketCapRank(1);
+    topCoins.add(btc);
     Result marketData = new Result();
     marketData.setCoins(topCoins);
     this.resultOfGetTopCoins = Optional.of(marketData);
   }
 
   @Test
-  void coinInfoTest() {
+  void coinInfoTestInCMC() {
     this.setupCoinInfoTest();
     var res = this.mongoInit.coinInfo(this.resultOfGetTopCoins);
     assertEquals(1, res.size());
     assertEquals("bitcoin", res.get(0).getName());
     assertEquals(coin.getImage_url(), res.get(0).getImage_url());
+  }
+
+  @Test
+  void coinInfoTestNotInCMC() {
+    this.setupCoinInfoTest();
+    Coin eth = new Coin();
+    eth.setSymbol("eth");
+    eth.setName("ethereum");
+    eth.setQuotes(new TreeMap<>());
+    eth.setMarketCapRank(2);
+    this.resultOfGetCoinInfo.setCoins(List.of(eth));
+    var res = this.mongoInit.coinInfo(this.resultOfGetTopCoins);
+    assertEquals(1, res.size());
+    assertEquals("bitcoin", res.get(0).getName());
   }
 }

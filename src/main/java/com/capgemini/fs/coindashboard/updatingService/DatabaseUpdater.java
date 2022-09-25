@@ -6,6 +6,7 @@ import com.capgemini.fs.coindashboard.CRUDService.queries.GetQueries;
 import com.capgemini.fs.coindashboard.CRUDService.queries.UpdateQueries;
 import com.capgemini.fs.coindashboard.apiCommunicator.ApiHolder;
 import com.capgemini.fs.coindashboard.apiCommunicator.dtos.Result;
+import com.capgemini.fs.coindashboard.apiCommunicator.interfaces.ApiProviderEnum;
 import com.capgemini.fs.coindashboard.utils.AsyncService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -78,22 +79,25 @@ public class DatabaseUpdater {
 
   // Updating current market data for top 250 coins each few seconds.
   @Async
-  @Scheduled(fixedDelay = 10000)
+  @Scheduled(fixedDelay = 5000)
   public Boolean currentQuoteUpdates() {
     if (this.enabled) {
       try {
         List<String> vsCurrencies = List.of("usd");
-        var resultTop = this.apiHolder.getTopCoins(MAX_COINS, 0, vsCurrencies);
+        var resultTop =
+            this.apiHolder.getTopCoins(
+                List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies, false);
         List<Coin> curr_coins = resultTop.orElseThrow().getCoins();
         String prev_coins = getQueries.getCoinsSimple(MAX_COINS, 0);
         Map<String, Integer> prev_coins_map = jsonToMapForMarketCapRank(prev_coins);
         List[] data_lists = comparerCurrentAndPreviousResult(prev_coins_map, curr_coins);
         List<String> not_in_db = data_lists[0];
         List<Coin> marketCapRank_update = data_lists[1];
-        List kicked_from_top = data_lists[2];
+        List<String> kicked_from_top = data_lists[2];
         Optional<Result> resultInfoNotInDb;
         if (!not_in_db.isEmpty()) {
-          resultInfoNotInDb = this.apiHolder.getCoinInfo(not_in_db);
+          resultInfoNotInDb =
+              this.apiHolder.getCoinInfo(List.of(ApiProviderEnum.COIN_GECKO), not_in_db);
           List<Coin> coinsNotInDb = resultInfoNotInDb.orElseThrow().getCoins();
           createQueries.createCoinDocuments(coinsNotInDb);
         }
@@ -108,13 +112,24 @@ public class DatabaseUpdater {
   }
 
   @Async
-  @Scheduled(cron = "* */5 * * * *")
+  // @Scheduled(cron = "* */5 * * * *")
+  @Scheduled(cron = "* 1 * * * *")
   public Boolean chartUpdate() {
     if (this.enabled) {
-      this.updateQueries.UpdateEveryCoinPriceChart();
-      return true;
+      log.info("Hourly sparkline update for top coins has started.");
+      try {
+        List<String> vsCurrencies = List.of("usd");
+        var resultTop =
+            this.apiHolder.getTopCoins(
+                List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies, true);
+        List<Coin> curr_coins = resultTop.orElseThrow().getCoins();
+        this.updateQueries.updateTopCoinsPriceChart(curr_coins);
+      } catch (Exception ex) {
+        log.error(ex);
+        return false;
+      }
     }
-    return false;
+    return true;
   }
 
   private Map<String, Integer> jsonToMapForMarketCapRank(String jsonString)

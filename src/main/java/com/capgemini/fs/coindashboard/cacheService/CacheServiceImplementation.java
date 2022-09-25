@@ -34,7 +34,7 @@ public class CacheServiceImplementation implements CacheService {
   @Override
   @Cacheable("getChart")
   public Optional<String> getChart(String name, long chart_from, long chart_to) {
-    throw new UnsupportedOperationException("Method not yet implemented.");
+    return Optional.of(getQueries.getChart(name, chart_from, chart_to));
   }
 
   @Override

@@ -25,6 +25,8 @@ public final class CoinGeckoFieldNameMapper extends FieldNameMapper {
   public final String CURRENT_PRICE = "current_price";
   public final String LAST_UPDATE_DATE = "last_updated";
   public final String ID = "id";
+  public final String SPARKLINE = "sparkline_in_7d";
+  public final String PRICE = "price";
 
   public final String MARKET_DATA = "market_data";
   public final String PRICES = "prices";
