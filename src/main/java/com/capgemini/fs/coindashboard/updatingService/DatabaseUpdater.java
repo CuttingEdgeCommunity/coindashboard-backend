@@ -112,8 +112,7 @@ public class DatabaseUpdater {
   }
 
   @Async
-  // @Scheduled(cron = "* */5 * * * *")
-  @Scheduled(cron = "* 1 * * * *")
+  @Scheduled(cron = "0 5 * * * *")
   public Boolean chartUpdate() {
     if (this.enabled) {
       log.info("Hourly sparkline update for top coins has started.");
@@ -124,6 +123,7 @@ public class DatabaseUpdater {
                 List.of(ApiProviderEnum.COIN_GECKO), MAX_COINS, 0, vsCurrencies, true);
         List<Coin> curr_coins = resultTop.orElseThrow().getCoins();
         this.updateQueries.updateTopCoinsPriceChart(curr_coins);
+        log.info("Hourly sparkline update for top coins has successfully finished.");
       } catch (Exception ex) {
         log.error(ex);
         return false;

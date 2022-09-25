@@ -48,11 +48,15 @@ public class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBa
           LocalDateTime.parse(data.get(mapper.LAST_UPDATE_DATE).textValue().replace("Z", ""));
       JsonNode prices = data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE);
       int last_update_hour = last_update.getHour();
-      last_update = last_update.withHour(7).withMinute(0).withSecond(0).withNano(0);
-      if (last_update_hour < 7) {
+      last_update = last_update.withHour(1).withMinute(0).withSecond(0).withNano(0);
+      if (last_update_hour < 2) {
         last_update = last_update.minusDays(1L).withHour(19);
-      } else if (last_update_hour >= 19) {
+      } else if (last_update_hour >= 20) {
         last_update = last_update.withHour(19);
+      } else if (last_update_hour >= 14) {
+        last_update = last_update.withHour(13);
+      } else if (last_update_hour >= 8) {
+        last_update = last_update.withHour(7);
       }
       LocalDateTime _7days_ago = last_update.minusDays(7L);
       for (int i = 0; i < prices.size(); i++) {
