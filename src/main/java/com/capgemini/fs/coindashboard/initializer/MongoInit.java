@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,6 +36,7 @@ public class MongoInit implements InitializingBean {
 
   // method to make code cleaner
   protected void requestingInitialData() {
+    // clearingDatabase();
     log.info("Requesting data...");
     final byte PAGES = 4;
     int TAKE = 250;
@@ -120,5 +122,11 @@ public class MongoInit implements InitializingBean {
     } catch (Exception e) {
       log.error(e.getMessage());
     }
+  }
+
+  protected void clearingDatabase() {
+    log.info("Clearing db has started...");
+    mongoTemplate.remove(new Query(), "Coin");
+    log.info("Database has been successfully cleared.");
   }
 }

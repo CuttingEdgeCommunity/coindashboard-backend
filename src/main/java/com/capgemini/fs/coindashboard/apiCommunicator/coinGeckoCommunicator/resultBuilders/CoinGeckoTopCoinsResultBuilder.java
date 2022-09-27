@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -44,21 +46,23 @@ public class CoinGeckoTopCoinsResultBuilder extends CoinGeckoMarketDataBuilderBa
   protected List<Price> buildPriceList(JsonNode data) {
     List<Price> priceList = new ArrayList<>();
     if (this.requestArgs.isInclude7dSparkline()) {
-      LocalDateTime last_update =
-          LocalDateTime.parse(data.get(mapper.LAST_UPDATE_DATE).textValue().replace("Z", ""));
       JsonNode prices = data.get(this.mapper.SPARKLINE).get(this.mapper.PRICE);
-      int last_update_hour = last_update.getHour();
-      last_update = last_update.withHour(1).withMinute(0).withSecond(0).withNano(0);
-      if (last_update_hour < 2) {
-        last_update = last_update.minusDays(1L).withHour(19);
-      } else if (last_update_hour >= 20) {
-        last_update = last_update.withHour(19);
-      } else if (last_update_hour >= 14) {
-        last_update = last_update.withHour(13);
-      } else if (last_update_hour >= 8) {
-        last_update = last_update.withHour(7);
+      ZonedDateTime last_update_utc =
+          ZonedDateTime.parse(data.get(mapper.LAST_UPDATE_DATE).textValue());
+      int last_update_utc_hour = last_update_utc.getHour();
+      last_update_utc = last_update_utc.withHour(5).withMinute(0).withSecond(0).withNano(0);
+      if (last_update_utc_hour < 6) {
+        last_update_utc = last_update_utc.minusDays(1L).withHour(23);
+      } else if (last_update_utc_hour >= 18) {
+        last_update_utc = last_update_utc.withHour(17);
+      } else if (last_update_utc_hour >= 12) {
+        last_update_utc = last_update_utc.withHour(11);
       }
-      LocalDateTime _7days_ago = last_update.minusDays(7L);
+      LocalDateTime _7days_ago =
+          last_update_utc
+              .withZoneSameInstant(ZoneId.systemDefault())
+              .toLocalDateTime()
+              .minusDays(7L);
       for (int i = 0; i < prices.size(); i++) {
         _7days_ago = _7days_ago.plusHours(1L);
         priceList.add(new Price(prices.get(i).asDouble(), Timestamp.valueOf(_7days_ago).getTime()));
